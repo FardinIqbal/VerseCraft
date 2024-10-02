@@ -69,3 +69,5 @@ end
 gem "devise", "~> 4.9"
 
 gem "bullet", "~> 7.2", :group => :development
+
+gem "sassc-rails", "~> 2.1"
