@@ -33,3 +33,43 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# Ignore precompiled javascript packs
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
+
+# Ignore uploaded files in development
+/public/uploads
+
+# Ignore Byebug command history file.
+.byebug_history
+
+# Ignore database configuration
+/config/database.yml
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore coverage files
+/coverage
+
+# Ignore RSpec state
+spec/examples.txt
+
+# Ignore local Rubymine settings
+.idea
+
+# Ignore precompiled assets
+/public/assets
+
+# Ignore yarn files
+/yarn-error.log
+yarn-debug.log*
+
+# Ignore built documentation
+/doc/app
+.yardoc
