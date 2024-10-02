@@ -1,13 +1,16 @@
 Rails.application.routes.draw do
-  # Devise routes for users
+  # Devise routes for user authentication (sign up, sign in, etc.)
   devise_for :users
 
-  # Root route
+  # RESTful routes for user profile (only show, edit, and update actions)
+  resources :users, only: [:show, :edit, :update]
+
+  # Root path (homepage)
   root 'pages#home'
 
-  # Poem resource routes
+  # RESTful routes for Poem resources (index, show, create, update, delete)
   resources :poems
 
-  # Health check route
-  get 'up' => 'rails/health#show', as: :rails_health_check
+  # Health check route (useful for monitoring the app's status)
+  get 'up', to: 'rails/health#show', as: :rails_health_check
 end

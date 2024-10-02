@@ -1,0 +1,30 @@
+<h1>Edit Profile</h1>
+
+<%= form_with(model: @user, local: true) do |form| %>
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this profile from being saved:</h2>
+      <ul>
+        <% @user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :bio %>
+    <%= form.text_area :bio %>
+  </div>
+
+  <div class="field">
+    <%= form.label :location %>
+    <%= form.text_field :location %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit 'Update Profile', class: 'btn' %>
+  </div>
+<% end %>
+
+<%= link_to 'Back to Profile', user_path(@user) %>

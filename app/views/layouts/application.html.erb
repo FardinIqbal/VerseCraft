@@ -19,7 +19,7 @@
     <%= link_to 'Poems', poems_path %>
     <% if user_signed_in? %>
       <%= link_to 'New Poem', new_poem_path %>
-      <%= link_to 'Profile', edit_user_registration_path %>
+      <%= link_to 'My Profile', user_path(current_user) %>
       <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
     <% else %>
       <%= link_to 'Sign In', new_user_session_path %>
