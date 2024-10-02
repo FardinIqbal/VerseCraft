@@ -1,2 +1,6 @@
-<h1>Poems#edit</h1>
-<p>Find me in app/views/poems/edit.html.erb</p>
+<h1>Editing Poem</h1>
+
+<%= render 'form', poem: @poem %>
+
+<%= link_to 'Show', @poem %> |
+<%= link_to 'Back', poems_path %>

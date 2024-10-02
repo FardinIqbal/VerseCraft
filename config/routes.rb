@@ -5,10 +5,7 @@ Rails.application.routes.draw do
   # Root route
   root 'pages#home'
 
-  # Pages routes
-  get 'pages/home'
-
-  # Poem resource routes, automatically generating index, show, new, create, edit, update, and destroy actions
+  # Poem resource routes
   resources :poems
 
   # Health check route

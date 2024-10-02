@@ -1,2 +1,14 @@
-<h1>Poems#show</h1>
-<p>Find me in app/views/poems/show.html.erb</p>
+<h1><%= @poem.title %></h1>
+<p>By <%= @poem.user.email %></p>
+
+<div class="poem-content">
+  <%= simple_format(@poem.content) %>
+</div>
+
+<div class="poem-actions">
+  <% if user_signed_in? && current_user == @poem.user %>
+    <%= link_to 'Edit', edit_poem_path(@poem) %>
+    <%= link_to 'Delete', poem_path(@poem), method: :delete, data: { confirm: 'Are you sure?' } %>
+  <% end %>
+  <%= link_to 'Back to Poems', poems_path %>
+</div>
