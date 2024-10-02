@@ -1,0 +1,11 @@
+<h1>Poems</h1>
+
+<% @poems.each do |poem| %>
+  <div>
+    <h2><%= link_to poem.title, poem_path(poem) %></h2>
+    <p>By <%= poem.user.email %></p>
+    <p><%= truncate(poem.content, length: 100) %></p>
+  </div>
+<% end %>
+
+<%= link_to 'New Poem', new_poem_path if user_signed_in? %>
