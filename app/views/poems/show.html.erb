@@ -1,12 +1,24 @@
 <article class="poem">
   <h2><%= @poem.title %></h2>
-  <p class="poem-meta">By <%= @poem.user.email %> | <%= @poem.created_at.strftime("%B %d, %Y") %></p>
+  <p class="poem-meta">
+    By <%= @poem.user.email %> |
+    <%= @poem.created_at.strftime("%B %d, %Y") %> |
+    <%= pluralize(@poem.likes.count, 'like') %>
+  </p>
   <div class="poem-content">
     <%= simple_format(@poem.content) %>
   </div>
 </article>
 
 <div class="poem-actions mt-1">
+  <% if user_signed_in? %>
+    <% if @poem.liked_by?(current_user) %>
+      <%= button_to 'Unlike', poem_like_path(@poem), method: :delete, class: 'btn' %>
+    <% else %>
+      <%= button_to 'Like', poem_likes_path(@poem), class: 'btn' %>
+    <% end %>
+  <% end %>
+
   <% if user_signed_in? && current_user == @poem.user %>
     <%= link_to 'Edit', edit_poem_path(@poem), class: 'btn' %>
     <%= link_to 'Delete', poem_path(@poem), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn' %>

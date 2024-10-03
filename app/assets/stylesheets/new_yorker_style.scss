@@ -40,7 +40,7 @@ body {
 // Typography
 h1, h2, h3, h4, h5, h6 {
   @include header-font;
-  margin-bottom: 0.5em;
+  margin-bottom: 0;
 }
 
 h1 {
@@ -176,3 +176,26 @@ footer {
 .text-center { text-align: center; }
 .mt-1 { margin-top: 1rem; }
 .mb-1 { margin-bottom: 1rem; }
+
+// Like button
+.btn-like {
+  background-color: $color-accent;
+  border-color: $color-accent;
+
+  &:hover {
+    background-color: darken($color-accent, 10%);
+    border-color: darken($color-accent, 10%);
+    color: $color-white;
+  }
+}
+
+.liked {
+  background-color: $color-white;
+  color: $color-accent;
+  border-color: $color-accent;
+
+  &:hover {
+    background-color: $color-accent;
+    color: $color-white;
+  }
+}
