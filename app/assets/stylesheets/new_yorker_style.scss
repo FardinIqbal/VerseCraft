@@ -395,3 +395,64 @@ form {
   border-radius: 0;
   font-size: 0.9rem;
 }
+
+
+// Forms
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid $color-border;
+  background-color: $color-white;
+  color: $color-black;
+  font-family: $font-serif;
+  font-size: 1rem;
+
+  &:focus {
+    outline: none;
+    border-color: $color-accent;
+  }
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.form-check-input {
+  margin-right: 0.5rem;
+  width: 1rem;
+  height: 1rem;
+}
+
+.form-check-label {
+  font-family: $font-serif;
+  font-size: 1rem;
+}
+
+// Button (reuse existing styles or ensure the following)
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: $color-white;
+  color: $color-black;
+  text-decoration: none;
+  @include header-font;
+  font-size: 1rem;
+  border: 1px solid $color-black;
+  transition: background-color 0.3s, color 0.3s;
+
+  &:hover {
+    background-color: $color-black;
+    color: $color-white;
+  }
+}
+
+// Utility Classes (if not already defined)
+.mt-3 {
+  margin-top: 1.5rem;
+}

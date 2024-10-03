@@ -1,8 +1,7 @@
-<!--app/views/poems/_form.html.erb-->
 <%= form_with(model: poem, local: true) do |form| %>
   <% if poem.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(poem.errors.count, "error") %> prohibited this poem from being saved:</h2>
+    <div id="error_explanation" class="error-messages">
+      <h2 class="text-center mb-3"><%= pluralize(poem.errors.count, "error") %> prohibited this poem from being saved:</h2>
       <ul>
         <% poem.errors.full_messages.each do |message| %>
           <li><%= message %></li>
@@ -11,17 +10,17 @@
     </div>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, class: "form-control" %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= form.label :content %>
-    <%= form.text_area :content %>
+    <%= form.text_area :content, class: "form-control" %>
   </div>
 
-  <div class="actions">
-    <%= form.submit %>
+  <div class="form-group mt-3">
+    <%= form.submit "Save Poem", class: "btn" %>
   </div>
 <% end %>
