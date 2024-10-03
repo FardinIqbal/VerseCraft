@@ -14,25 +14,28 @@
 
 <body>
 <div class="container">
-  <nav>
-    <%= link_to 'Home', root_path %>
-    <%= link_to 'Poems', poems_path %>
-    <% if user_signed_in? %>
-      <%= link_to 'New Poem', new_poem_path %>
-      <%= link_to 'My Profile', user_path(current_user) %>
-      <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
-    <% else %>
-      <%= link_to 'Sign In', new_user_session_path %>
-      <%= link_to 'Sign Up', new_user_registration_path %>
-    <% end %>
-  </nav>
+  <header>
+    <h1 class="text-center">VerseCraft</h1>
+    <nav>
+      <%= link_to 'Home', root_path %>
+      <%= link_to 'Poems', poems_path %>
+      <% if user_signed_in? %>
+        <%= link_to 'New Poem', new_poem_path %>
+        <%= link_to 'My Profile', user_path(current_user) %>
+        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to 'Sign In', new_user_session_path %>
+        <%= link_to 'Sign Up', new_user_registration_path %>
+      <% end %>
+    </nav>
+  </header>
 
-  <% if notice %><p class="notice"><%= notice %></p>
-  <% end %>
-  <% if alert %><p class="alert"><%= alert %></p>
-  <% end %>
+  <main>
+    <% if notice %><p class="notice"><%= notice %></p><% end %>
+    <% if alert %><p class="alert"><%= alert %></p><% end %>
 
-  <%= yield %>
+    <%= yield %>
+  </main>
 
   <footer>
     <p>&copy; <%= Time.current.year %> VerseCraft. All rights reserved.</p>

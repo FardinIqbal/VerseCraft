@@ -1,12 +1,12 @@
-<div class="poem">
-  <h1><%= @poem.title %></h1>
+<article class="poem">
+  <h2><%= @poem.title %></h2>
   <p class="poem-meta">By <%= @poem.user.email %> | <%= @poem.created_at.strftime("%B %d, %Y") %></p>
   <div class="poem-content">
     <%= simple_format(@poem.content) %>
   </div>
-</div>
+</article>
 
-<div class="poem-actions">
+<div class="poem-actions mt-1">
   <% if user_signed_in? && current_user == @poem.user %>
     <%= link_to 'Edit', edit_poem_path(@poem), class: 'btn' %>
     <%= link_to 'Delete', poem_path(@poem), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn' %>
