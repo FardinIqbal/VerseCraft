@@ -1,2 +1,22 @@
-<h1>Welcome to VerseCraft</h1>
-<p>Your journey into the world of poetry begins here.</p>
+<h1 class="text-center">Welcome to VerseCraft</h1>
+
+<section class="featured-poems">
+  <h2>Featured Poems</h2>
+  <% Poem.featured.limit(3).each do |poem| %>
+    <article class="poem featured-poem">
+      <h3><%= link_to poem.title, poem_path(poem) %></h3>
+      <p class="poem-meta">By <%= poem.user.email %> | <%= poem.created_at.strftime("%B %d, %Y") %></p>
+      <div class="poem-content">
+        <%= truncate(poem.content, length: 100) %>
+      </div>
+      <%= link_to 'Read More', poem_path(poem), class: 'btn' %>
+    </article>
+  <% end %>
+  <%= link_to 'View All Featured Poems', featured_poems_path, class: 'btn' %>
+</section>
+
+<section class="cta">
+  <h2>Share Your Poetry</h2>
+  <p>Join our community of poets and share your verses with the world.</p>
+  <%= link_to 'Start Writing', new_poem_path, class: 'btn btn-large' %>
+</section>

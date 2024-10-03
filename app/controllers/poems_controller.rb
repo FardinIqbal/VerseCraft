@@ -1,6 +1,6 @@
 class PoemsController < ApplicationController
   before_action :set_poem, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: [:index, :show, :featured]
 
   def index
     @poems = Poem.all
@@ -46,5 +46,9 @@ class PoemsController < ApplicationController
 
   def poem_params
     params.require(:poem).permit(:title, :content)
+  end
+
+  def featured
+    @featured_poems = Poem.featured.includes(:user).order(created_at: :desc).limit(5)
   end
 end

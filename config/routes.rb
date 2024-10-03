@@ -11,12 +11,10 @@ Rails.application.routes.draw do
 
   # Poem routes with nested routes for likes and comments
   resources :poems do
-    # Nested resource for likes
-    # Only allowing create and destroy actions for likes
+    collection do
+      get 'featured'
+    end
     resources :likes, only: [:create, :destroy]
-
-    # Nested resource for comments
-    # Allowing create, update, and destroy actions for comments
     resources :comments, only: [:create, :update, :destroy]
   end
 
