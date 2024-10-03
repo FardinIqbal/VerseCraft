@@ -8,4 +8,8 @@ class User < ApplicationRecord
 
   validates :bio, length: { maximum: 500 }
   validates :location, length: { maximum: 100 }
+
+  def admin?
+    admin
+  end
 end

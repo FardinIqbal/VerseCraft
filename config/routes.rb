@@ -18,6 +18,14 @@ Rails.application.routes.draw do
     resources :comments, only: [:create, :update, :destroy]
   end
 
+  namespace :admin do
+    resources :poems, only: [:index] do
+      member do
+        patch :toggle_featured
+      end
+    end
+  end
+
   # Health check route
   # Useful for monitoring the application's status
   get 'up', to: 'rails/health#show', as: :rails_health_check
