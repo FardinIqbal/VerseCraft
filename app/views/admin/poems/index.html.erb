@@ -1,6 +1,6 @@
-<h1>Admin: Manage Poems</h1>
+<h1 class="text-center mb-3">Admin: Manage Poems</h1>
 
-<table>
+<table class="poem-table">
   <thead>
   <tr>
     <th>Title</th>
@@ -13,15 +13,34 @@
   <tbody>
   <% @poems.each do |poem| %>
     <tr>
-      <td><%= link_to poem.title, poem_path(poem) %></td>
-      <td><%= poem.user.email %></td>
-      <td><%= poem.created_at.strftime("%B %d, %Y") %></td>
-      <td><%= poem.featured? ? 'Yes' : 'No' %></td>
+      <!-- Link to the poem page -->
+      <td><%= link_to poem.title, poem_path(poem), class: 'poem-link' %></td>
+
+      <!-- Aesthetic profile link with icon -->
       <td>
-        <%= button_to poem.featured? ? 'Unfeature' : 'Feature',
+        <%= link_to user_path(poem.user), class: 'profile-link' do %>
+          <i class="fas fa-user"></i> <%= poem.user.email %>
+        <% end %>
+      </td>
+
+      <td><%= poem.created_at.strftime("%B %d, %Y") %></td>
+
+      <td>
+          <span class="badge <%= poem.featured? ? 'badge-success' : 'badge-secondary' %>">
+            <%= poem.featured? ? 'Yes' : 'No' %>
+          </span>
+      </td>
+
+      <!-- Feature/Unfeature and Delete buttons -->
+      <td class="table-actions">
+        <%= button_to (poem.featured? ? 'Unfeature' : 'Feature'),
                       toggle_featured_admin_poem_path(poem),
                       method: :patch,
-                      class: 'btn' %>
+                      class: "btn btn-action #{poem.featured? ? 'btn-featured' : 'btn-action'}" %>
+        <%= link_to 'Delete', poem_path(poem),
+                    method: :delete,
+                    data: { confirm: 'Are you sure?' },
+                    class: 'btn btn-action' %>
       </td>
     </tr>
   <% end %>

@@ -2,7 +2,9 @@
 
 <% @poems.each do |poem| %>
   <article class="poem">
-    <h3><%= link_to poem.title, poem_path(poem) %></h3>
+    <h3 class="poem-title">
+      <%= link_to poem.title, poem_path(poem), class: 'poem-link' %>
+    </h3>
     <p class="poem-meta">By <%= poem.user.email %> | <%= poem.created_at.strftime("%B %d, %Y") %></p>
     <div class="poem-content">
       <%= truncate(poem.content, length: 200) %>

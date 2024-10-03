@@ -1,34 +1,37 @@
-// Enhanced New Yorker inspired styles
+// Typography
+$font-serif: 'Adobe Caslon Pro', 'Times New Roman', serif;
+$font-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-$font-serif: 'Playfair Display', serif;
-$font-sans-serif: 'Libre Franklin', sans-serif;
+// Color Palette
 $color-black: #000000;
 $color-white: #FFFFFF;
-$color-accent: #D72E31;  // A rich red color
-$color-background: #F9F7F1;  // A warm, off-white background
-$color-text: #2C2C2C;
-$color-border: #D1D1D1;
+$color-grey: #333333;
+$color-light-grey: #F7F7F7;
+$color-accent: #E13D3D; // Deep red accent
+$color-border: #CCCCCC; // Light grey border
+$color-primary: #000000; // Primary color set to black for a classic look
+$color-hover: #E13D3D; // Hover color matches the accent
 
 // Mixins
 @mixin header-font {
   font-family: $font-serif;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-weight: normal;
 }
 
 @mixin body-font {
-  font-family: $font-sans-serif;
-  font-weight: 400;
-  letter-spacing: 0.2px;
+  font-family: $font-serif;
+  font-weight: normal;
 }
 
-// Global styles
+// Global Styles
 body {
   @include body-font;
-  background-color: $color-background;
-  color: $color-text;
-  line-height: 1.6;
+  background-color: $color-white;
+  color: $color-black;
+  line-height: 1.8;
   font-size: 18px;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
@@ -40,58 +43,71 @@ body {
 // Typography
 h1, h2, h3, h4, h5, h6 {
   @include header-font;
-  margin-bottom: 0;
+  margin: 1.5rem 0 0.5rem;
+  line-height: 1.2;
 }
 
 h1 {
-  font-size: 2.5rem;
-  border-bottom: 2px solid $color-black;
-  padding-bottom: 0.3em;
+  font-size: 3rem;
 }
 
-h2 { font-size: 2rem; }
-h3 { font-size: 1.75rem; }
+h2 {
+  font-size: 2.5rem;
+}
+
+h3 {
+  font-size: 2rem;
+}
 
 p {
-  margin-bottom: 1.5em;
+  margin-bottom: 1.5rem;
 }
 
 // Navigation
 nav {
-  border-bottom: 2px solid $color-black;
-  padding: 1rem 0;
-  margin-bottom: 2rem;
+  text-align: center;
+  margin: 2rem 0;
 
   a {
     @include header-font;
     color: $color-black;
     text-decoration: none;
-    margin-right: 1.5rem;
+    margin: 0 1rem;
     font-size: 1.1rem;
-    transition: color 0.3s ease;
+    position: relative;
 
-    &:hover {
-      color: $color-accent;
+    &:after {
+      content: '';
+      display: block;
+      width: 0%;
+      height: 2px;
+      background: $color-accent;
+      transition: width 0.3s;
+      position: absolute;
+      left: 0;
+      bottom: -5px;
+    }
+
+    &:hover:after {
+      width: 100%;
     }
   }
 }
 
-// Poem styles
+// Poem Styles
 .poem {
   margin-bottom: 3rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid $color-border;
 
   h2 {
-    font-size: 1.8rem;
-    margin-bottom: 0.3rem;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
   }
 
   .poem-meta {
     font-style: italic;
-    color: lighten($color-text, 20%);
+    color: $color-grey;
     margin-bottom: 1rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
 
   .poem-content {
@@ -100,44 +116,171 @@ nav {
     line-height: 1.8;
     margin-bottom: 1.5rem;
 
-    &::first-letter {
-      float: left;
-      font-size: 3.5em;
-      line-height: 0.7;
-      padding-right: 0.1em;
-      padding-top: 0.1em;
+    p {
+      margin-bottom: 1rem;
     }
   }
+}
+
+// Poem Title Styles
+.poem-title {
+  font-size: 2rem;
+  @include header-font;
+  margin-bottom: 0.5rem;
+}
+
+.poem-link {
+  color: $color-black;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.poem-link:hover {
+  color: $color-accent;
 }
 
 // Buttons
 .btn {
   display: inline-block;
-  padding: 0.7rem 1.2rem;
-  background-color: $color-black;
-  color: $color-white;
+  padding: 0.6rem 1.2rem;
+  background-color: $color-white;
+  color: $color-black;
   text-decoration: none;
-  font-family: $font-sans-serif;
-  font-weight: 700;
-  font-size: 0.9rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  border: 2px solid $color-black;
-  transition: all 0.3s ease;
+  @include header-font;
+  font-size: 1rem;
+  border: 1px solid $color-black;
+  border-radius: 0;
+  transition: background-color 0.3s, color 0.3s;
 
   &:hover {
-    background-color: $color-white;
-    color: $color-black;
+    background-color: $color-black;
+    color: $color-white;
   }
+}
+
+// Admin Buttons
+.btn-action {
+  margin-right: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid $color-black;
+  background-color: $color-white;
+  color: $color-black;
+  font-size: 0.9rem;
+
+  &:hover {
+    background-color: $color-black;
+    color: $color-white;
+  }
+
+  &.btn-featured {
+    border-color: $color-accent;
+    color: $color-accent;
+
+    &:hover {
+      background-color: $color-accent;
+      color: $color-white;
+    }
+  }
+}
+
+// Featured Poems Section
+.featured-poems {
+  margin-bottom: 3rem;
+
+  h2 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .poem-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+
+    .featured-poem {
+      background-color: $color-white;
+      border: 1px solid $color-border;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      transition: all 0.3s ease;
+      cursor: pointer;
+
+      &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        border-color: $color-accent;
+      }
+
+      h3 {
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+        color: $color-black;
+        transition: color 0.3s;
+
+        &:hover {
+          color: $color-accent;
+        }
+      }
+
+      .poem-meta {
+        font-style: italic;
+        font-size: 1rem;
+        color: $color-grey;
+        margin-bottom: 1rem;
+      }
+
+      .poem-content {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  .text-center {
+    text-align: center;
+    font-size: 1rem;
+    color: $color-grey;
+  }
+}
+
+// Shadows for Cards and Elevation Effect
+.poem-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+// Footer
+footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid $color-border;
+  font-size: 1rem;
+  color: $color-grey;
+  text-align: center;
+}
+
+// Utility Classes
+.text-center {
+  text-align: center;
+}
+
+.mt-1 {
+  margin-top: 1rem;
+}
+
+.mb-1 {
+  margin-bottom: 1rem;
+}
+
+.mb-3 {
+  margin-bottom: 3rem;
 }
 
 // Forms
 form {
   margin-bottom: 2rem;
-
-  .field {
-    margin-bottom: 1.5rem;
-  }
 
   label {
     display: block;
@@ -153,8 +296,10 @@ form {
     width: 100%;
     padding: 0.5rem;
     border: 1px solid $color-border;
-    font-family: $font-sans-serif;
+    font-family: $font-serif;
     font-size: 1rem;
+    margin-bottom: 1rem;
+    background-color: $color-white;
   }
 
   textarea {
@@ -162,87 +307,91 @@ form {
   }
 }
 
-// Footer
-footer {
-  margin-top: 3rem;
-  padding-top: 1rem;
-  border-top: 2px solid $color-black;
-  font-size: 0.9rem;
-  color: lighten($color-text, 20%);
-  text-align: center;
+// Alerts and Notices
+.notice,
+.alert {
+  padding: 1rem;
+  border: 1px solid $color-border;
+  background-color: $color-light-grey;
+  margin-bottom: 2rem;
 }
 
-// Utility classes
-.text-center { text-align: center; }
-.mt-1 { margin-top: 1rem; }
-.mb-1 { margin-bottom: 1rem; }
-
-// Like button
-.btn-like {
-  background-color: $color-accent;
-  border-color: $color-accent;
-
-  &:hover {
-    background-color: darken($color-accent, 10%);
-    border-color: darken($color-accent, 10%);
-    color: $color-white;
-  }
+// General Table Styling
+.poem-table {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-collapse: collapse;
+  font-size: 1rem;
 }
 
-.liked {
+.poem-table th, .poem-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid $color-border;
+}
+
+.poem-table th {
   background-color: $color-white;
+  @include header-font;
+  font-weight: normal;
+  border-bottom: 2px solid $color-black;
+}
+
+.poem-table td {
+  vertical-align: middle;
+  font-family: $font-sans-serif;
+}
+
+// Poem Title Links
+.poem-link {
+  @include header-font;
+  font-size: 1.2rem;
+  color: $color-black;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.poem-link:hover {
   color: $color-accent;
-  border-color: $color-accent;
+}
+
+// Profile Link with Icon
+.profile-link {
+  display: inline-flex;
+  align-items: center;
+  font-family: $font-sans-serif;
+  color: $color-grey;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+
+  i {
+    margin-right: 0.5rem;
+    color: $color-accent;
+  }
 
   &:hover {
-    background-color: $color-accent;
-    color: $color-white;
-  }
-}
+    color: $color-black;
 
-// ... existing styles ...
-
-.featured-poems {
-  margin-bottom: 3rem;
-
-  .featured-poem {
-    background-color: rgba($color-accent, 0.05);
-    border-left: 4px solid $color-accent;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    transition: all 0.3s ease;
-
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    h3 {
-      color: $color-accent;
+    i {
+      color: $color-black;
     }
   }
 }
 
-.cta {
-  text-align: center;
-  background-color: $color-background;
-  padding: 3rem 1rem;
-  border-top: 2px solid $color-black;
-  border-bottom: 2px solid $color-black;
-  margin: 3rem 0;
+// Badges for Featured/Not Featured
+.badge-success {
+  background-color: $color-accent;
+  color: $color-white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0;
+  font-size: 0.9rem;
+}
 
-  h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-
-  p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-  }
-
-  .btn-large {
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
-  }
+.badge-secondary {
+  background-color: $color-grey;
+  color: $color-white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 0;
+  font-size: 0.9rem;
 }

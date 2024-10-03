@@ -1,22 +1,29 @@
+<!--app/views/layouts/application.html.erb-->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>VerseCraft</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Libre+Franklin:wght@300;400;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Georgia&display=swap" rel="stylesheet">
 
+  <!-- Stylesheets -->
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+  <!-- JavaScript -->
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 </head>
-
 <body>
 <div class="container">
-  <header>
-    <h1 class="text-center">VerseCraft</h1>
-    <nav>
+  <!-- Header Section -->
+  <header class="text-center">
+    <h1>VerseCraft</h1>
+    <!-- Navigation -->
+    <nav aria-label="Main navigation">
       <%= link_to 'Home', root_path %>
       <%= link_to 'Poems', poems_path %>
       <% if user_signed_in? %>
@@ -33,13 +40,19 @@
     </nav>
   </header>
 
+  <!-- Main Content -->
   <main>
-    <% if notice %><p class="notice"><%= notice %></p><% end %>
-    <% if alert %><p class="alert"><%= alert %></p><% end %>
+    <% if notice %>
+      <p class="notice"><%= notice %></p>
+    <% end %>
+    <% if alert %>
+      <p class="alert"><%= alert %></p>
+    <% end %>
 
     <%= yield %>
   </main>
 
+  <!-- Footer -->
   <footer>
     <p>&copy; <%= Time.current.year %> VerseCraft. All rights reserved.</p>
   </footer>

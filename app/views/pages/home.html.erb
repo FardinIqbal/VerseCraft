@@ -1,11 +1,12 @@
-<h1>Welcome to VerseCraft</h1>
+<h1 class="text-center">Welcome to VerseCraft</h1>
 
 <section class="featured-poems">
-  <h2>Featured Poems</h2>
+  <h2 class="text-center mb-1">Featured Poems</h2>
+
   <% if @featured_poems.present? %>
     <% @featured_poems.each do |poem| %>
-      <article class="poem featured-poem">
-        <h3><%= link_to poem.title, poem_path(poem) %></h3>
+      <article class="poem">
+        <h3 class="poem-title"><%= link_to poem.title, poem_path(poem), class: "poem-link" %></h3>
         <p class="poem-meta">By <%= poem.user.email %> | <%= poem.created_at.strftime("%B %d, %Y") %></p>
         <div class="poem-content">
           <%= truncate(poem.content, length: 100) %>
@@ -14,8 +15,6 @@
       </article>
     <% end %>
   <% else %>
-    <p>No featured poems at the moment.</p>
+    <p class="text-center">No featured poems at the moment.</p>
   <% end %>
 </section>
-
-<!-- Add other sections for your home page as needed -->
