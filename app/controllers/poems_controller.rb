@@ -49,6 +49,6 @@ class PoemsController < ApplicationController
   end
 
   def featured
-    @featured_poems = Poem.featured.includes(:user).order(created_at: :desc).limit(5)
+    @featured_poems = Poem.featured.includes(:user).order(created_at: :desc)
   end
 end

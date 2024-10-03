@@ -71,3 +71,7 @@ gem "devise", "~> 4.9"
 gem "bullet", "~> 7.2", :group => :development
 
 gem "sassc-rails", "~> 2.1"
+
+gem "nokogiri", "~> 1.16"
+
+gem "httparty", "~> 0.22.0"
