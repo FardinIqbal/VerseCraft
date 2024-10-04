@@ -65,32 +65,11 @@ p {
 
 // Navigation
 nav {
-  text-align: center;
   margin: 2rem 0;
 
   a {
     @include header-font;
-    color: $color-black;
-    text-decoration: none;
-    margin: 0 1rem;
     font-size: 1.1rem;
-    position: relative;
-
-    &:after {
-      content: '';
-      display: block;
-      width: 0%;
-      height: 2px;
-      background: $color-accent;
-      transition: width 0.3s;
-      position: absolute;
-      left: 0;
-      bottom: -5px;
-    }
-
-    &:hover:after {
-      width: 100%;
-    }
   }
 }
 

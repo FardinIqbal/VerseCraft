@@ -1,0 +1,13 @@
+// app/assets/stylesheets/application.scss
+
+// Import variables first
+@import "variables";
+
+// Import layout styles
+@import "layout";
+
+// Import other stylesheets
+@import "new_yorker_style";
+@import "poems";
+@import "poem_viewer";
+@import "home";

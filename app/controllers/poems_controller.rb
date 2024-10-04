@@ -6,8 +6,9 @@ class PoemsController < ApplicationController
   # GET /poems
   # Fetches all poems, including the associated user, to avoid N+1 query issues
   def index
-    @poems = Poem.includes(:user).all
+    @poems = Poem.includes(:user).order(created_at: :desc)
   end
+
 
   # GET /poems/:id
   # Displays a specific poem

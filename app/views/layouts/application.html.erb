@@ -1,10 +1,9 @@
-<!--app/views/layouts/application.html.erb-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>VerseCraft</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VerseCraft</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
@@ -20,33 +19,35 @@
 <body>
 <div class="container">
   <!-- Header Section -->
-  <header class="text-center">
-    <h1>VerseCraft</h1>
+  <header>
+    <h1 class="site-title">VerseCraft</h1>
     <!-- Navigation -->
-    <nav aria-label="Main navigation">
-      <%= link_to 'Home', root_path %>
-      <%= link_to 'Poems', poems_path %>
-      <% if user_signed_in? %>
-        <%= link_to 'New Poem', new_poem_path %>
-        <%= link_to 'My Profile', user_path(current_user) %>
-        <% if current_user.admin? %>
-          <%= link_to 'Admin', admin_poems_path %>
+    <div class="nav-wrapper">
+      <nav aria-label="Main navigation">
+        <%= link_to 'Home', root_path %>
+        <%= link_to 'Poems', poems_path %>
+        <% if user_signed_in? %>
+          <%= link_to 'New Poem', new_poem_path %>
+          <%= link_to 'My Profile', user_path(current_user) %>
+          <% if current_user.admin? %>
+            <%= link_to 'Admin', admin_poems_path %>
+          <% end %>
+          <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn-sign-out', form_class: 'button_to' %>
+        <% else %>
+          <%= link_to 'Sign In', new_user_session_path %>
+          <%= link_to 'Sign Up', new_user_registration_path %>
         <% end %>
-        <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
-      <% else %>
-        <%= link_to 'Sign In', new_user_session_path %>
-        <%= link_to 'Sign Up', new_user_registration_path %>
-      <% end %>
-    </nav>
+      </nav>
+    </div>
   </header>
 
   <!-- Main Content -->
   <main>
     <% if notice %>
-      <p class="notice"><%= notice %></p>
+      <p class="notice" role="alert"><%= notice %></p>
     <% end %>
     <% if alert %>
-      <p class="alert"><%= alert %></p>
+      <p class="alert" role="alert"><%= alert %></p>
     <% end %>
 
     <%= yield %>
