@@ -395,7 +395,7 @@
           </RakeTaskImpl>
           <RakeTaskImpl id="db">
             <subtasks>
-              <RakeTaskImpl description="Add William Shakespeare as a user and create his sonnets" fullCommand="db:add_shakespeare" id="add_shakespeare" />
+              <RakeTaskImpl description="Add William Shakespeare as a user and create all his sonnets" fullCommand="db:add_shakespeare" id="add_shakespeare" />
               <RakeTaskImpl description="Create the database from DATABASE_URL or config/database.yml for the current RAILS_ENV (use db:create:all to create all databases in the config). Without RAILS_ENV or when RAILS_ENV is development, it defaults to creating the development and test databases, except when DATABASE_URL is present" fullCommand="db:create" id="create" />
               <RakeTaskImpl description="Drop the database from DATABASE_URL or config/database.yml for the current RAILS_ENV (use db:drop:all to drop all databases in the config). Without RAILS_ENV or when RAILS_ENV is development, it defaults to dropping the development and test databases, except when DATABASE_URL is present" fullCommand="db:drop" id="drop" />
               <RakeTaskImpl id="encryption">
