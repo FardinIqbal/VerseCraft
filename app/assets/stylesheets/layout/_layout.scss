@@ -1,109 +1,51 @@
-@import "variables";
+// app/assets/stylesheets/layout/_layout.scss
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
+@import "../base/variables";
+
+// Main layout container
+.site-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
-header {
-  text-align: center;
+// Main content area
+.main-content {
+  flex: 1;
   padding: 2rem 0;
+  background-color: $color-white;
+}
 
-  .site-title {
-    font-family: $font-serif;
-    font-size: 3rem;
-    color: $color-black;
-    margin-bottom: 1rem;
+// Container sizes
+.container {
+  width: 100%;
+  max-width: $container-max-width;
+  margin: 0 auto;
+  padding: 0 $spacing-unit;
+
+  // Container variations
+  &-sm {
+    max-width: 600px;
   }
 
-  .nav-wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 2rem;
+  &-md {
+    max-width: 800px;
   }
 
-  nav {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-
-    a,
-    form.button_to {
-      display: inline-block;
-      position: relative;
-      color: $color-black;
-      text-decoration: none;
-      padding: 4px 8px;
-      transition: color 0.3s ease;
-      font-family: $font-serif;
-      font-size: 1.1rem;
-      line-height: 1.5;
-
-      &:hover {
-        color: $color-accent;
-      }
-
-      &::after {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 2px;
-        bottom: 0;
-        left: 0;
-        background-color: $color-accent;
-        transition: width 0.3s ease;
-      }
-
-      &:hover::after {
-        width: 100%;
-      }
-    }
-
-    form.button_to {
-      margin: 0;
-      padding: 0;
-      background: none;
-      border: none;
-
-      button {
-        background: none;
-        border: none;
-        color: inherit;
-        font: inherit;
-        cursor: pointer;
-        padding: 0;
-      }
-    }
+  &-lg {
+    max-width: 1200px;
   }
 }
 
-main {
-  min-height: calc(100vh - 200px);
-}
+// Section spacing
+.section {
+  padding: 4rem 0;
 
-footer {
-  text-align: center;
-  padding: 1rem 0;
-  color: $color-grey;
-}
+  &-sm {
+    padding: 2rem 0;
+  }
 
-.notice,
-.alert {
-  text-align: center;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
-}
-
-.notice {
-  background-color: #d4edda;
-  color: #155724;
-}
-
-.alert {
-  background-color: #f8d7da;
-  color: #721c24;
+  &-lg {
+    padding: 6rem 0;
+  }
 }

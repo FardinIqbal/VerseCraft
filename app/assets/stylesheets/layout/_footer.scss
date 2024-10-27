@@ -1,0 +1,102 @@
+// app/assets/stylesheets/layout/_footer.scss
+
+@import "../base/variables";
+
+.site-footer {
+  background-color: $color-light-grey;
+  padding: 4rem 0 2rem;
+  margin-top: auto;
+
+  .footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+
+  // Footer sections
+  .footer-section {
+    h3 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      color: $color-black;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      li {
+        margin-bottom: 0.5rem;
+
+        a {
+          color: $color-grey;
+          text-decoration: none;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: $color-accent;
+          }
+        }
+      }
+    }
+  }
+
+  // Newsletter form
+  .newsletter-form {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    @media (max-width: $breakpoint-sm) {
+      flex-direction: column;
+    }
+
+    input[type="email"] {
+      flex: 1;
+      padding: 0.5rem;
+      border: 1px solid $color-border;
+      border-radius: 4px;
+    }
+  }
+
+  // Social links
+  .social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+
+    a {
+      color: $color-grey;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $color-accent;
+      }
+    }
+  }
+
+  // Copyright section
+  .footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid $color-border;
+    color: $color-grey;
+    font-size: 0.9rem;
+
+    .footer-links {
+      margin-top: 1rem;
+
+      a {
+        color: $color-grey;
+        text-decoration: none;
+        margin: 0 0.5rem;
+
+        &:hover {
+          color: $color-accent;
+        }
+      }
+    }
+  }
+}
