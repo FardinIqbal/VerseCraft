@@ -1,0 +1,144 @@
+// app/assets/stylesheets/components/_forms.scss
+
+@import "../base/variables";
+
+// Form container
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+// Labels
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: $font-serif;
+  font-size: 1rem;
+  color: $color-black;
+}
+
+// Basic input styles
+.form-control {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  font-family: $font-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: $color-black;
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  transition: $transition-base;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 2px rgba($color-primary, 0.1);
+  }
+
+  &::placeholder {
+    color: lighten($color-grey, 20%);
+  }
+
+  &:disabled {
+    background-color: $color-light-grey;
+    cursor: not-allowed;
+  }
+}
+
+// Textarea specific styles
+textarea.form-control {
+  min-height: 150px;
+  resize: vertical;
+
+  &.poem-content {
+    min-height: 300px;
+    font-family: $font-serif;
+    line-height: 1.8;
+    white-space: pre-wrap;
+  }
+}
+
+// Form validation states
+.form-control.is-invalid {
+  border-color: $color-error;
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba($color-error, 0.1);
+  }
+}
+
+.invalid-feedback {
+  display: block;
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: $color-error;
+}
+
+// Error messages list
+.error-messages {
+  margin-bottom: 1.5rem;
+  padding: 1rem;
+  border: 1px solid $color-error;
+  border-radius: $border-radius-md;
+  background-color: rgba($color-error, 0.1);
+
+  h2 {
+    font-size: 1rem;
+    color: $color-error;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      color: $color-error;
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
+
+// Form layout utilities
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: -0.5rem;
+  margin-left: -0.5rem;
+
+  > * {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+  }
+
+  @media (min-width: $breakpoint-md) {
+    > * {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
+  }
+}
+
+// Form actions
+.form-actions {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+
+  @media (max-width: $breakpoint-sm) {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

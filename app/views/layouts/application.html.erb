@@ -3,11 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="VerseCraft - A platform for poets to share and discover poetry">
   <title>VerseCraft</title>
+
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <!-- Google Fonts -->
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Georgia&display=swap" rel="stylesheet">
 
   <!-- Stylesheets -->
@@ -16,46 +20,74 @@
   <!-- JavaScript -->
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 </head>
+
 <body>
-<div class="container">
+<!-- Accessibility Skip Link -->
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<div class="site-wrapper">
   <!-- Header Section -->
-  <header>
-    <h1 class="site-title">VerseCraft</h1>
-    <!-- Navigation -->
-    <div class="nav-wrapper">
-      <nav aria-label="Main navigation">
-        <%= link_to 'Home', root_path %>
-        <%= link_to 'Poems', poems_path %>
-        <% if user_signed_in? %>
-          <%= link_to 'New Poem', new_poem_path %>
-          <%= link_to 'My Profile', user_path(current_user) %>
-          <% if current_user.admin? %>
-            <%= link_to 'Admin', admin_poems_path %>
-          <% end %>
-          <%= button_to 'Sign Out', destroy_user_session_path, method: :delete, class: 'btn-sign-out', form_class: 'button_to' %>
-        <% else %>
-          <%= link_to 'Sign In', new_user_session_path %>
-          <%= link_to 'Sign Up', new_user_registration_path %>
-        <% end %>
-      </nav>
+  <header class="site-header" role="banner">
+    <div class="container">
+      <div class="header-content">
+        <!-- Logo/Site Title -->
+        <h1 class="site-title">
+          <%= link_to 'VerseCraft', root_path, aria: { label: 'Home' } %>
+        </h1>
+
+        <!-- Navigation -->
+        <div class="nav-wrapper">
+          <nav aria-label="Main navigation">
+            <%= link_to 'Home', root_path %>
+            <%= link_to 'Poems', poems_path %>
+            <% if user_signed_in? %>
+              <%= link_to 'New Poem', new_poem_path %>
+              <%= link_to 'My Profile', user_path(current_user) %>
+              <% if current_user.admin? %>
+                <%= link_to 'Admin', admin_poems_path %>
+              <% end %>
+              <%= button_to 'Sign Out',
+                            destroy_user_session_path,
+                            method: :delete,
+                            class: 'btn-sign-out',
+                            form_class: 'button_to' %>
+            <% else %>
+              <%= link_to 'Sign In', new_user_session_path %>
+              <%= link_to 'Sign Up', new_user_registration_path %>
+            <% end %>
+          </nav>
+        </div>
+      </div>
     </div>
   </header>
 
   <!-- Main Content -->
-  <main>
-    <% if notice %>
-      <p class="notice" role="alert"><%= notice %></p>
-    <% end %>
-    <% if alert %>
-      <p class="alert" role="alert"><%= alert %></p>
-    <% end %>
+  <main id="main" class="main-content" role="main">
+    <div class="container">
+      <!-- Notifications -->
+      <% if notice %>
+        <div class="alert alert-success" role="alert">
+          <%= notice %>
+        </div>
+      <% end %>
 
-    <%= yield %>
+      <% if alert %>
+        <div class="alert alert-error" role="alert">
+          <%= alert %>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </div>
   </main>
 
   <!-- Footer -->
-  <footer>
-    <p>&copy; <%= Time.current.year %> VerseCraft. All rights reserved.</p>
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p class="copyright">
+        &copy; <%= Time.current.year %> VerseCraft. All rights reserved.
+      </p>
+    </div>
   </footer>
 </div>
 </body>

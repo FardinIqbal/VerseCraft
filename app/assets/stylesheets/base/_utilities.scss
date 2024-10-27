@@ -138,3 +138,21 @@ $spacers: (
 .h-50 { height: 50% !important; }
 .h-25 { height: 25% !important; }
 .h-auto { height: auto !important; }
+
+// Z-index utilities
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  z-index: 999;
+  padding: 1em;
+  background-color: $color-white;
+  color: $color-black;
+  text-decoration: none;
+  border: 1px solid $color-border;
+
+  &:focus {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+  }
+}

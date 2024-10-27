@@ -1,0 +1,99 @@
+// app/assets/stylesheets/components/_buttons.scss
+
+@import "../base/variables";
+
+// Base button styles
+.btn {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  font-family: $font-serif;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.5;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  border: 1px solid $color-black;
+  background-color: $color-white;
+  color: $color-black;
+  transition: $transition-base;
+
+  &:hover {
+    background-color: $color-black;
+    color: $color-white;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba($color-black, 0.2);
+  }
+
+  // Disabled state
+  &:disabled,
+  &.disabled {
+    opacity: 0.65;
+    pointer-events: none;
+  }
+}
+
+// Button variations
+.btn-primary {
+  background-color: $color-primary;
+  border-color: $color-primary;
+  color: $color-white;
+
+  &:hover {
+    background-color: darken($color-primary, 10%);
+    border-color: darken($color-primary, 10%);
+  }
+}
+
+.btn-accent {
+  background-color: $color-accent;
+  border-color: $color-accent;
+  color: $color-white;
+
+  &:hover {
+    background-color: darken($color-accent, 10%);
+    border-color: darken($color-accent, 10%);
+  }
+}
+
+// Sign out button specific styles
+.btn-sign-out {
+  @extend .btn;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  color: $color-grey;
+
+  &:hover {
+    color: $color-accent;
+    background: none;
+  }
+}
+
+// Button sizes
+.btn-sm {
+  padding: 0.4rem 0.8rem;
+  font-size: 0.875rem;
+}
+
+.btn-lg {
+  padding: 0.8rem 1.6rem;
+  font-size: 1.125rem;
+}
+
+// Full width button
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+// Button groups
+.btn-group {
+  display: inline-flex;
+  gap: 0.5rem;
+}
