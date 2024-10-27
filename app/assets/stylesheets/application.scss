@@ -1,13 +1,29 @@
 // app/assets/stylesheets/application.scss
 
-// Import variables first
+// Variables and Configurations
 @import "variables";
 
-// Import layout styles
-@import "layout";
+// Base Styles
+@import "base/reset";
+@import "base/typography";
+@import "base/utilities";
 
-// Import other stylesheets
-@import "new_yorker_style";
-@import "poems";
-@import "poem_viewer";
-@import "home";
+// Layout
+@import "layout/layout";
+@import "layout/header";
+@import "layout/footer";
+@import "layout/navigation";
+
+// Components
+@import "components/buttons";
+@import "components/forms";
+@import "components/cards";
+@import "components/poems";
+@import "components/poem_viewer";
+@import "components/poetry";
+
+// Pages
+@import "pages/home";
+
+// Themes
+@import "themes/new_yorker";

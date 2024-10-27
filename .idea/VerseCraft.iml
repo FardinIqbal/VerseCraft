@@ -501,6 +501,11 @@
               <RakeTaskImpl description="Truncate all/specified *.log files in log/ to zero bytes (specify which logs with LOGS=test,development)" fullCommand="log:clear" id="clear" />
             </subtasks>
           </RakeTaskImpl>
+          <RakeTaskImpl id="poetry">
+            <subtasks>
+              <RakeTaskImpl description="Seed Shakespeare's poetry into the database" fullCommand="poetry:seed_shakespeare" id="seed_shakespeare" />
+            </subtasks>
+          </RakeTaskImpl>
           <RakeTaskImpl id="sonnets">
             <subtasks>
               <RakeTaskImpl description="Scrape Shakespeare's sonnets and save them to a file" fullCommand="sonnets:scrape" id="scrape" />

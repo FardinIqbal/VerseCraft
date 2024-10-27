@@ -1,0 +1,119 @@
+// app/assets/stylesheets/components/_poems.scss
+
+@import "../base/variables";
+
+// Poem card for listings
+.poem-card {
+  background: $color-white;
+  border: 1px solid $color-border;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .poem-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+
+    a {
+      color: $color-black;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: $color-hover;
+      }
+    }
+  }
+
+  .poem-meta {
+    color: $color-grey;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .poem-preview {
+    font-family: $font-serif;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    white-space: pre-line;
+  }
+}
+
+// Poems grid layout
+.poems-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+
+  @media (max-width: $breakpoint-sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// Featured poems section
+.featured-poems {
+  margin: 3rem 0;
+
+  .section-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .poem-card {
+    border-color: $color-accent;
+  }
+}
+
+// Poem categories/filters
+.poem-filters {
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .filter-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid $color-border;
+    background: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover,
+    &.active {
+      background-color: $color-black;
+      color: $color-white;
+      border-color: $color-black;
+    }
+  }
+}
+
+// Empty state
+.no-poems {
+  text-align: center;
+  padding: 3rem;
+  color: $color-grey;
+  font-style: italic;
+}
+
+// Poem statistics
+.poem-stats {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.9rem;
+  color: $color-grey;
+
+  .stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+}

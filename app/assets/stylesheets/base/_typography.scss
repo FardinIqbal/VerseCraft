@@ -1,0 +1,147 @@
+// app/assets/stylesheets/base/_typography.scss
+
+@import "variables";
+
+// Basic Typography
+html {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+body {
+  font-family: $font-serif;
+  color: $color-black;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+// Headings
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-serif;
+  margin-bottom: 0.5em;
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+h3 {
+  font-size: 1.75rem;
+}
+
+h4 {
+  font-size: 1.5rem;
+}
+
+h5 {
+  font-size: 1.25rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+// Paragraphs
+p {
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+// Links
+a {
+  color: $color-primary;
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: $color-hover;
+  }
+
+  &:focus {
+    outline: none;
+    text-decoration: underline;
+  }
+}
+
+// Lists
+ul, ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+}
+
+// Poetry-specific typography
+.poem {
+  line-height: 1.8;
+
+  &-title {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  &-content {
+    font-family: $font-serif;
+    font-size: 1.2rem;
+    white-space: pre-wrap;
+  }
+
+  &-meta {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: $color-grey;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}
+
+// Utility text classes
+.text-small {
+  font-size: 0.875rem;
+}
+
+.text-large {
+  font-size: 1.125rem;
+}
+
+.text-italic {
+  font-style: italic;
+}
+
+.text-bold {
+  font-weight: bold;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-muted {
+  color: $color-grey;
+}
+
+// Quote styles
+blockquote {
+  font-style: italic;
+  margin: 2rem 0;
+  padding-left: 1.5rem;
+  border-left: 3px solid $color-primary;
+  color: $color-grey;
+}

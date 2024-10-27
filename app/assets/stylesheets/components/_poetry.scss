@@ -1,0 +1,111 @@
+// app/assets/stylesheets/components/_poetry.scss
+
+@import "../base/variables";
+
+// Poetry collection styles
+.poetry-collection {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  .collection-header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    .collection-title {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .collection-description {
+      color: $color-grey;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+}
+
+// Poetry forms guide
+.poetry-forms {
+  margin: 2rem 0;
+
+  .form-card {
+    background: $color-white;
+    padding: 1.5rem;
+    border: 1px solid $color-border;
+    margin-bottom: 1.5rem;
+
+    .form-name {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-description {
+      color: $color-grey;
+      margin-bottom: 1rem;
+    }
+
+    .form-example {
+      font-family: $font-serif;
+      font-style: italic;
+      padding: 1rem;
+      background: $color-light-grey;
+      margin-top: 1rem;
+    }
+  }
+}
+
+// Poetry writing tools
+.writing-tools {
+  background: $color-light-grey;
+  padding: 2rem;
+  margin: 2rem 0;
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .tool-card {
+    background: $color-white;
+    padding: 1.5rem;
+    text-align: center;
+
+    .tool-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .tool-name {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .tool-description {
+      font-size: 0.9rem;
+      color: $color-grey;
+    }
+  }
+}
+
+// Daily prompts
+.daily-prompt {
+  text-align: center;
+  padding: 3rem;
+  background: $color-white;
+  margin: 2rem 0;
+  border: 1px solid $color-border;
+
+  .prompt-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .prompt-text {
+    font-family: $font-serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+  }
+}
