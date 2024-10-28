@@ -18,6 +18,7 @@
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
   <!-- JavaScript -->
+  <%= javascript_importmap_tags %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 </head>
 
@@ -26,57 +27,12 @@
 <a href="#main" class="skip-link">Skip to main content</a>
 
 <div class="site-wrapper">
-  <!-- Header Section -->
-  <header class="site-header" role="banner">
-    <div class="container">
-      <div class="header-content">
-        <!-- Logo/Site Title -->
-        <h1 class="site-title">
-          <%= link_to 'VerseCraft', root_path, aria: { label: 'Home' } %>
-        </h1>
-
-        <!-- Navigation -->
-        <div class="nav-wrapper">
-          <nav aria-label="Main navigation">
-            <%= link_to 'Home', root_path %>
-            <%= link_to 'Poems', poems_path %>
-            <% if user_signed_in? %>
-              <%= link_to 'New Poem', new_poem_path %>
-              <%= link_to 'My Profile', user_path(current_user) %>
-              <% if current_user.admin? %>
-                <%= link_to 'Admin', admin_poems_path %>
-              <% end %>
-              <%= button_to 'Sign Out',
-                            destroy_user_session_path,
-                            method: :delete,
-                            class: 'btn-sign-out',
-                            form_class: 'button_to' %>
-            <% else %>
-              <%= link_to 'Sign In', new_user_session_path %>
-              <%= link_to 'Sign Up', new_user_registration_path %>
-            <% end %>
-          </nav>
-        </div>
-      </div>
-    </div>
-  </header>
+  <%= render partial: 'shared/header' %>
 
   <!-- Main Content -->
   <main id="main" class="main-content" role="main">
     <div class="container">
-      <!-- Notifications -->
-      <% if notice %>
-        <div class="alert alert-success" role="alert">
-          <%= notice %>
-        </div>
-      <% end %>
-
-      <% if alert %>
-        <div class="alert alert-error" role="alert">
-          <%= alert %>
-        </div>
-      <% end %>
-
+      <%= render partial: 'shared/alerts' %>
       <%= yield %>
     </div>
   </main>
@@ -90,5 +46,13 @@
     </div>
   </footer>
 </div>
+
+<% if Rails.env.development? %>
+  <script>
+      window.addEventListener('stimulus-debug', (event) => {
+          console.log('Stimulus Debug:', event.detail);
+      });
+  </script>
+<% end %>
 </body>
 </html>

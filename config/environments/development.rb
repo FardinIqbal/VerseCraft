@@ -1,3 +1,4 @@
+# config/environments/development.rb
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
@@ -59,8 +60,14 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
 
-  # Suppress logger output for asset requests.
+  # Asset Pipeline Configuration
+  config.assets.debug = true
   config.assets.quiet = true
+  config.assets.compile = true
+  config.assets.check_precompiled_asset = false
+  config.assets.paths << Rails.root.join("app", "assets", "stylesheets")
+  config.assets.paths << Rails.root.join("app", "javascript")
+  config.assets.paths << Rails.root.join("vendor", "javascript")
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
@@ -76,4 +83,8 @@ Rails.application.configure do
     Bullet.console = true
     Bullet.rails_logger = true
   end
+
+  # Add rack-mini-profiler for performance analysis
+  # Uncomment if you want to use rack-mini-profiler
+  # config.rack_mini_profiler.enabled = true
 end

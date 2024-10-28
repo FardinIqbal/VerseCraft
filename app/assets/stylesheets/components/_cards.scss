@@ -1,0 +1,130 @@
+// app/assets/stylesheets/components/_cards.scss
+
+@import "../base/variables";
+
+.card {
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  border-radius: $border-radius-md;
+  overflow: hidden;
+  transition: $transition-base;
+
+  // Card variations
+  &-hover {
+    &:hover {
+      transform: translateY(-3px);
+      box-shadow: $shadow-md;
+    }
+  }
+
+  // Card header
+  &-header {
+    padding: 1rem;
+    border-bottom: 1px solid $color-border;
+    background-color: $color-white;
+
+    h2, h3, h4, h5, h6 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+  }
+
+  // Card body
+  &-body {
+    padding: 1rem;
+
+    > :last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  // Card footer
+  &-footer {
+    padding: 1rem;
+    border-top: 1px solid $color-border;
+    background-color: $color-light-grey;
+  }
+
+  // Card with image
+  &-image {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  // Card overlay (for images with text overlay)
+  &-overlay {
+    position: relative;
+
+    .card-body {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(
+                      to top,
+                      rgba($color-black, 0.8),
+                      rgba($color-black, 0)
+      );
+      color: $color-white;
+    }
+  }
+
+  // Card grid system
+  &-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+
+    @media (max-width: $breakpoint-sm) {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+// Poetry-specific card styles
+.poetry-card {
+  @extend .card;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+
+  .poetry-title {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    font-family: $font-serif;
+  }
+
+  .poetry-excerpt {
+    font-style: italic;
+    color: $color-grey;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+  }
+
+  .poetry-meta {
+    font-size: 0.875rem;
+    color: $color-grey;
+  }
+}
+
+// Featured card
+.featured-card {
+  @extend .card;
+  border-color: $color-accent;
+
+  .card-header {
+    background-color: rgba($color-accent, 0.1);
+    color: $color-accent;
+  }
+
+  .featured-badge {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background-color: $color-accent;
+    color: $color-white;
+    font-size: 0.75rem;
+    border-radius: $border-radius-sm;
+    margin-left: 0.5rem;
+  }
+}

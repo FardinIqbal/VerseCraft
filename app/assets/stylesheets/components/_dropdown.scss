@@ -1,0 +1,134 @@
+// app/assets/stylesheets/components/_dropdown.scss
+
+@import "../base/variables";
+
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+
+  &-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: $color-black;
+    transition: $transition-base;
+
+    &:hover {
+      color: $color-accent;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      background-color: $color-light-grey;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      color: $color-grey;
+    }
+
+    .dropdown-arrow {
+      font-size: 0.8rem;
+      transition: transform 0.3s ease;
+    }
+
+    &[aria-expanded="true"] {
+      .dropdown-arrow {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  &-content {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 200px;
+    background-color: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $border-radius-md;
+    box-shadow: $shadow-md;
+    padding: 0.5rem 0;
+    margin-top: 0.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: $z-index-dropdown;
+
+    &.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  color: $color-black;
+  text-decoration: none;
+  transition: $transition-base;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-light-grey;
+    color: $color-accent;
+  }
+
+  .icon {
+    font-size: 1.2rem;
+  }
+
+  &.text-error {
+    color: $color-error;
+
+    &:hover {
+      background-color: rgba($color-error, 0.1);
+    }
+  }
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: $color-border;
+  margin: 0.5rem 0;
+}
+
+@media (max-width: $breakpoint-md) {
+  .user-dropdown {
+    width: 100%;
+
+    &-toggle {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    &-content {
+      position: static;
+      box-shadow: none;
+      border: none;
+      border-radius: 0;
+      margin-top: 0;
+      padding: 0;
+
+      &.active {
+        border-top: 1px solid $color-border;
+        border-bottom: 1px solid $color-border;
+      }
+    }
+  }
+}

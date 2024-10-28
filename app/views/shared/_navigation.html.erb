@@ -1,0 +1,68 @@
+<!-- app/views/shared/_navigation.html.erb -->
+<div class="nav-wrapper">
+  <nav class="main-nav"
+       data-controller="menu"
+       data-menu-visible-class="active"
+       aria-label="Main navigation">
+
+    <button class="menu-toggle"
+            data-menu-target="button"
+            data-action="menu#toggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false">
+      <span class="menu-icon"></span>
+    </button>
+
+    <div class="nav-list" data-menu-target="menu">
+      <%= link_to 'Home', root_path, class: 'nav-item' %>
+      <%= link_to 'Poems', poems_path, class: 'nav-item' %>
+      <% if user_signed_in? %>
+        <%= link_to 'New Poem', new_poem_path, class: 'nav-item' %>
+
+        <div class="user-dropdown"
+             data-controller="dropdown"
+             data-dropdown-open-class="active">
+
+          <button class="user-dropdown-toggle"
+                  data-action="dropdown#toggle">
+            <span class="user-avatar">
+              <%= current_user.email[0].upcase %>
+            </span>
+            <span class="user-name"><%= current_user.email %></span>
+            <span class="dropdown-arrow">▼</span>
+          </button>
+
+          <div class="user-dropdown-content" data-dropdown-target="content">
+            <%= link_to user_path(current_user), class: 'dropdown-item' do %>
+              <i class="icon">👤</i> My Profile
+            <% end %>
+
+            <% if current_user.admin? %>
+              <%= link_to admin_poems_path, class: 'dropdown-item' do %>
+                <i class="icon">⚙️</i> Admin Dashboard
+              <% end %>
+            <% end %>
+
+            <%= link_to edit_user_registration_path, class: 'dropdown-item' do %>
+              <i class="icon">🔧</i> Settings
+            <% end %>
+
+            <div class="dropdown-divider"></div>
+
+            <%= button_to destroy_user_session_path,
+                          method: :delete,
+                          class: 'dropdown-item text-error',
+                          form_class: 'button_to' do %>
+              <i class="icon">🚪</i> Sign Out
+            <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="auth-buttons">
+          <%= link_to 'Sign In', new_user_session_path, class: 'nav-item' %>
+          <%= link_to 'Sign Up', new_user_registration_path, class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
+  </nav>
+</div>
