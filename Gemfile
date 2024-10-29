@@ -9,7 +9,6 @@ gem "rails", "~> 7.1.4"
 gem "sprockets-rails"
 
 # Use mysql as the database for Active Record
-gem "mysql2", "~> 0.5"
 
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -75,3 +74,5 @@ gem "sassc-rails", "~> 2.1"
 gem "nokogiri", "~> 1.16"
 
 gem "httparty", "~> 0.22.0"
+
+gem 'pg'
