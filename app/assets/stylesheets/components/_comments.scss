@@ -1,0 +1,124 @@
+// app/assets/stylesheets/components/_comments.scss
+
+@import "../base/variables";
+
+// Comments section container
+.comments-section {
+  margin-top: $spacing-3xl;
+  padding-top: $spacing-2xl;
+  border-top: $border-width $border-style $color-border;
+}
+
+// Comment title
+.comments-title {
+  font-family: $font-serif;
+  font-size: $font-size-2xl;
+  margin-bottom: $spacing-2xl;
+  color: $color-black;
+}
+
+// Individual comment
+.comment {
+  margin-bottom: $spacing-2xl;
+
+  &:not(:last-child) {
+    border-bottom: $border-width $border-style $color-light-grey;
+    padding-bottom: $spacing-2xl;
+  }
+}
+
+// Comment metadata
+.comment-meta {
+  font-family: $font-sans-serif;
+  font-size: $font-size-sm;
+  color: $color-grey;
+  margin-bottom: $spacing-sm;
+
+  .comment-author {
+    font-weight: 500;
+  }
+
+  .comment-date {
+    &:before {
+      content: "•";
+      margin: 0 $spacing-sm;
+    }
+  }
+}
+
+// Comment content
+.comment-content {
+  font-family: $font-serif;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+  color: $color-black;
+  margin-bottom: $spacing-md;
+
+  p {
+    margin-bottom: $spacing-md;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+// Comment form
+.comment-form {
+  margin-bottom: $spacing-3xl;
+
+  .comment-input {
+    width: 100%;
+    padding: $spacing-md;
+    border: $border-width $border-style $color-border;
+    font-family: $font-serif;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    resize: vertical;
+    min-height: 100px;
+    background-color: $color-white;
+
+    &:focus {
+      outline: none;
+      border-color: $color-accent;
+    }
+  }
+
+  .form-actions {
+    margin-top: $spacing-md;
+  }
+}
+
+// Delete comment button
+.btn-delete-comment {
+  font-family: $font-sans-serif;
+  font-size: $font-size-xs;
+  color: $color-grey;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: $transition-base;
+
+  &:hover {
+    color: $color-accent;
+  }
+}
+
+// Sign in prompt
+.sign-in-prompt {
+  text-align: center;
+  color: $color-grey;
+  font-family: $font-serif;
+  font-style: italic;
+  margin: $spacing-2xl 0;
+
+  a {
+    color: $color-accent;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,9 +1,8 @@
 <!--
   app/views/poems/show.html.erb
 
-  This template displays a single poem with its metadata and associated actions.
-  It includes like/unlike functionality, editing capabilities for authors,
-  and proper formatting for poetry display.
+  This template displays a single poem with its metadata, associated actions,
+  and comments section.
 
   Features:
   - Responsive poem display
@@ -11,6 +10,7 @@
   - Edit/Delete options for poem authors
   - Proper poetry formatting with line breaks
   - Attribution for public domain works
+  - Interactive comments section
 -->
 
 <%# Main poem display section %>
@@ -107,6 +107,30 @@
     <% end %>
   </div>
 </div>
+
+<%# Comments section %>
+<section class="comments-section" aria-label="Poem comments">
+  <%# Comments header %>
+  <h3 class="comments-title">Thoughts on this poem</h3>
+
+  <%# Comments stream - updates dynamically with Turbo %>
+  <%= turbo_frame_tag "poem-comments" do %>
+    <% if @poem.comments.any? %>
+      <%= render @poem.comments.chronological %>
+    <% else %>
+      <p class="no-comments">Be the first to share your thoughts on this poem.</p>
+    <% end %>
+  <% end %>
+
+  <%# Comment form for authenticated users %>
+  <% if user_signed_in? %>
+    <%= render "comments/form", poem: @poem %>
+  <% else %>
+    <p class="sign-in-prompt">
+      <%= link_to "Sign in", new_user_session_path %> to share your thoughts on this poem.
+    </p>
+  <% end %>
+</section>
 
 <%# Optional sharing section %>
 <% if Rails.env.production? %>

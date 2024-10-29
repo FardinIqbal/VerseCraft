@@ -1,30 +1,50 @@
+# config/routes.rb
+
+# This file defines all the routes for the VerseCraft application.
+# It includes routes for authentication, user profiles, poems,
+# social features (likes, comments), and admin functionality.
 Rails.application.routes.draw do
-  # Authentication routes
+  #-----------------
+  # Authentication
+  #-----------------
+  # Provides routes for user registration, login, and account management
   devise_for :users
 
-  # Root path (homepage)
-  # This is where featured poems will be displayed
+  #-----------------
+  # Public Routes
+  #-----------------
+  # Root path - Featured poems displayed on homepage
   root 'pages#home'
 
-  # User profile routes
+  # User profile management
+  # Allows viewing and editing user profiles
   resources :users, only: [:show, :edit, :update]
 
-  # Poem routes with nested routes for likes and comments
+  # Poem management and interaction
+  # Includes nested routes for social features
   resources :poems do
+    # Social interaction routes
     resources :likes, only: [:create, :destroy]
-    resources :comments, only: [:create, :update, :destroy]
+    resources :comments, only: [:create, :destroy]
   end
 
-  # Admin namespace
+  #-----------------
+  # Admin Routes
+  #-----------------
+  # Namespaced admin routes for content management
   namespace :admin do
     resources :poems, only: [:index] do
       member do
+        # Toggle featured status of poems
         patch :toggle_featured
       end
     end
   end
 
-  # Health check route
+  #-----------------
+  # System Routes
+  #-----------------
+  # Health check endpoint for monitoring
   get 'up', to: 'rails/health#show', as: :rails_health_check
 
   # For details on the DSL available within this file, see:

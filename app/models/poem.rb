@@ -14,6 +14,8 @@ class Poem < ApplicationRecord
   has_many :likes
   # Users who have liked this poem, accessed through the likes table
   has_many :liking_users, through: :likes, source: :user
+  # Comments on this poem
+  has_many :comments, dependent: :destroy
 
   #-----------------
   # Validations
