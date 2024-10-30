@@ -23,6 +23,11 @@ Rails.application.routes.draw do
   # Poem management and interaction
   # Includes nested routes for social features
   resources :poems do
+    # Poem form guidelines route
+    collection do
+      get 'form_guidelines/:form', to: 'poems#form_guidelines'
+    end
+
     # Social interaction routes
     resources :likes, only: [:create, :destroy]
     resources :comments, only: [:create, :destroy]
@@ -46,7 +51,4 @@ Rails.application.routes.draw do
   #-----------------
   # Health check endpoint for monitoring
   get 'up', to: 'rails/health#show', as: :rails_health_check
-
-  # For details on the DSL available within this file, see:
-  # https://guides.rubyonrails.org/routing.html
 end

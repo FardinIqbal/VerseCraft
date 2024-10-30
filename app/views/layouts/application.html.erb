@@ -1,3 +1,4 @@
+<!-- app/views/layouts/application.html.erb -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -19,7 +20,6 @@
 
   <!-- JavaScript -->
   <%= javascript_importmap_tags %>
-  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
 </head>
 
 <body>
@@ -49,9 +49,7 @@
 
 <% if Rails.env.development? %>
   <script>
-      window.addEventListener('stimulus-debug', (event) => {
-          console.log('Stimulus Debug:', event.detail);
-      });
+      console.log('Development mode active');
   </script>
 <% end %>
 </body>

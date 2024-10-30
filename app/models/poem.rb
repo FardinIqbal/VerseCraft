@@ -5,6 +5,18 @@
 # Poems can be featured for special display on the platform.
 class Poem < ApplicationRecord
   #-----------------
+  # Constants
+  #-----------------
+  # Available poetry forms
+  FORMS = {
+    'free_verse' => 'Free Verse',
+    'sonnet' => 'Sonnet',
+    'haiku' => 'Haiku',
+    'tanka' => 'Tanka',
+    'limerick' => 'Limerick'
+  }.freeze
+
+  #-----------------
   # Associations
   #-----------------
   # Each poem must have an author (user)
@@ -47,6 +59,9 @@ class Poem < ApplicationRecord
             },
             allow_nil: true
 
+  # Form validation
+  validates :form, inclusion: { in: FORMS.keys }, allow_nil: true
+
   #-----------------
   # Scopes
   #-----------------
@@ -65,6 +80,9 @@ class Poem < ApplicationRecord
       .group(:id)
       .select('poems.*, COUNT(likes.id) as likes_count')
   }
+
+  # Returns poems of a specific form
+  scope :by_form, ->(form) { where(form: form) }
 
   #-----------------
   # Instance Methods
@@ -97,10 +115,48 @@ class Poem < ApplicationRecord
     content.truncate(length, separator: ' ')
   end
 
+  # Returns the display name for the poem's form
+  # @return [String, nil] the human-readable form name if form is present
+  def form_name
+    FORMS[form] if form.present?
+  end
+
+  # Determines if the poem follows standard form rules
+  # @return [Boolean] true if the poem matches its form's requirements
+  def valid_form?
+    case form
+    when 'haiku'
+      validate_haiku
+    when 'sonnet'
+      validate_sonnet
+    when 'limerick'
+      validate_limerick
+    else
+      true # Free verse and other forms have no strict rules
+    end
+  end
+
   #-----------------
   # Private Methods
   #-----------------
   private
 
-  # Add any private methods here
+  # Validates haiku structure (3 lines, 5-7-5 syllables)
+  def validate_haiku
+    lines = content.split("\n").reject(&:blank?)
+    lines.count == 3
+    # Note: Syllable counting would require additional gem/logic
+  end
+
+  # Validates sonnet structure (14 lines)
+  def validate_sonnet
+    lines = content.split("\n").reject(&:blank?)
+    lines.count == 14
+  end
+
+  # Validates limerick structure (5 lines)
+  def validate_limerick
+    lines = content.split("\n").reject(&:blank?)
+    lines.count == 5
+  end
 end

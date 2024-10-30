@@ -1,3 +1,4 @@
+<%# app/views/poems/_form.html.erb %>
 <%= form_with(model: poem, local: true) do |form| %>
   <% if poem.errors.any? %>
     <div id="error_explanation" class="error-messages">
@@ -15,9 +16,24 @@
     <%= form.text_field :title, class: "form-control" %>
   </div>
 
-  <div class="form-group">
+  <%# Note the data attributes for Stimulus %>
+  <div class="form-group" data-controller="poem-form">
+    <%= form.label :form, "Poetry Form" %>
+    <%= form.select :form,
+                    Poem::FORMS.map { |key, value| [value, key] },
+                    { include_blank: "Select a form" },
+                    {
+                      class: "form-control",
+                      data: { action: "change->poem-form#updateGuidelines" }
+                    } %>
+
+    <%# This div is the target for guidelines %>
+    <div data-poem-form-target="guidelines" class="form-guidelines mt-3"></div>
+
     <%= form.label :content %>
-    <%= form.text_area :content, class: "form-control" %>
+    <%= form.text_area :content,
+                       class: "form-control poem-content-input",
+                       data: { poem_form_target: "contentInput" } %>
   </div>
 
   <div class="form-group mt-3">

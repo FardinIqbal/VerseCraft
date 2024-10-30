@@ -2,123 +2,129 @@
 
 @import "../base/variables";
 
-// Comments section container
+// Container for the comments section
 .comments-section {
-  margin-top: $spacing-3xl;
-  padding-top: $spacing-2xl;
-  border-top: $border-width $border-style $color-border;
+  margin-top: $spacing-3xl; // Space above the comments section
+  padding-top: $spacing-2xl; // Padding at the top for spacing
+  border-top: $border-width $border-style $color-border; // Top border for section separation
 }
 
-// Comment title
+// Title styling for comments section
 .comments-title {
-  font-family: $font-serif;
-  font-size: $font-size-2xl;
-  margin-bottom: $spacing-2xl;
-  color: $color-black;
+  font-family: $font-serif; // Serif font for elegance
+  font-size: $font-size-2xl; // Large font size for emphasis
+  margin-bottom: $spacing-2xl; // Space below the title
+  color: $color-black; // Black color for visibility
 }
 
-// Individual comment
+// Individual comment container
 .comment {
-  margin-bottom: $spacing-2xl;
+  margin-bottom: $spacing-2xl; // Space between each comment
 
+  // Adds a bottom border to all but the last comment
   &:not(:last-child) {
     border-bottom: $border-width $border-style $color-light-grey;
-    padding-bottom: $spacing-2xl;
+    padding-bottom: $spacing-2xl; // Space below each comment
   }
 }
 
-// Comment metadata
+// Metadata section for each comment (author, date)
 .comment-meta {
-  font-family: $font-sans-serif;
-  font-size: $font-size-sm;
-  color: $color-grey;
-  margin-bottom: $spacing-sm;
+  font-family: $font-sans-serif; // Sans-serif font for readability
+  font-size: $font-size-sm; // Small font size for metadata
+  color: $color-grey; // Grey color to de-emphasize
+  margin-bottom: $spacing-sm; // Space below metadata
 
   .comment-author {
-    font-weight: 500;
+    font-weight: 500; // Semi-bold for emphasis on the author
   }
 
+  // Separator for the date with a bullet before the date
   .comment-date {
     &:before {
-      content: "•";
+      content: "•"; // Bullet point separator
       margin: 0 $spacing-sm;
     }
   }
 }
 
-// Comment content
+// Content section within each comment
 .comment-content {
-  font-family: $font-serif;
-  font-size: $font-size-base;
-  line-height: $line-height-base;
-  color: $color-black;
-  margin-bottom: $spacing-md;
+  font-family: $font-serif; // Serif font for readability
+  font-size: $font-size-base; // Base font size
+  line-height: $line-height-base; // Standard line height
+  color: $color-black; // Black color for clarity
+  margin-bottom: $spacing-md; // Space below content
 
+  // Paragraphs within the comment content
   p {
     margin-bottom: $spacing-md;
 
+    // Removes bottom margin from the last paragraph
     &:last-child {
       margin-bottom: 0;
     }
   }
 }
 
-// Comment form
+// Comment form for adding new comments
 .comment-form {
-  margin-bottom: $spacing-3xl;
+  margin-bottom: $spacing-3xl; // Space below the form
 
   .comment-input {
-    width: 100%;
-    padding: $spacing-md;
-    border: $border-width $border-style $color-border;
+    width: 100%; // Full width for input area
+    padding: $spacing-md; // Padding for comfort
+    border: $border-width $border-style $color-border; // Standard border
     font-family: $font-serif;
     font-size: $font-size-base;
     line-height: $line-height-base;
-    resize: vertical;
-    min-height: 100px;
-    background-color: $color-white;
+    resize: vertical; // Allow vertical resizing
+    min-height: 100px; // Minimum height for comment area
+    background-color: $color-white; // White background for contrast
 
     &:focus {
       outline: none;
-      border-color: $color-accent;
+      border-color: $color-accent; // Accent color for focused input
     }
   }
 
+  // Form action buttons container
   .form-actions {
-    margin-top: $spacing-md;
+    margin-top: $spacing-md; // Space above actions
   }
 }
 
-// Delete comment button
+// Delete button for comments
 .btn-delete-comment {
   font-family: $font-sans-serif;
-  font-size: $font-size-xs;
-  color: $color-grey;
-  background: none;
-  border: none;
+  font-size: $font-size-xs; // Small font size for subtlety
+  color: $color-grey; // Grey color for minimal emphasis
+  background: none; // Transparent background
+  border: none; // No border for cleaner look
   padding: 0;
   cursor: pointer;
-  transition: $transition-base;
+  transition: $transition-base; // Smooth transition on hover
 
   &:hover {
-    color: $color-accent;
+    color: $color-accent; // Accent color on hover for visibility
   }
 }
 
-// Sign in prompt
+// Prompt to sign in if user is not authenticated
 .sign-in-prompt {
-  text-align: center;
-  color: $color-grey;
+  text-align: center; // Centered text
+  color: $color-grey; // Grey color to de-emphasize
   font-family: $font-serif;
-  font-style: italic;
-  margin: $spacing-2xl 0;
+  font-style: italic; // Italic for distinction
+  margin: $spacing-2xl 0; // Vertical margin
 
+  // Link within the prompt
   a {
-    color: $color-accent;
-    text-decoration: none;
+    color: $color-accent; // Accent color for links
+    text-decoration: none; // Removes underline
 
     &:hover {
-      text-decoration: underline;
+      text-decoration: underline; // Underline on hover for clarity
     }
   }
 }

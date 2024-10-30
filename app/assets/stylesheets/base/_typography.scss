@@ -2,146 +2,109 @@
 
 @import "variables";
 
-// Basic Typography
+// Global font settings for readability and consistency
 html {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 16px; // Base font size for scalability
+  line-height: 1.6; // Increased line-height for readability
 }
 
 body {
-  font-family: $font-serif;
-  color: $color-black;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: $font-serif; // Main font family
+  color: $color-black; // Standard body text color
+  -webkit-font-smoothing: antialiased; // Smooths font for better readability on WebKit browsers
+  -moz-osx-font-smoothing: grayscale; // Smooths font for macOS
 }
 
-// Headings
+// Heading styles with consistent spacing and sizes
 h1, h2, h3, h4, h5, h6 {
   font-family: $font-serif;
-  margin-bottom: 0.5em;
-  line-height: 1.2;
+  margin-bottom: 0.5em; // Space after each heading
+  line-height: 1.2; // Compact line-height for headers
 }
 
 h1 {
-  font-size: 2.5rem;
-  margin-top: 0;
+  font-size: 2.5rem; // Largest heading
+  margin-top: 0; // Removes top margin on H1 for uniform spacing
 }
 
-h2 {
-  font-size: 2rem;
-}
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
 
-h3 {
-  font-size: 1.75rem;
-}
-
-h4 {
-  font-size: 1.5rem;
-}
-
-h5 {
-  font-size: 1.25rem;
-}
-
-h6 {
-  font-size: 1rem;
-}
-
-// Paragraphs
+// Paragraph styling for readability
 p {
-  margin-bottom: 1.5rem;
-  line-height: 1.8;
+  margin-bottom: 1.5rem; // Standard margin after paragraphs
+  line-height: 1.8; // Increased line-height for optimal readability
 }
 
-// Links
+// Link styling with transitions for interactivity
 a {
-  color: $color-primary;
-  text-decoration: none;
-  transition: color 0.3s ease;
+  color: $color-primary; // Base color for links
+  text-decoration: none; // No underline for links
+  transition: color 0.3s ease; // Smooth color transition on hover
 
   &:hover {
-    color: $color-hover;
+    color: $color-hover; // Hover color for emphasis
   }
 
   &:focus {
     outline: none;
-    text-decoration: underline;
+    text-decoration: underline; // Underline for accessibility focus state
   }
 }
 
-// Lists
+// List styles for ordered and unordered lists
 ul, ol {
-  margin-bottom: 1.5rem;
-  padding-left: 1.5rem;
+  margin-bottom: 1.5rem; // Space below lists
+  padding-left: 1.5rem; // Indentation for list items
 }
 
 li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem; // Space between list items
 }
 
-// Poetry-specific typography
+// Poetry-specific typography for VerseCraft
 .poem {
-  line-height: 1.8;
+  line-height: 1.8; // Readability for poetry lines
 
   &-title {
     font-size: 2rem;
-    text-align: center;
+    text-align: center; // Center-align for emphasis
     margin-bottom: 1.5rem;
   }
 
   &-content {
     font-family: $font-serif;
     font-size: 1.2rem;
-    white-space: pre-wrap;
+    white-space: pre-wrap; // Keeps poem formatting intact
   }
 
   &-meta {
-    font-style: italic;
+    font-style: italic; // Italicized metadata
     font-size: 0.9rem;
-    color: $color-grey;
+    color: $color-grey; // Muted color for metadata
     text-align: center;
     margin-bottom: 2rem;
   }
 }
 
-// Utility text classes
-.text-small {
-  font-size: 0.875rem;
-}
+// Utility classes for various text formats
+.text-small { font-size: 0.875rem; } // Small text
+.text-large { font-size: 1.125rem; } // Large text
+.text-italic { font-style: italic; }
+.text-bold { font-weight: bold; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-left { text-align: left; }
+.text-muted { color: $color-grey; } // Muted color for less emphasis
 
-.text-large {
-  font-size: 1.125rem;
-}
-
-.text-italic {
-  font-style: italic;
-}
-
-.text-bold {
-  font-weight: bold;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-right {
-  text-align: right;
-}
-
-.text-left {
-  text-align: left;
-}
-
-.text-muted {
-  color: $color-grey;
-}
-
-// Quote styles
+// Blockquote styling for emphasized quotations
 blockquote {
   font-style: italic;
   margin: 2rem 0;
   padding-left: 1.5rem;
-  border-left: 3px solid $color-primary;
-  color: $color-grey;
+  border-left: 3px solid $color-primary; // Colored left border for emphasis
+  color: $color-grey; // Muted color for blockquote text
 }

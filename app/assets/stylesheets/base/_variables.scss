@@ -1,91 +1,129 @@
 // app/assets/stylesheets/variables.scss
 
+// ----------------------------------------
 // Typography
-$font-serif: 'Adobe Caslon Pro', 'Times New Roman', serif;
-$font-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+// ----------------------------------------
+
+$font-serif: 'Adobe Caslon Pro', 'Times New Roman', serif; // Main serif font for headers and body text
+$font-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif; // Sans-serif fallback for body and UI text
+
+// Base font size and line-height for accessibility and readability
 $font-size-base: 16px;
 $line-height-base: 1.8;
 
-// Font Sizes
-$font-size-xs: 0.75rem;    // 12px
-$font-size-sm: 0.875rem;   // 14px
-$font-size-base: 1rem;     // 16px
-$font-size-lg: 1.125rem;   // 18px
-$font-size-xl: 1.25rem;    // 20px
-$font-size-2xl: 1.5rem;    // 24px
-$font-size-3xl: 1.875rem;  // 30px
-$font-size-4xl: 2.25rem;   // 36px
+// Font Sizes - Scaled for responsive typography
+$font-size-xs: 0.75rem;    // Extra-small font - 12px
+$font-size-sm: 0.875rem;   // Small font - 14px
+$font-size-base: 1rem;     // Base font - 16px
+$font-size-lg: 1.125rem;   // Large font - 18px
+$font-size-xl: 1.25rem;    // Extra-large font - 20px
+$font-size-2xl: 1.5rem;    // 2x large font - 24px
+$font-size-3xl: 1.875rem;  // 3x large font - 30px
+$font-size-4xl: 2.25rem;   // 4x large font - 36px
 
-// Colors
+// ----------------------------------------
+// Color Palette
+// ----------------------------------------
+
+// Primary Colors - Black and White
 $color-black: #000000;
 $color-white: #FFFFFF;
-$color-grey: #333333;
-$color-light-grey: #F7F7F7;
-$color-accent: #E13D3D;
-$color-border: #CCCCCC;
-$color-primary: #000000;
-$color-hover: #E13D3D;
 
-// Additional Colors
-$color-error: #DC2626;
-$color-success: #059669;
-$color-warning: #D97706;
-$color-info: #2563EB;
-$color-grey-light: #E5E7EB;
-$color-grey-dark: #1F2937;
+// Greyscale Colors for background, text, and borders
+$color-grey: #333333;         // Dark grey for text
+$color-light-grey: #F7F7F7;   // Light grey for backgrounds
+$color-grey-light: #E5E7EB;   // Lighter grey
+$color-grey-dark: #1F2937;    // Darker grey for subtle accents
 
-// Spacing
+// Accent and State Colors
+$color-accent: #E13D3D;       // Accent color for highlights
+$color-border: #CCCCCC;       // Border color for UI elements
+$color-primary: $color-black; // Primary color (default black)
+$color-hover: #E13D3D;        // Hover state color for links/buttons
+
+// Additional Colors for Alerts and Messages
+$color-error: #DC2626;        // Error state color
+$color-success: #059669;      // Success state color
+$color-warning: #D97706;      // Warning state color
+$color-info: #2563EB;         // Info state color
+
+// ----------------------------------------
+// Spacing Scale
+// ----------------------------------------
+
+// Spacing variables based on a base unit
 $spacing-unit: 1rem;
 $spacing-xs: $spacing-unit * 0.25;   // 4px
 $spacing-sm: $spacing-unit * 0.5;    // 8px
-$spacing-md: $spacing-unit;          // 16px
+$spacing-md: $spacing-unit;          // 16px (default spacing)
 $spacing-lg: $spacing-unit * 1.5;    // 24px
 $spacing-xl: $spacing-unit * 2;      // 32px
 $spacing-2xl: $spacing-unit * 2.5;   // 40px
 $spacing-3xl: $spacing-unit * 3;     // 48px
 
-// Breakpoints
-$breakpoint-xs: 320px;
-$breakpoint-sm: 640px;
-$breakpoint-md: 768px;
-$breakpoint-lg: 1024px;
-$breakpoint-xl: 1280px;
-$breakpoint-2xl: 1536px;
+// ----------------------------------------
+// Responsive Breakpoints
+// ----------------------------------------
 
-// Z-index Scale
-$z-index-negative: -1;
-$z-index-base: 1;
-$z-index-dropdown: 1000;
-$z-index-sticky: 1020;
-$z-index-fixed: 1030;
-$z-index-modal-backdrop: 1040;
-$z-index-modal: 1050;
-$z-index-popover: 1060;
-$z-index-tooltip: 1070;
+$breakpoint-xs: 320px;  // Mobile devices
+$breakpoint-sm: 640px;  // Small tablets
+$breakpoint-md: 768px;  // Tablets
+$breakpoint-lg: 1024px; // Desktops
+$breakpoint-xl: 1280px; // Large desktops
+$breakpoint-2xl: 1536px; // Extra-large screens
 
-// Borders
-$border-radius-sm: 0.125rem;
-$border-radius-md: 0.25rem;
-$border-radius-lg: 0.5rem;
-$border-width: 1px;
-$border-style: solid;
+// ----------------------------------------
+// Z-index Scale for layering
+// ----------------------------------------
 
-// Transitions
-$transition-base: all 0.3s ease;
-$transition-fast: all 0.15s ease;
-$transition-slow: all 0.45s ease;
+$z-index-negative: -1;          // Elements below base content
+$z-index-base: 1;               // Default base layer
+$z-index-dropdown: 1000;        // Dropdown menus
+$z-index-sticky: 1020;          // Sticky elements
+$z-index-fixed: 1030;           // Fixed position elements
+$z-index-modal-backdrop: 1040;  // Modal backdrop
+$z-index-modal: 1050;           // Modals
+$z-index-popover: 1060;         // Popovers
+$z-index-tooltip: 1070;         // Tooltips
 
-// Shadows
-$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+// ----------------------------------------
+// Border Settings
+// ----------------------------------------
 
-// Container
-$container-padding: $spacing-md;
-$container-max-width: 1200px;
+$border-radius-sm: 0.125rem; // Small radius for subtle rounding
+$border-radius-md: 0.25rem;  // Medium radius for standard elements
+$border-radius-lg: 0.5rem;   // Large radius for buttons, cards, etc.
+$border-width: 1px;          // Standard border width
+$border-style: solid;        // Default border style
 
-// Poetry Specific
-$poem-line-height: 1.8;
-$poem-font-size: 1.2rem;
-$poem-title-size: 2rem;
-$poem-metadata-size: 0.9rem;
+// ----------------------------------------
+// Transition Durations
+// ----------------------------------------
+
+$transition-base: all 0.3s ease;  // Standard transition
+$transition-fast: all 0.15s ease; // Fast transition for subtle interactions
+$transition-slow: all 0.45s ease; // Slow transition for emphasis
+
+// ----------------------------------------
+// Shadows for Depth and Emphasis
+// ----------------------------------------
+
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);    // Subtle shadow for small elements
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);  // Medium shadow for emphasis
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1); // Large shadow for modal popups
+
+// ----------------------------------------
+// Container Settings
+// ----------------------------------------
+
+$container-padding: $spacing-md;     // Default container padding
+$container-max-width: 1200px;        // Max width for container layout
+
+// ----------------------------------------
+// Poetry-specific styles
+// ----------------------------------------
+
+$poem-line-height: 1.8;          // Poem line height for readability
+$poem-font-size: 1.2rem;         // Poem body font size
+$poem-title-size: 2rem;          // Poem title size for emphasis
+$poem-metadata-size: 0.9rem;     // Metadata size for additional information

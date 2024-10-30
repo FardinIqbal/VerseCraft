@@ -1,14 +1,18 @@
+# app/controllers/poems_controller.rb
 class PoemsController < ApplicationController
   # Callbacks for setting poem object and ensuring authentication for protected actions
   before_action :set_poem, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:index, :show]
+  before_action :authenticate_user!, except: [:index, :show, :form_guidelines]
+
+  #-----------------
+  # Standard CRUD Actions
+  #-----------------
 
   # GET /poems
   # Fetches all poems, including the associated user, to avoid N+1 query issues
   def index
     @poems = Poem.includes(:user).order(created_at: :desc)
   end
-
 
   # GET /poems/:id
   # Displays a specific poem
@@ -26,10 +30,8 @@ class PoemsController < ApplicationController
   def create
     @poem = current_user.poems.build(poem_params)
     if @poem.save
-      # Redirect to poem show page with success message
       redirect_to @poem, notice: 'Poem was successfully created.'
     else
-      # Render the new form again if validation fails
       render :new
     end
   end
@@ -56,6 +58,21 @@ class PoemsController < ApplicationController
     redirect_to poems_url, notice: 'Poem was successfully destroyed.'
   end
 
+  #-----------------
+  # Additional Actions
+  #-----------------
+
+  # GET /poems/form_guidelines/:form
+  # Returns the guidelines partial for the specified poetry form
+  def form_guidelines
+    @form = params[:form]
+    if Poem::FORMS.key?(@form)
+      render partial: "poems/form_guidelines/#{@form}", layout: false
+    else
+      head :not_found
+    end
+  end
+
   # Fetches featured poems (can be used for showing featured poems separately)
   def featured
     @featured_poems = Poem.featured.includes(:user).order(created_at: :desc)
@@ -70,6 +87,6 @@ class PoemsController < ApplicationController
 
   # Strong parameters for poem creation and updates
   def poem_params
-    params.require(:poem).permit(:title, :content)
+    params.require(:poem).permit(:title, :content, :form)
   end
 end

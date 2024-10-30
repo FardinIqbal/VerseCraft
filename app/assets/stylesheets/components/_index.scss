@@ -1,10 +1,13 @@
 // app/assets/stylesheets/components/_index.scss
 
-@import "alerts";
-@import "buttons";
-@import "cards";
-@import "forms";
-@import "poem_viewer";
-@import "poems";
-@import "poetry";
-@import "comments";
+// Importing all component styles for organized structure and easy maintenance
+// Each import corresponds to a specific component or UI element in the application
+
+@import "alerts";        // Alert component styles (success, error, warning, info)
+@import "buttons";       // Button styles (primary, accent, sizes, and states)
+@import "cards";         // Card component styles (basic, hover effects, featured, and grids)
+@import "forms";         // Form and input styles (labels, controls, validation)
+@import "poem_viewer";   // Viewer styles specific to displaying poems
+@import "poems";         // Styles specific to poem elements and layout
+@import "poetry";        // Poetry-related typography and layout styles
+@import "comments";      // Comment component styles (individual comment, form, metadata)

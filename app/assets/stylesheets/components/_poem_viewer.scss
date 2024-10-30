@@ -89,3 +89,81 @@
     vertical-align: middle;
   }
 }
+
+// app/assets/stylesheets/components/_poem_viewer.scss
+// Add to your existing file...
+
+// Form-specific styling
+.poem-content {
+  &.sonnet {
+    .stanza {
+      margin-bottom: 2rem;
+    }
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  &.haiku {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+
+    p {
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+  }
+
+  &.tanka {
+    text-align: center;
+    max-width: 400px;
+    margin: 0 auto;
+  }
+
+  &.limerick {
+    text-align: left;
+    max-width: 500px;
+    margin: 0 auto;
+
+    p {
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+// Form guidelines styling
+.form-guidelines {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: $color-light-grey;
+  border-radius: $border-radius-md;
+
+  h4 {
+    font-family: $font-serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: $color-black;
+  }
+
+  ul {
+    list-style-type: disc;
+    margin-left: 1.5rem;
+
+    li {
+      font-size: 0.9rem;
+      color: $color-grey;
+      margin-bottom: 0.25rem;
+    }
+  }
+}
+
+// Enhanced textarea for poetry input
+.poem-content-input {
+  font-family: $font-serif !important;
+  line-height: 1.8 !important;
+  padding: 1rem !important;
+  min-height: 300px;
+  white-space: pre-wrap !important;
+}

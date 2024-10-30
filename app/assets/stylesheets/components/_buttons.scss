@@ -2,50 +2,52 @@
 
 @import "../base/variables";
 
-// Base button styles
+// Base button styling to establish default look and feel
 .btn {
-  display: inline-block;
-  padding: 0.6rem 1.2rem;
-  font-family: $font-serif;
-  font-size: 1rem;
-  font-weight: normal;
-  line-height: 1.5;
-  text-align: center;
-  text-decoration: none;
-  vertical-align: middle;
-  cursor: pointer;
-  user-select: none;
-  border: 1px solid $color-black;
-  background-color: $color-white;
-  color: $color-black;
-  transition: $transition-base;
+  display: inline-block; // Inline-block for easy alignment and padding
+  padding: 0.6rem 1.2rem; // Standard padding for balanced button size
+  font-family: $font-serif; // Serif font for a classic look
+  font-size: 1rem; // Base font size
+  font-weight: normal; // Standard weight for readability
+  line-height: 1.5; // Consistent line-height for button text
+  text-align: center; // Center-aligns button text
+  text-decoration: none; // Removes underline from links
+  vertical-align: middle; // Centers button within line height
+  cursor: pointer; // Pointer cursor for interactivity
+  user-select: none; // Disables text selection on click
+  border: 1px solid $color-black; // Black border for neutral appearance
+  background-color: $color-white; // White background as base
+  color: $color-black; // Black text for contrast
+  transition: $transition-base; // Smooth transition for color change
 
+  // Hover state for base button
   &:hover {
     background-color: $color-black;
-    color: $color-white;
+    color: $color-white; // Inverts colors on hover for emphasis
   }
 
+  // Focus state for accessibility
   &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba($color-black, 0.2);
+    outline: none; // Removes default outline
+    box-shadow: 0 0 0 2px rgba($color-black, 0.2); // Adds subtle focus ring
   }
 
-  // Disabled state
+  // Disabled state styling
   &:disabled,
   &.disabled {
-    opacity: 0.65;
-    pointer-events: none;
+    opacity: 0.65; // Reduces opacity for clarity
+    pointer-events: none; // Disables interactions
   }
 }
 
-// Button variations
+// Button variations for different actions
 .btn-primary {
   background-color: $color-primary;
   border-color: $color-primary;
   color: $color-white;
 
   &:hover {
-    background-color: darken($color-primary, 10%);
+    background-color: darken($color-primary, 10%); // Darkens on hover for emphasis
     border-color: darken($color-primary, 10%);
   }
 }
@@ -61,39 +63,39 @@
   }
 }
 
-// Sign out button specific styles
+// Specific style for sign-out button
 .btn-sign-out {
-  @extend .btn;
-  background: none;
-  border: none;
-  padding: 0.5rem;
+  @extend .btn; // Inherits base button styles
+  background: none; // Removes background
+  border: none; // Removes border
+  padding: 0.5rem; // Smaller padding for compact design
   color: $color-grey;
 
   &:hover {
-    color: $color-accent;
-    background: none;
+    color: $color-accent; // Accent color on hover
+    background: none; // No background on hover
   }
 }
 
-// Button sizes
+// Button size variations for flexible UI needs
 .btn-sm {
-  padding: 0.4rem 0.8rem;
-  font-size: 0.875rem;
+  padding: 0.4rem 0.8rem; // Reduced padding for small size
+  font-size: 0.875rem; // Smaller font for compact look
 }
 
 .btn-lg {
-  padding: 0.8rem 1.6rem;
-  font-size: 1.125rem;
+  padding: 0.8rem 1.6rem; // Increased padding for large button
+  font-size: 1.125rem; // Larger font size
 }
 
-// Full width button
+// Full-width button for block-level elements
 .btn-block {
   display: block;
-  width: 100%;
+  width: 100%; // Expands button to full width
 }
 
-// Button groups
+// Button group for grouping multiple buttons
 .btn-group {
-  display: inline-flex;
-  gap: 0.5rem;
+  display: inline-flex; // Inline-flex for flexible alignment
+  gap: 0.5rem; // Space between grouped buttons
 }

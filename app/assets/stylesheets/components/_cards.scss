@@ -2,59 +2,60 @@
 
 @import "../base/variables";
 
+// Base card styling for all card components
 .card {
-  background-color: $color-white;
-  border: 1px solid $color-border;
-  border-radius: $border-radius-md;
-  overflow: hidden;
-  transition: $transition-base;
+  background-color: $color-white; // White background for contrast
+  border: 1px solid $color-border; // Subtle border for card edges
+  border-radius: $border-radius-md; // Medium border radius for soft edges
+  overflow: hidden; // Ensures content stays within card boundaries
+  transition: $transition-base; // Smooth transition for hover effects
 
-  // Card variations
+  // Hover effect for card lift and shadow
   &-hover {
     &:hover {
-      transform: translateY(-3px);
-      box-shadow: $shadow-md;
+      transform: translateY(-3px); // Slight lift on hover
+      box-shadow: $shadow-md; // Medium shadow for depth
     }
   }
 
-  // Card header
+  // Card header section for titles and subtitles
   &-header {
-    padding: 1rem;
-    border-bottom: 1px solid $color-border;
-    background-color: $color-white;
+    padding: 1rem; // Standard padding for spacing
+    border-bottom: 1px solid $color-border; // Divider line
+    background-color: $color-white; // White background for consistency
 
     h2, h3, h4, h5, h6 {
-      margin: 0;
-      font-size: 1.25rem;
+      margin: 0; // Resets margin for uniformity
+      font-size: 1.25rem; // Medium font size for emphasis
     }
   }
 
-  // Card body
+  // Card body for main content
   &-body {
-    padding: 1rem;
+    padding: 1rem; // Standard padding for content spacing
 
     > :last-child {
-      margin-bottom: 0;
+      margin-bottom: 0; // Removes bottom margin for last child
     }
   }
 
-  // Card footer
+  // Card footer for additional content or actions
   &-footer {
     padding: 1rem;
-    border-top: 1px solid $color-border;
-    background-color: $color-light-grey;
+    border-top: 1px solid $color-border; // Divider line
+    background-color: $color-light-grey; // Light grey for visual separation
   }
 
-  // Card with image
+  // Image styling for full-width card images
   &-image {
-    width: 100%;
-    height: auto;
+    width: 100%; // Full width for responsive design
+    height: auto; // Maintains aspect ratio
     display: block;
   }
 
-  // Card overlay (for images with text overlay)
+  // Overlay for image cards with text overlay
   &-overlay {
-    position: relative;
+    position: relative; // Positions overlay relative to card
 
     .card-body {
       position: absolute;
@@ -65,66 +66,67 @@
                       to top,
                       rgba($color-black, 0.8),
                       rgba($color-black, 0)
-      );
-      color: $color-white;
+      ); // Gradient for readability over image
+      color: $color-white; // White text for contrast
     }
   }
 
-  // Card grid system
+  // Grid layout for card collections
   &-grid {
     display: grid;
-    gap: 1.5rem;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem; // Spacing between grid items
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); // Responsive grid
 
     @media (max-width: $breakpoint-sm) {
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr; // Single column on small screens
     }
   }
 }
 
-// Poetry-specific card styles
+// Poetry-specific card style with centered content and customized typography
 .poetry-card {
   @extend .card;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  text-align: center;
+  padding: 1.5rem; // Extra padding for spacing
+  margin-bottom: 1.5rem; // Bottom margin for stacking
+  text-align: center; // Centers poetry text
 
   .poetry-title {
-    font-size: 1.25rem;
+    font-size: 1.25rem; // Font size for title
     margin-bottom: 1rem;
-    font-family: $font-serif;
+    font-family: $font-serif; // Serif font for poetic style
   }
 
   .poetry-excerpt {
-    font-style: italic;
-    color: $color-grey;
+    font-style: italic; // Italics for poetic emphasis
+    color: $color-grey; // Muted color for excerpt text
     margin-bottom: 1rem;
-    line-height: 1.6;
+    line-height: 1.6; // Readable line height
   }
 
   .poetry-meta {
-    font-size: 0.875rem;
-    color: $color-grey;
+    font-size: 0.875rem; // Smaller font size for metadata
+    color: $color-grey; // Muted color for metadata
   }
 }
 
-// Featured card
+// Featured card style with accent border and badge
 .featured-card {
   @extend .card;
-  border-color: $color-accent;
+  border-color: $color-accent; // Accent color for featured status
 
   .card-header {
-    background-color: rgba($color-accent, 0.1);
-    color: $color-accent;
+    background-color: rgba($color-accent, 0.1); // Light accent background
+    color: $color-accent; // Accent color for header text
   }
 
+  // Featured badge for highlighting
   .featured-badge {
     display: inline-block;
-    padding: 0.25rem 0.5rem;
-    background-color: $color-accent;
-    color: $color-white;
-    font-size: 0.75rem;
-    border-radius: $border-radius-sm;
-    margin-left: 0.5rem;
+    padding: 0.25rem 0.5rem; // Small padding for compact appearance
+    background-color: $color-accent; // Accent color background
+    color: $color-white; // White text for contrast
+    font-size: 0.75rem; // Small font size for badge
+    border-radius: $border-radius-sm; // Small rounded corners
+    margin-left: 0.5rem; // Spacing from other elements
   }
 }
