@@ -1,19 +1,18 @@
-// app/assets/stylesheets/base/_foundation.scss
+// app/assets/stylesheets/base/_variables.scss
+
+@use "sass:math";
+@use "sass:map";
+@use "sass:color";
+@use "sass:string";
+@use "sass:list";
 
 /**
- * VerseCraft Design System Foundation
- * A comprehensive design system merging literary sophistication with modern interaction
- *
- * This is the single source of truth for our design tokens.
- * No additional variables should be needed after this foundation is established.
- *
- * @author Your Name
- * @version 1.0.0
+ * VerseCraft Design System Variables
+ * Core design tokens and configuration settings
  */
 
 // ---------------------------------------------------------------
-// Core Configuration
-// Application-wide settings
+// Configuration Flags
 // ---------------------------------------------------------------
 
 $enable-features: (
@@ -25,16 +24,12 @@ $enable-features: (
         'high-contrast': false,
         'font-size-adjust': true,
         'print-styles': true
-);
-
-$environment: 'production' !default;
+) !default;
 
 // ---------------------------------------------------------------
-// Typography System
-// Complete type scale and fonts
+// Typography - Font Families
 // ---------------------------------------------------------------
 
-/* Font Stacks */
 $fonts: (
         'primary': (
                 'family': ("Adobe Caslon Pro", "Perpetua", "Baskerville", "Georgia Pro", Georgia, serif),
@@ -51,48 +46,47 @@ $fonts: (
                 'weights': (400),
                 'formats': ('woff2')
         )
-);
+) !default;
 
-/* Type Scale - Based on perfect fourth (1.333) */
+// ---------------------------------------------------------------
+// Typography - Scale & Metrics
+// ---------------------------------------------------------------
+
 $type-scale: (
-        '3xs': 0.563rem,    //  9.0px - Footnotes
-        '2xs': 0.75rem,     // 12.0px - Small print
-        'xs': 0.875rem,     // 14.0px - Meta text
-        'sm': 1rem,         // 16.0px - Body text
-        'base': 1.333rem,   // 21.3px - Large body
-        'md': 1.777rem,     // 28.4px - Subheadings
-        'lg': 2.369rem,     // 37.9px - Headings
-        'xl': 3.157rem,     // 50.5px - Title
-        '2xl': 4.209rem,    // 67.3px - Display
-        '3xl': 5.61rem      // 89.8px - Hero
-);
+        '3xs': 0.563rem,    //  9.0px
+        '2xs': 0.75rem,     // 12.0px
+        'xs': 0.875rem,     // 14.0px
+        'sm': 1rem,         // 16.0px
+        'base': 1.333rem,   // 21.3px
+        'md': 1.777rem,     // 28.4px
+        'lg': 2.369rem,     // 37.9px
+        'xl': 3.157rem,     // 50.5px
+        '2xl': 4.209rem,    // 67.3px
+        '3xl': 5.61rem      // 89.8px
+) !default;
 
-/* Line Heights */
 $line-heights: (
-        'tight': 1.1,       // Headings
-        'snug': 1.2,        // Subheadings
-        'base': 1.5,        // Body text
-        'relaxed': 1.625,   // Large text
-        'loose': 1.8,       // Poetry
-        'verse': 2,         // Verse spacing
-        'display': 1.25     // Display text
-);
+        'tight': 1.1,      // Headings
+        'snug': 1.2,       // Subheadings
+        'base': 1.5,       // Body text
+        'relaxed': 1.625,  // Large text
+        'loose': 1.8,      // Poetry
+        'verse': 2,        // Verse spacing
+        'display': 1.25    // Large titles
+) !default;
 
-/* Letter Spacing */
 $letter-spacing: (
         'tight': -0.02em,
         'normal': 0,
         'wide': 0.02em,
         'wider': 0.05em,
         'widest': 0.1em
-);
+) !default;
 
 // ---------------------------------------------------------------
-// Color System
-// Comprehensive color palette
+// Colors
 // ---------------------------------------------------------------
 
-/* Core Colors */
 $colors: (
         'ink': (
                 'darkest': #000000,
@@ -130,161 +124,38 @@ $colors: (
                 'lighter': #e8dda1,
                 'lightest': #fff6cc
         )
-);
-
-/* Semantic Colors */
-$semantic-colors: (
-        'success': #2d5a27,
-        'warning': #8a5d00,
-        'error': #8b0000,
-        'info': #2c5282
-);
-
-/* Alpha Values */
-$alpha-values: (
-        'opaque': 1,
-        'semi-opaque': 0.8,
-        'medium': 0.5,
-        'semi-transparent': 0.2,
-        'transparent': 0
-);
+) !default;
 
 // ---------------------------------------------------------------
-// Spacing System
-// Comprehensive spacing scale
+// Spacing
 // ---------------------------------------------------------------
-
-/* Base Spacing */
-$spacing-base: 4px;
 
 $spacing: (
         '0': 0,
-        '1': $spacing-base,      // 4px
-        '2': $spacing-base * 2,  // 8px
-        '3': $spacing-base * 4,  // 16px
-        '4': $spacing-base * 6,  // 24px
-        '5': $spacing-base * 8,  // 32px
-        '6': $spacing-base * 12, // 48px
-        '7': $spacing-base * 16, // 64px
-        '8': $spacing-base * 24, // 96px
-        '9': $spacing-base * 32, // 128px
-        '10': $spacing-base * 40 // 160px
-);
-
-/* Poetry-Specific Spacing */
-$poetry-spacing: (
-        'verse-indent': map-get($spacing, '4'),
-        'stanza-spacing': map-get($spacing, '6'),
-        'title-spacing': map-get($spacing, '7'),
-        'annotation-offset': map-get($spacing, '3'),
-        'line-number-width': map-get($spacing, '4')
-);
+        '1': 4px,       // 0.25rem
+        '2': 8px,       // 0.5rem
+        '3': 16px,      // 1rem
+        '4': 24px,      // 1.5rem
+        '5': 32px,      // 2rem
+        '6': 48px,      // 3rem
+        '7': 64px,      // 4rem
+        '8': 96px,      // 6rem
+        '9': 128px,     // 8rem
+        '10': 160px     // 10rem
+) !default;
 
 // ---------------------------------------------------------------
-// Layout System
-// Grid and container definitions
+// Layout
 // ---------------------------------------------------------------
 
-/* Breakpoints */
 $breakpoints: (
-        '2xs': 320px,
         'xs': 480px,
         'sm': 640px,
         'md': 768px,
         'lg': 1024px,
         'xl': 1280px,
         '2xl': 1536px
-);
-
-/* Container Settings */
-$containers: (
-        'xs': 100%,
-        'sm': 540px,
-        'md': 720px,
-        'lg': 960px,
-        'xl': 1140px,
-        '2xl': 1320px
-);
-
-/* Grid Configuration */
-$grid: (
-        'columns': 12,
-        'gap': map-get($spacing, '4'),
-        'container-padding': map-get($spacing, '4')
-);
-
-/* Content Widths */
-$content-width: (
-        'prose': 68ch,
-        'poem': 45ch,
-        'narrow': 640px,
-        'default': 800px,
-        'wide': 1200px
-);
-
-// ---------------------------------------------------------------
-// Interaction System
-// Animation and interaction parameters
-// ---------------------------------------------------------------
-
-/* Durations */
-$durations: (
-        'instant': 100ms,
-        'fast': 150ms,
-        'quick': 200ms,
-        'natural': 300ms,
-        'relaxed': 400ms,
-        'slow': 500ms
-);
-
-/* Easings */
-$easings: (
-        'standard': cubic-bezier(0.4, 0, 0.2, 1),
-        'in': cubic-bezier(0.4, 0, 1, 1),
-        'out': cubic-bezier(0, 0, 0.2, 1),
-        'in-out': cubic-bezier(0.4, 0, 0.2, 1)
-);
-
-/* Interaction States */
-$interaction: (
-        'hover-lift': translateY(-2px),
-        'active-scale': 0.98,
-        'focus-ring-width': 2px,
-        'focus-ring-offset': 2px
-);
-
-/* Animation Scales */
-$animation-scales: (
-        'appreciation': 1.2,
-        'bookmark': 1.15,
-        'pulse': 1.05
-);
-
-// ---------------------------------------------------------------
-// Social Features
-// Instagram-inspired interaction metrics
-// ---------------------------------------------------------------
-
-/* Interaction Thresholds */
-$interaction-thresholds: (
-        'double-tap': 300ms,
-        'scroll-trigger': 100px,
-        'minimum-swipe': 50px,
-        'hold-duration': 500ms
-);
-
-/* Content Limits */
-$content-limits: (
-        'title-length': 120px,
-        'excerpt-lines': 3,
-        'bio-lines': 4,
-        'username-length': 30
-);
-
-// ---------------------------------------------------------------
-// Layer Management
-// Z-index system
-// ---------------------------------------------------------------
+) !default;
 
 $z-layers: (
         'underground': -1,
@@ -300,76 +171,124 @@ $z-layers: (
         'notification': 800,
         'spotlight': 900,
         'highest': 9999
-);
+) !default;
+
+$content-width: (
+        'prose': 68ch,
+        'poem': 45ch,
+        'narrow': 640px,
+        'default': 800px,
+        'wide': 1200px
+) !default;
 
 // ---------------------------------------------------------------
-// Literary Distinctions
-// Visual hierarchy for poet categories
+// Animations & Transitions
 // ---------------------------------------------------------------
 
-$distinctions: (
-        'immortal': (
-                'spacing': map-get($spacing, '7'),
-                'scale': 1.2,
-                'style': 'italic'
-        ),
-        'luminary': (
-                'spacing': map-get($spacing, '6'),
-                'scale': 1.1,
-                'style': 'normal'
-        ),
-        'master': (
-                'spacing': map-get($spacing, '5'),
-                'scale': 1.05,
-                'style': 'normal'
-        ),
-        'emerging': (
-                'spacing': map-get($spacing, '4'),
-                'scale': 1,
-                'style': 'normal'
-        )
-);
+$durations: (
+        'instant': 100ms,
+        'quick': 200ms,
+        'natural': 300ms,
+        'relaxed': 400ms,
+        'slow': 500ms
+) !default;
+
+$easings: (
+        'standard': cubic-bezier(0.4, 0, 0.2, 1),
+        'in': cubic-bezier(0.4, 0, 1, 1),
+        'out': cubic-bezier(0, 0, 0.2, 1),
+        'in-out': cubic-bezier(0.4, 0, 0.2, 1)
+) !default;
 
 // ---------------------------------------------------------------
-// Effects System
-// Shadows, borders, and visual effects
+// Effects
 // ---------------------------------------------------------------
 
-/* Shadows */
 $shadows: (
         'xs': (0 1px 2px rgba(0, 0, 0, 0.05)),
         'sm': (0 1px 3px rgba(0, 0, 0, 0.1)),
         'md': (0 4px 6px rgba(0, 0, 0, 0.1)),
         'lg': (0 10px 15px rgba(0, 0, 0, 0.1)),
         'xl': (0 20px 25px rgba(0, 0, 0, 0.1))
-);
+) !default;
 
-/* Border Radii */
-$radii: (
-        'none': 0,
-        'sm': 2px,
-        'md': 4px,
-        'lg': 8px,
-        'xl': 12px,
-        'full': 9999px
-);
-
-/* Border Widths */
-$border-widths: (
-        'none': 0,
-        'hairline': 1px,
-        'thin': 2px,
-        'thick': 4px
-);
+$borders: (
+        'width': (
+                'none': 0,
+                'hairline': 1px,
+                'thin': 2px,
+                'thick': 4px
+        ),
+        'radius': (
+                'none': 0,
+                'sm': 2px,
+                'md': 4px,
+                'lg': 8px,
+                'xl': 12px,
+                'full': 9999px
+        )
+) !default;
 
 // ---------------------------------------------------------------
-// Print Settings
-// Print-specific configurations
+// Semantic Colors
 // ---------------------------------------------------------------
 
-$print: (
-        'margin': 0.75in,
-        'font-size': 11pt,
-        'line-height': 1.5,
-        'page-break-inside': 'avoid'
-);
+$semantic-colors: (
+        'success': map.get(map.get($colors, 'ink'), 'dark'),
+        'warning': #8a5d00,
+        'error': map.get(map.get($colors, 'accent'), 'dark'),
+        'info': #2c5282,
+        'notice': map.get(map.get($colors, 'gold'), 'dark'),
+        'muted': map.get(map.get($colors, 'ink'), 'light')
+) !default;
+
+// ---------------------------------------------------------------
+// Poetry Specific
+// ---------------------------------------------------------------
+
+$distinctions: (
+        'immortal': (
+                'spacing': map.get($spacing, '7'),
+                'scale': 1.2,
+                'style': 'italic'
+        ),
+        'luminary': (
+                'spacing': map.get($spacing, '6'),
+                'scale': 1.1,
+                'style': 'normal'
+        ),
+        'master': (
+                'spacing': map.get($spacing, '5'),
+                'scale': 1.05,
+                'style': 'normal'
+        ),
+        'emerging': (
+                'spacing': map.get($spacing, '4'),
+                'scale': 1,
+                'style': 'normal'
+        )
+) !default;
+
+$verse-metrics: (
+        'indent': map.get($spacing, '4'),
+        'stanza-spacing': map.get($spacing, '6'),
+        'title-spacing': map.get($spacing, '7'),
+        'line-number-width': map.get($spacing, '4')
+) !default;
+
+// ---------------------------------------------------------------
+// Social Features
+// ---------------------------------------------------------------
+
+$interaction-thresholds: (
+        'double-tap': 300ms,
+        'scroll-trigger': 100px,
+        'minimum-swipe': 50px,
+        'hold-duration': 500ms
+) !default;
+
+$animation-scales: (
+        'appreciation': 1.2,
+        'bookmark': 1.15,
+        'pulse': 1.05
+) !default;

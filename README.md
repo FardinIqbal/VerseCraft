@@ -1,77 +1,154 @@
-# VerseCraft
+# VerseCraft Design System
 
-VerseCraft is a social media platform focused on sharing and discovering poetry, short prose, and quotes. It aims to provide a more productive and enriching alternative to traditional social media platforms, with a clean, professional aesthetic reminiscent of high-end literary magazines.
+## Architecture
 
-## Features
+The design system is organized into four main layers:
 
-- User-generated content (poetry, short prose, quotes)
-- Curated content from famous poets
-- Social interactions (likes, comments, shares)
-- User profiles for both living users and famous poets
-- Ambient music integration
-- Minimalistic, clean aesthetic focused on the writing
+### 1. Base Layer (`/base`)
+- `_variables.scss`: Single source of truth for all design tokens.
+- `_foundation.scss`: Core utility functions and helpers.
+- `_mixins.scss`: Reusable style patterns.
+- `_reset.scss`: Baseline style reset.
+- `_typography.scss`: Typography implementation.
+- `_utilities.scss`: Utility classes.
 
-## Getting Started
+### 2. Layout Layer (`/layout`)
+- Core layout patterns.
+- Grid systems.
+- Responsive behaviors.
 
-### Prerequisites
+### 3. Components (`/components`)
+- Individual UI components.
+- Self-contained styles following BEM methodology.
 
-- Ruby 3.2.2
-- Rails 7.1.4
-- MySQL 9.0.1
+### 4. Pages (`/pages`)
+- Page-specific styles.
+- Layout combinations and special cases.
 
-### Installation
+## Best Practices
 
-1. Clone the repository
-   ```
-   git clone https://github.com/FardinIqbal/VerseCraft.git
-   cd VerseCraft
-   ```
+### Variable Usage
 
-2. Install dependencies
-   ```
-   bundle install
-   ```
+```scss
+// DON'T: Use hard-coded values
+.element {
+  font-size: 16px;
+  color: #000000;
+}
 
-3. Set up the database
-   ```
-   rails db:create
-   rails db:migrate
-   ```
-
-4. Start the Rails server
-   ```
-   rails server
-   ```
-
-5. Visit `http://localhost:3000` in your web browser to see the application.
-
-## Running Tests
-
-To run the test suite:
-
+// DO: Use design tokens
+.element {
+  font-size: f.font-size('base');
+  color: f.color('ink', 'base');
+}
 ```
-rails test
+
+### Component Structure
+
+```scss
+// Component structure template
+.component {
+  // 1. Layout properties
+  // 2. Box model
+  // 3. Visual properties
+  // 4. Typography
+  // 5. Interactive states
+  
+  &__element {
+    // Element styles
+  }
+  
+  &--modifier {
+    // Modifier styles
+  }
+}
 ```
+
+### Poetry-Specific Patterns
+
+```scss
+// Use poetry mixins for verse content
+.verse {
+  @include mix.poetry-text;
+  @include mix.verse-layout;
+  
+  &--immortal {
+    @include mix.literary-distinction('immortal');
+  }
+}
+```
+
+### Responsive Design
+
+```scss
+// Use breakpoint mixins
+.element {
+  @include mix.breakpoint('md') {
+    // Tablet and up styles
+  }
+  
+  @include mix.breakpoint('lg') {
+    // Desktop styles
+  }
+}
+```
+
+## Function Reference
+
+### Typography
+- `f.font-size($size)`: Get size from type scale.
+- `f.line-height($height)`: Get line height value.
+- `f.font($family)`: Get font stack.
+
+### Colors
+- `f.color($palette, $tone)`: Get color from palette.
+- `f.semantic-color($name)`: Get semantic color.
+- `f.color-alpha($color, $alpha)`: Add transparency.
+
+### Spacing
+- `f.spacing($size)`: Get spacing value.
+- `f.rel-spacing($multiplier)`: Get relative spacing.
+
+## Mixin Reference
+
+### Layout
+- `mix.container($size)`: Container wrapper.
+- `mix.flex($direction, $justify, $align)`: Flexbox setup.
+- `mix.grid($columns, $gap)`: Grid setup.
+
+### Typography
+- `mix.font-style($size, $weight, $height)`: Complete type styles.
+- `mix.poetry-text($size)`: Poetry-specific typography.
+
+### Interactive
+- `mix.elevation($level)`: Shadow and hover states.
+- `mix.focus-ring`: Accessible focus styles.
+
+## Performance Guidelines
+
+1. Use `@extend` sparingly.
+2. Minimize nesting (max 3 levels).
+3. Leverage CSS Grid for layouts.
+4. Use utility classes for common patterns.
+
+## Adding New Components
+
+1. Create component file in `/components`.
+2. Import foundation and mixins.
+3. Follow BEM naming convention.
+4. Document component usage.
+5. Add responsive variations.
 
 ## Deployment
 
-Deployment instructions will be added as the project progresses.
+1. Ensure no hard-coded values.
+2. Check responsive behavior.
+3. Validate accessibility.
+4. Test print styles.
 
-## Contributing
+## Maintenance
 
-We welcome contributions to VerseCraft! Please read our contributing guidelines (link to be added) before submitting pull requests.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
-
-## Acknowledgments
-
-- Inspired by the beauty and power of poetry
-- Built with Ruby on Rails
-
-## Contact
-
-Fardin Iqbal - [Your Email or GitHub Profile]
-
-Project Link: [https://github.com/FardinIqbal/VerseCraft](https://github.com/FardinIqbal/VerseCraft)
+1. Regular audit of unused styles.
+2. Update documentation.
+3. Check browser compatibility.
+4. Monitor performance.

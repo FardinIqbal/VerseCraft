@@ -1,0 +1,262 @@
+// app/assets/stylesheets/base/_foundation.scss
+
+@use "sass:math";
+@use "sass:map";
+@use "sass:color";
+@use "sass:list";
+@use "sass:string";
+@use "variables" as v;
+
+/**
+ * VerseCraft Foundation
+ * Core utility functions and helpers for the design system
+ */
+
+// ---------------------------------------------------------------
+// Typography Functions
+// ---------------------------------------------------------------
+
+/// Get font family
+/// @param {String} $family - Font family key
+/// @return {List} Font stack
+@function font($family) {
+  @return map.get(map.get(v.$fonts, $family), 'family');
+}
+
+/// Get semantic color
+/// @param {String} $name - Semantic color name
+/// @param {Number} $alpha [1] - Optional alpha value
+/// @return {Color} Color value
+@function semantic-color($name, $alpha: 1) {
+  $color: map.get(v.$semantic-colors, $name);
+  @if $alpha == 1 {
+    @return $color;
+  }
+  @return rgba($color, $alpha);
+}
+
+/// Get font size
+/// @param {String} $size - Size key from type scale
+/// @return {Number} Font size in rem
+@function font-size($size) {
+  @return map.get(v.$type-scale, $size);
+}
+
+/// Get line height
+/// @param {String} $height - Line height key
+/// @return {Number} Line height value
+@function line-height($height) {
+  @return map.get(v.$line-heights, $height);
+}
+
+/// Get letter spacing
+/// @param {String} $spacing - Letter spacing key
+/// @return {String} Letter spacing value
+@function letter-spacing($spacing) {
+  @return map.get(v.$letter-spacing, $spacing);
+}
+
+// ---------------------------------------------------------------
+// Color Functions
+// ---------------------------------------------------------------
+
+/// Get color from palette
+/// @param {String} $palette - Color palette name
+/// @param {String} $tone [base] - Color tone
+/// @return {Color} Color value
+@function color($palette, $tone: 'base') {
+  @return map.get(map.get(v.$colors, $palette), $tone);
+}
+
+/// Get semantic color
+/// @param {String} $name - Semantic color name
+/// @return {Color} Color value
+@function semantic-color($name) {
+  @return map.get(v.$semantic-colors, $name);
+}
+
+/// Create color with alpha
+/// @param {String} $palette - Color palette name
+/// @param {String} $tone [base] - Color tone
+/// @param {Number} $alpha - Alpha value
+/// @return {Color} Color with alpha
+@function color-alpha($palette, $tone: 'base', $alpha) {
+  $color: color($palette, $tone);
+  @return rgba($color, $alpha);
+}
+
+// ---------------------------------------------------------------
+// Spacing Functions
+// ---------------------------------------------------------------
+
+/// Get spacing value
+/// @param {String|Number} $size - Spacing key or direct pixel value
+/// @return {Number} Spacing value in px or rem
+@function spacing($size) {
+  @if type-of($size) == 'number' {
+    @return $size * 1px;
+  }
+  @return map.get(v.$spacing, $size);
+}
+
+/// Calculate relative spacing
+/// @param {Number} $multiplier - Spacing multiplier
+/// @return {Number} Calculated spacing value
+@function rel-spacing($multiplier) {
+  $base: map.get(v.$spacing, '4');
+  @return $base * $multiplier;
+}
+
+// ---------------------------------------------------------------
+// Layout Functions
+// ---------------------------------------------------------------
+
+/// Get breakpoint value
+/// @param {String} $breakpoint - Breakpoint name
+/// @return {Number} Breakpoint value in pixels
+@function breakpoint($breakpoint) {
+  @return map.get(v.$breakpoints, $breakpoint);
+}
+
+/// Get z-index value
+/// @param {String} $layer - Layer name
+/// @return {Number} Z-index value
+@function z-index($layer) {
+  @return map.get(v.$z-layers, $layer);
+}
+
+/// Get content width
+/// @param {String} $size - Content width key
+/// @return {String|Number} Content width value
+@function content-width($size) {
+  @return map.get(v.$content-width, $size);
+}
+
+// ---------------------------------------------------------------
+// Animation Functions
+// ---------------------------------------------------------------
+
+/// Get duration value
+/// @param {String} $duration - Duration key
+/// @return {Number} Duration in milliseconds
+@function duration($duration) {
+  @return map.get(v.$durations, $duration);
+}
+
+/// Get easing function
+/// @param {String} $easing - Easing key
+/// @return {String} Cubic bezier value
+@function easing($easing) {
+  @return map.get(v.$easings, $easing);
+}
+
+/// Get animation scale
+/// @param {String} $animation - Animation name
+/// @return {Number} Scale value
+@function animation-scale($animation) {
+  @return map.get(v.$animation-scales, $animation);
+}
+
+// ---------------------------------------------------------------
+// Effect Functions
+// ---------------------------------------------------------------
+
+/// Get shadow value
+/// @param {String} $level - Shadow level
+/// @return {List} Shadow values
+@function shadow($level) {
+  @return map.get(v.$shadows, $level);
+}
+
+/// Get border radius
+/// @param {String} $size - Radius size
+/// @return {Number} Border radius value
+@function radius($size) {
+  @return map.get(map.get(v.$borders, 'radius'), $size);
+}
+
+/// Get border width
+/// @param {String} $size - Border width size
+/// @return {Number} Border width value
+@function border-width($size) {
+  @return map.get(map.get(v.$borders, 'width'), $size);
+}
+
+// ---------------------------------------------------------------
+// Poetry-Specific Functions
+// ---------------------------------------------------------------
+
+/// Get distinction value
+/// @param {String} $level - Distinction level
+/// @param {String} $property - Property to get
+/// @return {*} Distinction property value
+@function distinction($level, $property) {
+  $distinction: map.get(v.$distinctions, $level);
+  @return map.get($distinction, $property);
+}
+
+/// Get verse metric
+/// @param {String} $metric - Verse metric name
+/// @return {Number} Metric value
+@function verse-metric($metric) {
+  @return map.get(v.$verse-metrics, $metric);
+}
+
+// ---------------------------------------------------------------
+// State & Feature Functions
+// ---------------------------------------------------------------
+
+/// Check if feature is enabled
+/// @param {String} $feature - Feature name
+/// @return {Boolean} Whether feature is enabled
+@function feature-enabled($feature) {
+  @return map.get(v.$enable-features, $feature);
+}
+
+/// Get interaction threshold
+/// @param {String} $interaction - Interaction name
+/// @return {Number} Threshold value
+@function interaction-threshold($interaction) {
+  @return map.get(v.$interaction-thresholds, $interaction);
+}
+
+// ---------------------------------------------------------------
+// Unit Conversion Functions
+// ---------------------------------------------------------------
+
+/// Convert px to rem
+/// @param {Number} $px - Pixel value
+/// @return {Number} Rem value
+@function px-to-rem($px) {
+  @return math.div($px, 16) * 1rem;
+}
+
+/// Convert rem to px
+/// @param {Number} $rem - Rem value
+/// @return {Number} Pixel value
+@function rem-to-px($rem) {
+  @return $rem * 16px;
+}
+
+// ---------------------------------------------------------------
+// String Functions
+// ---------------------------------------------------------------
+
+/// Create class name
+/// @param {String} $base - Base class name
+/// @param {String} $modifier - Modifier name
+/// @return {String} Complete class name
+@function class-name($base, $modifier) {
+  @return '#{$base}--#{$modifier}';
+}
+
+/// Create data attribute selector
+/// @param {String} $name - Attribute name
+/// @param {String} $value - Attribute value
+/// @return {String} Data attribute selector
+@function data-attr($name, $value: '') {
+  @if $value == '' {
+    @return '[data-#{$name}]';
+  }
+  @return '[data-#{$name}="#{$value}"]';
+}
