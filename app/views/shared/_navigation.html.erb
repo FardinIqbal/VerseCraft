@@ -18,6 +18,7 @@
     <div class="nav-list" data-menu-target="menu">
       <%= link_to 'Home', root_path, class: 'nav-item' %>
       <%= link_to 'Poems', poems_path, class: 'nav-item' %>
+      <%= link_to 'Discover', scroll_poems_path, class: 'nav-item nav-highlight' %> <%# Add this line %>
       <% if user_signed_in? %>
         <%= link_to 'New Poem', new_poem_path, class: 'nav-item' %>
 
@@ -63,4 +64,3 @@
     </div>
   </nav>
 </div>
-<!-- End app/views/shared/_navigation.html.erb -->

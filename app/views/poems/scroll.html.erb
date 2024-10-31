@@ -1,0 +1,13 @@
+<div class="poem-scroll-container" data-controller="poem-scroll">
+  <div class="poem-scroll-feed" data-poem-scroll-target="feed">
+    <% @initial_poems.each do |poem| %>
+      <%= render 'poems/scroll_poem', poem: poem %>
+    <% end %>
+  </div>
+
+  <!-- Navigation buttons -->
+  <div class="navigation-buttons">
+    <button data-action="click->poem-scroll#navigateToPrevious" aria-label="Previous Poem">↑</button>
+    <button data-action="click->poem-scroll#navigateToNext" aria-label="Next Poem">↓</button>
+  </div>
+</div>

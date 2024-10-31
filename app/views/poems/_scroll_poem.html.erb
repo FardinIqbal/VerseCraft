@@ -1,0 +1,37 @@
+<div class="poem-scroll-item" data-poem-id="<%= poem.id %>">
+  <div class="poem-scroll-content">
+    <!-- Poem Title -->
+    <h2 class="poem-title"><%= poem.title %></h2>
+
+    <!-- Poem Body Content -->
+    <div class="poem-body">
+      <%= simple_format(poem.content) %>
+    </div>
+
+    <!-- Poem Metadata -->
+    <div class="poem-meta">
+      <span class="poem-author">
+        <%= link_to poem.user.email, user_path(poem.user), class: "poem-author-link" %>
+      </span>
+      <span class="poem-date">
+        <%= poem.created_at.strftime("%B %d, %Y") %>
+      </span>
+    </div>
+  </div>
+
+  <!-- Poem Actions (Like, Comment, Share) -->
+  <div class="poem-actions">
+    <button data-action="poem-scroll#likePoem" class="poem-action-btn">
+      <i class="fas fa-heart"></i>
+      <span class="like-count"><%= poem.likes_count %></span>
+    </button>
+    <button data-action="poem-scroll#commentPoem" class="poem-action-btn">
+      <i class="fas fa-comment"></i>
+<!--      <span class="comment-count"><%#= poem.comments_count %></span>-->
+      <span class="comment-count">0</span>
+    </button>
+    <button data-action="poem-scroll#sharePoem" class="poem-action-btn">
+      <i class="fas fa-share"></i>
+    </button>
+  </div>
+</div>

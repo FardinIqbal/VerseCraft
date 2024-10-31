@@ -23,9 +23,12 @@ class Poem < ApplicationRecord
   belongs_to :user
 
   # Poems can have multiple likes from different users
-  has_many :likes
+  # Counter cache enabled for performance
+  has_many :likes, dependent: :destroy, counter_cache: true
+
   # Users who have liked this poem, accessed through the likes table
   has_many :liking_users, through: :likes, source: :user
+
   # Comments on this poem
   has_many :comments, dependent: :destroy
 
@@ -75,10 +78,10 @@ class Poem < ApplicationRecord
   scope :most_recent, -> { order(created_at: :desc) }
 
   # Returns poems with their associated likes count
+  # Note: This scope is kept for backwards compatibility
+  # but likes_count column should be used directly
   scope :with_likes_count, -> {
-    left_joins(:likes)
-      .group(:id)
-      .select('poems.*, COUNT(likes.id) as likes_count')
+    select('poems.*, COALESCE(poems.likes_count, 0) as likes_count')
   }
 
   # Returns poems of a specific form
@@ -87,6 +90,12 @@ class Poem < ApplicationRecord
   #-----------------
   # Instance Methods
   #-----------------
+  # Returns the number of likes for the poem
+  # @return [Integer] the number of likes
+  def likes_count
+    self[:likes_count] || 0
+  end
+
   # Checks if a given user has liked this poem
   # @param user [User] the user to check for
   # @return [Boolean] true if the user has liked the poem, false otherwise

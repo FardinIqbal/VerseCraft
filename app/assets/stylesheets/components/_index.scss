@@ -11,3 +11,6 @@
 @import "poems";         // Styles specific to poem elements and layout
 @import "poetry";        // Poetry-related typography and layout styles
 @import "comments";      // Comment component styles (individual comment, form, metadata)
+@import "poem_scroll";  // Add this line
+@import "dropdown";      // Dropdown menu styles (button, list, and item)
+// app/assets/stylesheets/components/_poem_scroll.scss

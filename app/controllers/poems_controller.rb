@@ -2,31 +2,23 @@
 class PoemsController < ApplicationController
   # Callbacks for setting poem object and ensuring authentication for protected actions
   before_action :set_poem, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, except: [:index, :show, :form_guidelines]
+  before_action :authenticate_user!, except: [:index, :show, :form_guidelines, :scroll, :fetch_next]
 
   #-----------------
   # Standard CRUD Actions
   #-----------------
 
-  # GET /poems
-  # Fetches all poems, including the associated user, to avoid N+1 query issues
   def index
     @poems = Poem.includes(:user).order(created_at: :desc)
   end
 
-  # GET /poems/:id
-  # Displays a specific poem
   def show
   end
 
-  # GET /poems/new
-  # Prepares a new poem object for the form, scoped to the current user
   def new
     @poem = current_user.poems.build
   end
 
-  # POST /poems
-  # Creates a new poem with the provided parameters, scoped to the current user
   def create
     @poem = current_user.poems.build(poem_params)
     if @poem.save
@@ -36,13 +28,9 @@ class PoemsController < ApplicationController
     end
   end
 
-  # GET /poems/:id/edit
-  # Loads poem for editing (already handled by `set_poem`)
   def edit
   end
 
-  # PATCH/PUT /poems/:id
-  # Updates the poem with provided params if valid, otherwise renders the edit form again
   def update
     if @poem.update(poem_params)
       redirect_to @poem, notice: 'Poem was successfully updated.'
@@ -51,8 +39,6 @@ class PoemsController < ApplicationController
     end
   end
 
-  # DELETE /poems/:id
-  # Deletes the poem and redirects to the index page with a success message
   def destroy
     @poem.destroy
     redirect_to poems_url, notice: 'Poem was successfully destroyed.'
@@ -62,8 +48,39 @@ class PoemsController < ApplicationController
   # Additional Actions
   #-----------------
 
-  # GET /poems/form_guidelines/:form
-  # Returns the guidelines partial for the specified poetry form
+  def scroll
+    @initial_poems = Poem.includes(:user)
+                         .order(created_at: :desc)
+                         .limit(5)
+    cookies[:seen_touch_hint] ||= true
+  end
+
+
+  def fetch_next
+    last_id = params[:last_id].to_i
+    return head :bad_request if last_id.zero?
+
+    poems = Poem.includes(:user)
+                .where("id < ?", last_id)
+                .order(created_at: :desc)
+                .limit(5)
+
+    render json: {
+      poems: poems.map { |poem|
+        {
+          id: poem.id,
+          title: poem.title,
+          content: poem.content,
+          user_id: poem.user.id,
+          author: poem.user.email,
+          likes_count: poem.likes_count,
+          liked_by_current_user: user_signed_in? ? poem.liked_by?(current_user) : false,
+          created_at: poem.created_at.strftime("%B %d, %Y")
+        }
+      }
+    }
+  end
+
   def form_guidelines
     @form = params[:form]
     if Poem::FORMS.key?(@form)
@@ -73,19 +90,16 @@ class PoemsController < ApplicationController
     end
   end
 
-  # Fetches featured poems (can be used for showing featured poems separately)
   def featured
     @featured_poems = Poem.featured.includes(:user).order(created_at: :desc)
   end
 
   private
 
-  # Set the poem object based on the ID passed in params (used in show, edit, update, destroy)
   def set_poem
     @poem = Poem.find(params[:id])
   end
 
-  # Strong parameters for poem creation and updates
   def poem_params
     params.require(:poem).permit(:title, :content, :form)
   end

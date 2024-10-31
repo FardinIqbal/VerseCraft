@@ -23,9 +23,11 @@ Rails.application.routes.draw do
   # Poem management and interaction
   # Includes nested routes for social features
   resources :poems do
-    # Poem form guidelines route
+    # Collection routes for poem features
     collection do
       get 'form_guidelines/:form', to: 'poems#form_guidelines'
+      get 'scroll', to: 'poems#scroll'  # New infinite scroll feature
+      get 'fetch_next', to: 'poems#fetch_next'  # AJAX endpoint for loading more poems
     end
 
     # Social interaction routes
