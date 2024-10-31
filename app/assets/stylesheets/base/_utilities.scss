@@ -1,138 +1,67 @@
-// app/assets/stylesheets/base/_utilities.scss
+// ---------------------------------------------------------------
+// VerseCraft Utilities
+// ---------------------------------------------------------------
+// A set of utility classes for spacing, alignment, display,
+// and responsive adjustments. These utilities ensure consistency
+// and flexibility across the layout, in line with the sophisticated,
+// literary-inspired design of VerseCraft.
+// ---------------------------------------------------------------
 
-@import "variables";
+@use "sass:map";
+@use "base/variables" as *;
 
-// Spacing Utilities for padding and margin control
-$spacer: 1rem; // Base unit for spacing
-$spacers: (
-        0: 0,
-        1: $spacer * 0.25,  // 4px spacing
-        2: $spacer * 0.5,   // 8px spacing
-        3: $spacer,         // 16px spacing
-        4: $spacer * 1.5,   // 24px spacing
-        5: $spacer * 3      // 48px spacing
-);
+// ---------------------------------------------------------------
+// Spacing Utilities
+// ---------------------------------------------------------------
 
-// Margin and Padding Utilities for flexible layout adjustments
-@each $key, $value in $spacers {
-  .m-#{$key}  { margin: $value !important; }
-  .mt-#{$key} { margin-top: $value !important; }
-  .mr-#{$key} { margin-right: $value !important; }
-  .mb-#{$key} { margin-bottom: $value !important; }
-  .ml-#{$key} { margin-left: $value !important; }
-  .mx-#{$key} {
-    margin-left: $value !important;
-    margin-right: $value !important;
-  }
-  .my-#{$key} {
-    margin-top: $value !important;
-    margin-bottom: $value !important;
-  }
+.u-mt-0 { margin-top: 0 !important; }
+.u-mb-0 { margin-bottom: 0 !important; }
+.u-mt-1 { margin-top: map.get($spacing, '1') !important; }
+.u-mb-1 { margin-bottom: map.get($spacing, '1') !important; }
+// ...repeat for other spacing sizes
 
-  .p-#{$key}  { padding: $value !important; }
-  .pt-#{$key} { padding-top: $value !important; }
-  .pr-#{$key} { padding-right: $value !important; }
-  .pb-#{$key} { padding-bottom: $value !important; }
-  .pl-#{$key} { padding-left: $value !important; }
-  .px-#{$key} {
-    padding-left: $value !important;
-    padding-right: $value !important;
-  }
-  .py-#{$key} {
-    padding-top: $value !important;
-    padding-bottom: $value !important;
-  }
+// ---------------------------------------------------------------
+// Display Utilities
+// ---------------------------------------------------------------
+
+.u-flex { display: flex !important; }
+.u-inline-flex { display: inline-flex !important; }
+.u-block { display: block !important; }
+.u-inline { display: inline !important; }
+.u-hidden { display: none !important; }
+
+// ---------------------------------------------------------------
+// Alignment Utilities
+// ---------------------------------------------------------------
+
+.u-align-center { text-align: center !important; }
+.u-align-left { text-align: left !important; }
+.u-align-right { text-align: right !important; }
+
+// ---------------------------------------------------------------
+// Responsive Utilities
+// ---------------------------------------------------------------
+
+@media (min-width: map.get($breakpoints, 'tablet')) {
+  .u-hidden-tablet { display: none !important; }
 }
 
-// Display utilities for controlling element visibility and layout
-.d-none { display: none !important; }
-.d-inline { display: inline !important; }
-.d-inline-block { display: inline-block !important; }
-.d-block { display: block !important; }
-.d-flex { display: flex !important; }
-
-// Flexbox utilities for alignment within flex containers
-.flex-row { flex-direction: row !important; }
-.flex-column { flex-direction: column !important; }
-.flex-wrap { flex-wrap: wrap !important; }
-.flex-nowrap { flex-wrap: nowrap !important; }
-.justify-content-start { justify-content: flex-start !important; }
-.justify-content-end { justify-content: flex-end !important; }
-.justify-content-center { justify-content: center !important; }
-.justify-content-between { justify-content: space-between !important; }
-.align-items-start { align-items: flex-start !important; }
-.align-items-end { align-items: flex-end !important; }
-.align-items-center { align-items: center !important; }
-
-// Responsive container with max width based on breakpoints
-.container {
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 1200px;
+@media (min-width: map.get($breakpoints, 'desktop')) {
+  .u-hidden-desktop { display: none !important; }
 }
 
-@media (min-width: $breakpoint-sm) { .container { max-width: 540px; } }
-@media (min-width: $breakpoint-md) { .container { max-width: 720px; } }
-@media (min-width: $breakpoint-lg) { .container { max-width: 960px; } }
-@media (min-width: $breakpoint-xl) { .container { max-width: 1140px; } }
+// ---------------------------------------------------------------
+// Text Utilities
+// ---------------------------------------------------------------
 
-// Text utilities for truncation and text alignment
-.text-truncate {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+.u-uppercase { text-transform: uppercase !important; }
+.u-lowercase { text-transform: lowercase !important; }
+.u-italic { font-style: italic !important; }
 
-// Border utilities for consistent borders across components
-.border { border: 1px solid $color-border !important; }
-.border-top { border-top: 1px solid $color-border !important; }
-.border-right { border-right: 1px solid $color-border !important; }
-.border-bottom { border-bottom: 1px solid $color-border !important; }
-.border-left { border-left: 1px solid $color-border !important; }
-.border-0 { border: 0 !important; }
+// ---------------------------------------------------------------
+// Sophisticated Touches
+// ---------------------------------------------------------------
 
-// Shadow utilities for element elevation effects
-.shadow-sm { box-shadow: 0 .125rem .25rem rgba(0,0,0,.075) !important; }
-.shadow { box-shadow: 0 .5rem 1rem rgba(0,0,0,.15) !important; }
-.shadow-lg { box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important; }
-.shadow-none { box-shadow: none !important; }
-
-// Position utilities for various positioning options
-.position-relative { position: relative !important; }
-.position-absolute { position: absolute !important; }
-.position-fixed { position: fixed !important; }
-
-// Width utilities for flexible width control
-.w-100 { width: 100% !important; }
-.w-75 { width: 75% !important; }
-.w-50 { width: 50% !important; }
-.w-25 { width: 25% !important; }
-.w-auto { width: auto !important; }
-
-// Height utilities for flexible height control
-.h-100 { height: 100% !important; }
-.h-75 { height: 75% !important; }
-.h-50 { height: 50% !important; }
-.h-25 { height: 25% !important; }
-.h-auto { height: auto !important; }
-
-// Z-index and visibility utilities for skip-link accessibility
-.skip-link {
-  position: absolute;
-  left: -9999px;
-  z-index: 999;
-  padding: 1em;
-  background-color: $color-white;
-  color: $color-black;
-  text-decoration: none;
-  border: 1px solid $color-border;
-
-  &:focus {
-    left: 50%;
-    transform: translateX(-50%);
-    top: 0;
-  }
-}
+.u-text-muted { color: map.get(map.get($colors, 'ink'), 'light') !important; }
+.u-text-highlight { color: map.get(map.get($colors, 'editorial'), 'base') !important; }
+.u-border-soft { border: 1px solid map.get(map.get($colors, 'ink'), 'lighter') !important; }

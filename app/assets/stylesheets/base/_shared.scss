@@ -1,0 +1,114 @@
+// ---------------------------------------------------------------
+// VerseCraft Design System - Shared Mixins
+// ---------------------------------------------------------------
+// Description: Centralized reusable mixins for common patterns,
+// including typography, layout, and responsive utilities.
+// Created by: Fardin Iqbal
+// Version: 1.0
+// Last Updated: 2024-10-21
+// ---------------------------------------------------------------
+
+@use "sass:map";
+@use "sass:math";
+@use "variables" as v;
+
+// ---------------------------------------------------------------
+// Typography Mixins
+// ---------------------------------------------------------------
+
+/// Truncate text with an ellipsis if it overflows
+/// @param {Number} $lines - Number of lines to display before truncating
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+// ---------------------------------------------------------------
+// Layout Mixins
+// ---------------------------------------------------------------
+
+/// Apply flexbox layout with customizable properties
+/// @param {String} $direction [row] - Flex direction
+/// @param {String} $justify [flex-start] - Justify content
+/// @param {String} $align [stretch] - Align items
+/// @param {String} $wrap [nowrap] - Flex wrap
+@mixin flex($direction: row, $justify: flex-start, $align: stretch, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+}
+
+/// Apply grid layout with adjustable column count and gap
+/// @param {Number} $columns [1] - Number of columns
+/// @param {String|Number} $gap ['4'] - Gap between grid items
+@mixin grid($columns: 1, $gap: '4') {
+  display: grid;
+  grid-template-columns: repeat($columns, minmax(0, 1fr));
+  gap: map.get(v.$spacing, $gap);
+}
+
+// ---------------------------------------------------------------
+// Utility Mixins
+// ---------------------------------------------------------------
+
+/// Center content absolutely within its container
+@mixin center-absolute {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// ---------------------------------------------------------------
+// Responsive Mixins
+// ---------------------------------------------------------------
+
+/// Apply styles at specified breakpoint
+/// @param {String} $size - Breakpoint key from `$breakpoints`
+@mixin breakpoint($size) {
+  @media (min-width: map.get(v.$breakpoints, $size)) {
+    @content;
+  }
+}
+
+/// Hide content until a specified breakpoint is reached
+/// @param {String} $size - Breakpoint key from `$breakpoints`
+@mixin hide-until($size) {
+  @media (max-width: map.get(v.$breakpoints, $size) - 1px) {
+    display: none;
+  }
+}
+
+// ---------------------------------------------------------------
+// Accessibility Mixins
+// ---------------------------------------------------------------
+
+/// Visually hide element but keep it accessible to screen readers
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/// Apply reduced motion styles if user preference is set
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    @content;
+  }
+}

@@ -1,5 +1,3 @@
-// app/assets/stylesheets/base/_variables.scss
-
 @use "sass:math";
 @use "sass:map";
 @use "sass:color";
@@ -8,7 +6,10 @@
 
 /**
  * VerseCraft Design System Variables
- * Core design tokens and configuration settings
+ * Enhanced with sophisticated literary refinements.
+ * This file includes all core configurations for typography,
+ * color schemes, spacing, and feature flags, allowing for
+ * streamlined styling across the design system.
  */
 
 // ---------------------------------------------------------------
@@ -19,276 +20,515 @@ $enable-features: (
         'reduced-motion': true,
         'smooth-scroll': true,
         'text-balance': true,
-        'variable-fonts': false,
-        'dark-mode': false,
-        'high-contrast': false,
+        'variable-fonts': true,  // Enabled for sophisticated typography
+        'dark-mode': true,
+        'high-contrast': true,   // For accessibility
         'font-size-adjust': true,
-        'print-styles': true
+        'print-styles': true,
+        'margin-notes': true,    // New Yorker-style marginalia
+        'verse-numbers': true,
+        'editor-marks': true     // Editorial annotations
 ) !default;
 
 // ---------------------------------------------------------------
-// Typography - Font Families
+// Enhanced Typography - Font Families
 // ---------------------------------------------------------------
 
 $fonts: (
         'primary': (
                 'family': ("Adobe Caslon Pro", "Perpetua", "Baskerville", "Georgia Pro", Georgia, serif),
-                'weights': (300, 400, 400i, 500, 600),
-                'formats': ('woff2', 'woff')
+                'weights': (300, 400, 400i, 500, 600, 700),
+                'formats': ('woff2', 'woff'),
+                'features': ('liga', 'kern', 'onum')  // OpenType features
+        ),
+        'display': (
+                'family': ("Chronicle Display", "Surveyor Display", "Didot", "Georgia Pro", Georgia, serif),
+                'weights': (300, 400, 500, 600),
+                'formats': ('woff2', 'woff'),
+                'features': ('liga', 'kern', 'dlig')  // Discretionary ligatures
         ),
         'secondary': (
-                'family': ("Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif),
+                'family': ("Helvetica Neue", "Ideal Sans", -apple-system, BlinkMacSystemFont, sans-serif),
                 'weights': (400, 500, 600),
                 'formats': ('woff2', 'woff')
         ),
         'monospace': (
-                'family': ("SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace),
+                'family': ("SFMono-Regular", "Consolas", "Liberation Mono", monospace),
                 'weights': (400),
-                'formats': ('woff2')
+                'formats': ('woff2'),
+                'features': ('zero')  // Slashed zero
+        ),
+        'marginalia': (
+                'family': ("Mercury Text G1", "Georgia Pro", Georgia, serif),
+                'weights': (400, 400i),
+                'formats': ('woff2', 'woff')
         )
 ) !default;
 
 // ---------------------------------------------------------------
-// Typography - Scale & Metrics
+// Refined Typography Scale
 // ---------------------------------------------------------------
 
 $type-scale: (
-        '3xs': 0.563rem,    //  9.0px
-        '2xs': 0.75rem,     // 12.0px
-        'xs': 0.875rem,     // 14.0px
-        'sm': 1rem,         // 16.0px
-        'base': 1.333rem,   // 21.3px
-        'md': 1.777rem,     // 28.4px
-        'lg': 2.369rem,     // 37.9px
-        'xl': 3.157rem,     // 50.5px
-        '2xl': 4.209rem,    // 67.3px
-        '3xl': 5.61rem      // 89.8px
-) !default;
-
-$line-heights: (
-        'tight': 1.1,      // Headings
-        'snug': 1.2,       // Subheadings
-        'base': 1.5,       // Body text
-        'relaxed': 1.625,  // Large text
-        'loose': 1.8,      // Poetry
-        'verse': 2,        // Verse spacing
-        'display': 1.25    // Large titles
-) !default;
-
-$letter-spacing: (
-        'tight': -0.02em,
-        'normal': 0,
-        'wide': 0.02em,
-        'wider': 0.05em,
-        'widest': 0.1em
+        'micro': 0.512rem,    // 8.192px  - Footnotes, metadata
+        '4xs': 0.64rem,      // 10.24px  - Small print
+        '3xs': 0.8rem,       // 12.8px   - Annotations
+        '2xs': 0.875rem,     // 14px     - Meta text
+        'xs': 1rem,          // 16px     - Body text
+        'sm': 1.125rem,      // 18px     - Large body
+        'base': 1.25rem,     // 20px     - Poetry
+        'md': 1.5rem,        // 24px     - Subheadings
+        'lg': 1.875rem,      // 30px     - Section heads
+        'xl': 2.25rem,       // 36px     - Article titles
+        '2xl': 3rem,         // 48px     - Feature titles
+        '3xl': 3.75rem,      // 60px     - Major headlines
+        '4xl': 4.5rem,       // 72px     - Display
+        'hero': 6rem         // 96px     - Hero elements
 ) !default;
 
 // ---------------------------------------------------------------
-// Colors
+// Literary Line Heights
+// ---------------------------------------------------------------
+
+$line-heights: (
+        'solid': 1,          // Headings
+        'tight': 1.1,        // Display text
+        'snug': 1.25,        // Subheadings
+        'base': 1.5,         // Body text
+        'prose': 1.625,      // Long-form content
+        'loose': 1.75,       // Poetry
+        'verse': 2,          // Verse spacing
+        'relaxed': 2.25,     // Pull quotes
+        'display': 1.15      // Large titles
+) !default;
+
+// ---------------------------------------------------------------
+// Letter Spacing
+// ---------------------------------------------------------------
+
+$letter-spacing: (
+        'tracked-tight': -0.05em,
+        'tracked-tighter': -0.025em,
+        'normal': 0,
+        'tracked': 0.025em,
+        'tracked-wide': 0.05em,
+        'tracked-wider': 0.1em,
+        'spaced': 0.2em,     // Small caps
+        'display': -0.03em   // Large headlines
+) !default;
+
+// ---------------------------------------------------------------
+// Literary Colors
 // ---------------------------------------------------------------
 
 $colors: (
         'ink': (
-                'darkest': #000000,
-                'darker': #1a1a1a,
-                'dark': #333333,
-                'base': #4a4a4a,
-                'light': #666666,
-                'lighter': #808080,
-                'lightest': #999999
+                'deepest': #000000,    // Pure black
+                'darkest': #1a1a1a,    // Soft black
+                'darker': #262626,     // Rich black
+                'dark': #333333,       // Dark gray
+                'base': #404040,       // Medium gray
+                'medium': #595959,     // Classic gray
+                'light': #666666,      // Light gray
+                'lighter': #808080,    // Pale gray
+                'lightest': #999999    // Silver
         ),
         'paper': (
-                'darkest': #e5e5e5,
-                'darker': #f0f0f0,
-                'dark': #f5f5f5,
-                'base': #f8f8f8,
-                'light': #fafafa,
-                'lighter': #fcfcfc,
-                'lightest': #ffffff
+                'cream': #f9f8f4,      // Warm white
+                'antique': #f5f4ef,    // Antique paper
+                'ivory': #f9f9f6,      // Ivory tone
+                'white': #ffffff,      // Pure white
+                'matte': #fafafa,      // Matte finish
+                'pearl': #f5f5f5,      // Pearl tone
+                'chrome': #f0f0f0,     // Chrome finish
+                'platinum': #e8e8e8,   // Platinum tone
+                'silver': #e0e0e0      // Silver tone
+        ),
+        'editorial': (
+                'darkest': #4a0000,    // Deep red
+                'darker': #660000,     // Rich red
+                'dark': #8b0000,       // Classic red
+                'base': #990000,       // Editor's red
+                'medium': #b30000,     // Bright red
+                'light': #cc0000,      // Highlight red
+                'lighter': #ff0000,    // Vivid red
+                'lightest': #ff3333,   // Pale red
+                'faded': #ff6666      // Soft red
+        ),
+        'archival': (
+                'sepia': #704214,      // Sepia tone
+                'aged': #8b734b,       // Aged paper
+                'antique': #a68a64,    // Antique gold
+                'parchment': #c4a484,  // Parchment
+                'vellum': #d4c4a8,     // Vellum
+                'manuscript': #e6d5b8  // Manuscript
         ),
         'accent': (
-                'darkest': #4a0000,
-                'darker': #660000,
-                'dark': #8b0000,
-                'base': #cc0000,
-                'light': #ff0000,
-                'lighter': #ff3333,
-                'lightest': #ff6666
-        ),
-        'gold': (
-                'darkest': #5c4d2e,
-                'darker': #7c6840,
-                'dark': #9c8b7d,
-                'base': #c0aa6e,
-                'light': #d4c485,
-                'lighter': #e8dda1,
-                'lightest': #fff6cc
+                'gold': #9c8b7d,       // Muted gold
+                'brass': #b5a642,      // Brass tone
+                'bronze': #cd7f32,     // Bronze tone
+                'copper': #b87333,     // Copper tone
+                'pewter': #8e8e8e,     // Pewter tone
+                'platinum': #e5e4e2    // Platinum tone
         )
 ) !default;
 
 // ---------------------------------------------------------------
-// Spacing
+// Color Schemes (Light/Dark)
 // ---------------------------------------------------------------
+
+$color-schemes: (
+        'light': (
+                'background': (
+                        'primary': map.get(map.get($colors, 'paper'), 'white'),
+                        'secondary': map.get(map.get($colors, 'paper'), 'cream'),
+                        'tertiary': map.get(map.get($colors, 'paper'), 'antique'),
+                        'elevated': map.get(map.get($colors, 'paper'), 'ivory'),
+                        'inset': map.get(map.get($colors, 'paper'), 'pearl'),
+                        'overlay': rgba(249, 248, 244, 0.95),
+                        'feature': map.get(map.get($colors, 'paper'), 'matte')
+                ),
+                'text': (
+                        'primary': map.get(map.get($colors, 'ink'), 'darkest'),
+                        'secondary': map.get(map.get($colors, 'ink'), 'dark'),
+                        'tertiary': map.get(map.get($colors, 'ink'), 'base'),
+                        'subtle': map.get(map.get($colors, 'ink'), 'medium'),
+                        'muted': map.get(map.get($colors, 'ink'), 'light'),
+                        'inverse': map.get(map.get($colors, 'paper'), 'white'),
+                        'editorial': map.get(map.get($colors, 'editorial'), 'dark')
+                ),
+                'border': (
+                        'primary': map.get(map.get($colors, 'ink'), 'lightest'),
+                        'secondary': map.get(map.get($colors, 'paper'), 'silver'),
+                        'subtle': map.get(map.get($colors, 'paper'), 'platinum'),
+                        'focus': map.get(map.get($colors, 'editorial'), 'base'),
+                        'divider': rgba(0, 0, 0, 0.1),
+                        'decorative': map.get(map.get($colors, 'accent'), 'gold')
+                ),
+                'accent': (
+                        'primary': map.get(map.get($colors, 'editorial'), 'base'),
+                        'secondary': map.get(map.get($colors, 'editorial'), 'dark'),
+                        'tertiary': map.get(map.get($colors, 'archival'), 'sepia'),
+                        'hover': map.get(map.get($colors, 'editorial'), 'darker'),
+                        'active': map.get(map.get($colors, 'editorial'), 'darkest'),
+                        'muted': rgba(153, 0, 0, 0.1)
+                ),
+                'poetry': (
+                        'annotation': rgba(26, 26, 26, 0.05),
+                        'highlight': rgba(153, 0, 0, 0.1),
+                        'selection': rgba(153, 0, 0, 0.2),
+                        'verse-number': rgba(0, 0, 0, 0.4),
+                        'marginalia': rgba(26, 26, 26, 0.6),
+                        'editor-marks': map.get(map.get($colors, 'editorial'), 'base')
+                )
+        ),
+        'dark': (
+                'background': (
+                        'primary': #121212,
+                        'secondary': #1a1a1a,
+                        'tertiary': #242424,
+                        'elevated': #2a2a2a,
+                        'inset': #333333,
+                        'overlay': rgba(18, 18, 18, 0.95),
+                        'feature': #1f1f1f
+                ),
+                'text': (
+                        'primary': map.get(map.get($colors, 'paper'), 'white'),
+                        'secondary': map.get(map.get($colors, 'paper'), 'pearl'),
+                        'tertiary': map.get(map.get($colors, 'paper'), 'platinum'),
+                        'subtle': map.get(map.get($colors, 'paper'), 'silver'),
+                        'muted': rgba(255, 255, 255, 0.6),
+                        'inverse': map.get(map.get($colors, 'ink'), 'darkest'),
+                        'editorial': map.get(map.get($colors, 'editorial'), 'lighter')
+                ),
+                'border': (
+                        'primary': #333333,
+                        'secondary': #404040,
+                        'subtle': #292929,
+                        'focus': map.get(map.get($colors, 'editorial'), 'light'),
+                        'divider': rgba(255, 255, 255, 0.1),
+                        'decorative': map.get(map.get($colors, 'accent'), 'bronze')
+                ),
+                'accent': (
+                        'primary': map.get(map.get($colors, 'editorial'), 'light'),
+                        'secondary': map.get(map.get($colors, 'editorial'), 'lighter'),
+                        'tertiary': map.get(map.get($colors, 'archival'), 'aged'),
+                        'hover': map.get(map.get($colors, 'editorial'), 'lightest'),
+                        'active': map.get(map.get($colors, 'editorial'), 'base'),
+                        'muted': rgba(255, 0, 0, 0.1)
+                ),
+                'poetry': (
+                        'annotation': rgba(255, 255, 255, 0.05),
+                        'highlight': rgba(255, 0, 0, 0.1),
+                        'selection': rgba(255, 0, 0, 0.2),
+                        'verse-number': rgba(255, 255, 255, 0.4),
+                        'marginalia': rgba(255, 255, 255, 0.6),
+                        'editor-marks': map.get(map.get($colors, 'editorial'), 'lighter')
+                )
+        )
+) !default;
+
+// ---------------------------------------------------------------
+// Enhanced Literary Spacing
+// ---------------------------------------------------------------
+
+$spacing-base: 4px;
 
 $spacing: (
+        'px': 1px,
         '0': 0,
-        '1': 4px,       // 0.25rem
-        '2': 8px,       // 0.5rem
-        '3': 16px,      // 1rem
-        '4': 24px,      // 1.5rem
-        '5': 32px,      // 2rem
-        '6': 48px,      // 3rem
-        '7': 64px,      // 4rem
-        '8': 96px,      // 6rem
-        '9': 128px,     // 8rem
-        '10': 160px     // 10rem
+        '1': $spacing-base,
+        '2': $spacing-base * 2,
+        '3': $spacing-base * 4,
+        '4': $spacing-base * 6,
+        '5': $spacing-base * 8,
+        '6': $spacing-base * 12,
+        '7': $spacing-base * 16,
+        '8': $spacing-base * 24,
+        '9': $spacing-base * 32,
+        '10': $spacing-base * 40,
+
+        // Literary-specific spacing
+        'verse': (
+                'indent': $spacing-base * 10,
+                'continuation': $spacing-base * 15,
+                'stanza': $spacing-base * 20,
+                'section': $spacing-base * 32,
+                'quote': $spacing-base * 12,
+                'epigraph': $spacing-base * 24
+        ),
+        'marginalia': (
+                'offset': $spacing-base * 8,
+                'width': $spacing-base * 40,
+                'gutter': $spacing-base * 6,
+                'separation': $spacing-base * 4
+        ),
+        'editorial': (
+                'mark': $spacing-base * 2,
+                'note': $spacing-base * 4,
+                'correction': $spacing-base * 6,
+                'annotation': $spacing-base * 3
+        ),
+        'layout': (
+                'header': $spacing-base * 16,
+                'footer': $spacing-base * 20,
+                'page': $spacing-base * 10,
+                'column': $spacing-base * 8
+        )
 ) !default;
 
 // ---------------------------------------------------------------
-// Layout
+// Enhanced Literary Distinctions
 // ---------------------------------------------------------------
 
-$breakpoints: (
-        'xs': 480px,
-        'sm': 640px,
-        'md': 768px,
-        'lg': 1024px,
-        'xl': 1280px,
-        '2xl': 1536px
-) !default;
-
-$z-layers: (
-        'underground': -1,
-        'ground': 0,
-        'above': 1,
-        'header': 100,
-        'dropdown': 200,
-        'sticky': 300,
-        'overlay': 400,
-        'modal': 500,
-        'popover': 600,
-        'tooltip': 700,
-        'notification': 800,
-        'spotlight': 900,
-        'highest': 9999
-) !default;
-
-$content-width: (
-        'prose': 68ch,
-        'poem': 45ch,
-        'narrow': 640px,
-        'default': 800px,
-        'wide': 1200px
+$distinctions: (
+        'immortal': (
+                'spacing': map.get($spacing, '8'),
+                'scale': 1.25,
+                'style': 'italic',
+                'weight': 400,
+                'features': ('hist', 'ss01', 'swsh'),
+                'decoration': true,
+                'marginalia': true,
+                'leading': map.get($line-heights, 'loose'),
+                'letter-spacing': map.get($letter-spacing, 'tracked-tight'),
+                'quote-style': 'ornamental',
+                'emphasis': 'traditional'
+        ),
+        'classical': (
+                'spacing': map.get($spacing, '7'),
+                'scale': 1.2,
+                'style': 'normal',
+                'weight': 400,
+                'features': ('hist', 'ss01'),
+                'decoration': true,
+                'marginalia': true,
+                'leading': map.get($line-heights, 'loose'),
+                'letter-spacing': map.get($letter-spacing, 'normal'),
+                'quote-style': 'traditional',
+                'emphasis': 'classical'
+        ),
+        'luminary': (
+                'spacing': map.get($spacing, '6'),
+                'scale': 1.15,
+                'style': 'normal',
+                'weight': 400,
+                'features': ('ss01'),
+                'decoration': true,
+                'marginalia': false,
+                'leading': map.get($line-heights, 'relaxed'),
+                'letter-spacing': map.get($letter-spacing, 'tracked'),
+                'quote-style': 'modern',
+                'emphasis': 'contemporary'
+        ),
+        'master': (
+                'spacing': map.get($spacing, '5'),
+                'scale': 1.1,
+                'style': 'normal',
+                'weight': 400,
+                'features': ('liga', 'kern'),
+                'decoration': true,
+                'marginalia': false,
+                'leading': map.get($line-heights, 'base'),
+                'letter-spacing': map.get($letter-spacing, 'normal'),
+                'quote-style': 'simple',
+                'emphasis': 'balanced'
+        ),
+        'notable': (
+                'spacing': map.get($spacing, '4'),
+                'scale': 1.05,
+                'style': 'normal',
+                'weight': 400,
+                'features': ('liga'),
+                'decoration': false,
+                'marginalia': false,
+                'leading': map.get($line-heights, 'base'),
+                'letter-spacing': map.get($letter-spacing, 'normal'),
+                'quote-style': 'minimal',
+                'emphasis': 'subtle'
+        ),
+        'emerging': (
+                'spacing': map.get($spacing, '3'),
+                'scale': 1,
+                'style': 'normal',
+                'weight': 400,
+                'features': (),
+                'decoration': false,
+                'marginalia': false,
+                'leading': map.get($line-heights, 'base'),
+                'letter-spacing': map.get($letter-spacing, 'normal'),
+                'quote-style': 'basic',
+                'emphasis': 'standard'
+        )
 ) !default;
 
 // ---------------------------------------------------------------
-// Animations & Transitions
+// Animation Patterns and Transition Durations
 // ---------------------------------------------------------------
 
 $durations: (
         'instant': 100ms,
         'quick': 200ms,
+        'fast': 250ms,
         'natural': 300ms,
+        'smooth': 350ms,
         'relaxed': 400ms,
-        'slow': 500ms
+        'slow': 500ms,
+        'deliberate': 600ms,
+        'lengthy': 800ms
 ) !default;
 
 $easings: (
+        'linear': linear,
         'standard': cubic-bezier(0.4, 0, 0.2, 1),
         'in': cubic-bezier(0.4, 0, 1, 1),
         'out': cubic-bezier(0, 0, 0.2, 1),
-        'in-out': cubic-bezier(0.4, 0, 0.2, 1)
+        'in-out': cubic-bezier(0.4, 0, 0.2, 1),
+        'emphasized': cubic-bezier(0.2, 0.8, 0.2, 1),
+        'bounce': cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        'elegant': cubic-bezier(0.42, 0, 0.58, 1)
 ) !default;
 
 // ---------------------------------------------------------------
-// Effects
+// Interaction Patterns and Breakpoints
+// ---------------------------------------------------------------
+
+$breakpoints: (
+        'micro': 320px,
+        'small-print': 480px,
+        'folio': 640px,
+        'tablet': 768px,
+        'quarto': 1024px,
+        'desktop': 1280px,
+        'widescreen': 1440px,
+        'cinema': 1920px
+) !default;
+
+// ---------------------------------------------------------------
+// Theme Transitions
+// ---------------------------------------------------------------
+
+$theme-transition: (
+        'properties': (
+                'color',
+                'background-color',
+                'border-color',
+                'box-shadow',
+                'transform',
+                'opacity',
+                'filter',
+                'outline-color'
+        ),
+        'durations': (
+                'instant': map.get($durations, 'instant'),
+                'standard': map.get($durations, 'natural'),
+                'complex': map.get($durations, 'relaxed')
+        ),
+        'timing': (
+                'standard': map.get($easings, 'standard'),
+                'emphasized': map.get($easings, 'out'),
+                'decelerated': map.get($easings, 'in-out')
+        ),
+        'preferences': (
+                'reduce-motion': true,
+                'high-contrast': true,
+                'color-scheme': 'light dark'
+        )
+) !default;
+
+// ---------------------------------------------------------------
+// Animation Scales
+// ---------------------------------------------------------------
+
+$animation-scales: (
+        'tiny': 1.025,
+        'small': 1.05,
+        'medium': 1.1,
+        'large': 1.15,
+        'appreciation': 1.2,
+        'bookmark': 1.15,
+        'pulse': 1.05,
+        'hover': 1.02,
+        'press': 0.98
+) !default;
+
+// ---------------------------------------------------------------
+// Shadows
 // ---------------------------------------------------------------
 
 $shadows: (
-        'xs': (0 1px 2px rgba(0, 0, 0, 0.05)),
-        'sm': (0 1px 3px rgba(0, 0, 0, 0.1)),
-        'md': (0 4px 6px rgba(0, 0, 0, 0.1)),
-        'lg': (0 10px 15px rgba(0, 0, 0, 0.1)),
-        'xl': (0 20px 25px rgba(0, 0, 0, 0.1))
-) !default;
-
-$borders: (
-        'width': (
-                'none': 0,
-                'hairline': 1px,
-                'thin': 2px,
-                'thick': 4px
-        ),
-        'radius': (
-                'none': 0,
-                'sm': 2px,
-                'md': 4px,
-                'lg': 8px,
-                'xl': 12px,
-                'full': 9999px
-        )
+        'xs': 0px 1px 2px rgba(0, 0, 0, 0.05),
+        'sm': 0px 1px 3px rgba(0, 0, 0, 0.1),
+        'md': 0px 4px 6px rgba(0, 0, 0, 0.1),
+        'lg': 0px 10px 15px rgba(0, 0, 0, 0.15),
+        'xl': 0px 20px 25px rgba(0, 0, 0, 0.2),
+        '2xl': 0px 25px 50px rgba(0, 0, 0, 0.25)
 ) !default;
 
 // ---------------------------------------------------------------
-// Semantic Colors
+// Poetry-Specific Metrics
 // ---------------------------------------------------------------
-
-$semantic-colors: (
-        'success': map.get(map.get($colors, 'ink'), 'dark'),
-        'warning': #8a5d00,
-        'error': map.get(map.get($colors, 'accent'), 'dark'),
-        'info': #2c5282,
-        'notice': map.get(map.get($colors, 'gold'), 'dark'),
-        'muted': map.get(map.get($colors, 'ink'), 'light')
-) !default;
-
-// ---------------------------------------------------------------
-// Poetry Specific
-// ---------------------------------------------------------------
-
-$distinctions: (
-        'immortal': (
-                'spacing': map.get($spacing, '7'),
-                'scale': 1.2,
-                'style': 'italic'
-        ),
-        'luminary': (
-                'spacing': map.get($spacing, '6'),
-                'scale': 1.1,
-                'style': 'normal'
-        ),
-        'master': (
-                'spacing': map.get($spacing, '5'),
-                'scale': 1.05,
-                'style': 'normal'
-        ),
-        'emerging': (
-                'spacing': map.get($spacing, '4'),
-                'scale': 1,
-                'style': 'normal'
-        )
-) !default;
 
 $verse-metrics: (
-        'indent': map.get($spacing, '4'),
-        'stanza-spacing': map.get($spacing, '6'),
-        'title-spacing': map.get($spacing, '7'),
-        'line-number-width': map.get($spacing, '4')
+        'stanza-spacing': map.get($spacing, '6'),      // Standard space between stanzas
+        'line-indent': map.get($spacing, '4'),         // For continued lines
+        'citation-space': map.get($spacing, '3'),      // Space before citations
+        'epigraph-indent': map.get($spacing, '8'),     // Epigraph positioning
+        'verse-number-width': map.get($spacing, '4'),  // Space for verse numbers
+        'annotation-offset': map.get($spacing, '3'),   // Margin for annotations
+        'quote-indent': map.get($spacing, '6')         // Poetry quote indentation
+) !default;
+
+$poem-widths: (
+        'narrow': 45ch,    // For shorter verse
+        'standard': 60ch,  // Standard poetry width
+        'wide': 75ch,      // For longer lines
+        'epic': 90ch       // For epic poetry formats
 ) !default;
 
 // ---------------------------------------------------------------
-// Social Features
+// Reduced Motion - Fallback Variable
 // ---------------------------------------------------------------
 
-$interaction-thresholds: (
-        'double-tap': 300ms,
-        'scroll-trigger': 100px,
-        'minimum-swipe': 50px,
-        'hold-duration': 500ms
-) !default;
+$reduced-motion: map.get($enable-features, 'reduced-motion');
 
-$animation-scales: (
-        'appreciation': 1.2,
-        'bookmark': 1.15,
-        'pulse': 1.05
-) !default;

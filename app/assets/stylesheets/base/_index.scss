@@ -1,4 +1,10 @@
-@import "variables";
-@import "reset";
-@import "typography";
-@import "utilities";
+// app/assets/stylesheets/base/_index.scss
+@use "reset";
+@use "variables";
+@use "foundation";
+@use "mixins";
+@use "typography";
+@use "animations";
+@use "utilities";
+@use "layout";
+@use "theme";

@@ -1,41 +1,68 @@
-// app/assets/stylesheets/base/_reset.scss
+// ---------------------------------------------------------------
+// VerseCraft Reset
+// ---------------------------------------------------------------
+// Removes default browser styling for a consistent foundation
+// across different environments, while incorporating accessible
+// adjustments and a modern, minimal design language.
+// ---------------------------------------------------------------
 
-@import "../base/variables";
+@use "base/variables" as *;
+@use "sass:map";
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
   margin: 0;
   padding: 0;
+  border: 0;
+  font: inherit;
+  vertical-align: baseline;
 }
 
+// Box-sizing and display adjustments
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+// Set up base styles for HTML and body
 html {
-  font-size: 16px;
-  -webkit-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+  text-size-adjust: 100%;
 }
 
 body {
-  font-family: $font-serif;
-  line-height: 1.6;
-  color: $color-black;
-  background-color: $color-white;
+  line-height: map.get($line-heights, 'prose');
+  color: map.get(map.get($colors, 'ink'), 'darkest');
+  font-family: map.get($fonts, 'primary', 'family');
+  background-color: map.get(map.get($color-schemes, 'light'), 'background', 'primary');
 }
 
-img {
-  max-width: 100%;
-  height: auto;
+// Remove list styles on ul, ol elements
+ul, ol {
+  list-style: none;
 }
 
-button,
-input,
-select,
-textarea {
-  font: inherit;
+// Remove quotes on blockquote and q elements
+blockquote, q {
+  quotes: none;
+
+  &:before, &:after {
+    content: '';
+  }
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: $font-serif;
+// Anchor tag reset
+a {
+  color: inherit;
+  text-decoration: none;
 }

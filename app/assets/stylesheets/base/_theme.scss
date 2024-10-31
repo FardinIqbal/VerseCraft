@@ -1,0 +1,59 @@
+// ---------------------------------------------------------------
+// Themes
+// ---------------------------------------------------------------
+// VerseCraft Visual Themes
+// These distinct visual themes, inspired by natural and literary
+// imagery, bring elegance and accessibility to the interface.
+// Select from "Daylight," "Midnight," and "Clarity" to evoke
+// different atmospheres while preserving readability.
+// ---------------------------------------------------------------
+
+// Default Theme Selection
+$default-theme: 'daylight'; // Options: 'daylight', 'midnight', 'clarity'
+
+// Import necessary base variables
+@use "sass:map";
+@use "base/variables" as *;
+
+// Daylight Theme Mixin
+@mixin daylight {
+  --background-primary: map.get(map.get($color-schemes, 'light'), 'background', 'primary');
+  --background-secondary: map.get(map.get($color-schemes, 'light'), 'background', 'secondary');
+  --text-primary: map.get(map.get($color-schemes, 'light'), 'text', 'primary');
+  --text-secondary: map.get(map.get($color-schemes, 'light'), 'text', 'secondary');
+  // Additional colors and styles as needed for a soft, bright look
+}
+
+// Midnight Theme Mixin
+@mixin midnight {
+  --background-primary: map.get(map.get($color-schemes, 'dark'), 'background', 'primary');
+  --background-secondary: map.get(map.get($color-schemes, 'dark'), 'background', 'secondary');
+  --text-primary: map.get(map.get($color-schemes, 'dark'), 'text', 'primary');
+  --text-secondary: map.get(map.get($color-schemes, 'dark'), 'text', 'secondary');
+  // Additional colors and styles for a muted, focused atmosphere
+}
+
+// Clarity Theme Mixin (High Contrast)
+@mixin clarity {
+  --background-primary: #000000;  // True black for maximum contrast
+  --background-secondary: #FFFFFF; // True white for high contrast
+  --text-primary: #FFFFFF;         // White text on black background
+  --text-secondary: #000000;       // Black text on white background
+  // Additional high-contrast settings for enhanced accessibility
+}
+
+// Mixin to Apply Themes
+@mixin apply-theme($theme) {
+  @if $theme == 'daylight' {
+    @include daylight;
+  } @else if $theme == 'midnight' {
+    @include midnight;
+  } @else if $theme == 'clarity' {
+    @include clarity;
+  }
+}
+
+// Apply Default Theme
+body {
+  @include apply-theme($default-theme);
+}

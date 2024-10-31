@@ -1,275 +1,157 @@
-// app/assets/stylesheets/base/_mixins.scss
+// ---------------------------------------------------------------
+// VerseCraft Design System - Themes
+// ---------------------------------------------------------------
+// Description: VerseCraft Visual Themes
+// These distinct visual themes, inspired by natural and literary
+// imagery, bring elegance and accessibility to the interface.
+// Select from "Daylight," "Midnight," and "Clarity" to evoke
+// different atmospheres while preserving readability.
+// Created by: [Your Name]
+// Version: 1.0
+// Last Updated: [Date]
+// ---------------------------------------------------------------
 
-@use "sass:math";
 @use "sass:map";
-@use "sass:color";
-@use "sass:list";
-@use "variables" as v;
+@use "base/variables" as *;
+@use "shared"; // Import reusable styles for consistent theme handling
 
-/**
- * VerseCraft Design System Mixins
- * Core styling patterns and utilities
- */
+// Default Theme Selection
+$default-theme: 'daylight'; // Options: 'daylight', 'midnight', 'clarity'
 
 // ---------------------------------------------------------------
-// Typography Mixins
+// Theme Variables and Mixins
 // ---------------------------------------------------------------
 
-/// Core typography styles
-/// @param {String} $size - Font size from type scale
-/// @param {Number} $weight [400] - Font weight
-/// @param {String} $height [base] - Line height
-/// @param {String} $family [primary] - Font family
-@mixin font-style($size: 'base', $weight: 400, $height: 'base', $family: 'primary') {
-  font-family: map.get(map.get(v.$fonts, $family), 'family');
-  font-size: map.get(v.$type-scale, $size);
-  line-height: map.get(v.$line-heights, $height);
-  font-weight: $weight;
+/// Daylight Theme Mixin - Light, bright tones for readability in well-lit environments
+@mixin daylight {
+  --background-primary: #{map.get(map.get($color-schemes, 'light'), 'background', 'primary')};
+  --background-secondary: #{map.get(map.get($color-schemes, 'light'), 'background', 'secondary')};
+  --background-tertiary: #{map.get(map.get($color-schemes, 'light'), 'background', 'tertiary')};
+  --text-primary: #{map.get(map.get($color-schemes, 'light'), 'text', 'primary')};
+  --text-secondary: #{map.get(map.get($color-schemes, 'light'), 'text', 'secondary')};
+  --text-tertiary: #{map.get(map.get($color-schemes, 'light'), 'text', 'tertiary')};
+  --border-primary: #{map.get(map.get($color-schemes, 'light'), 'border', 'primary')};
+  --accent-primary: #{map.get(map.get($color-schemes, 'light'), 'accent', 'primary')};
+  // Additional Daylight theme variables as needed
 }
 
-/// Poetry-specific typography
-@mixin poetry-text($size: 'lg') {
-  @include font-style($size, 400, 'verse', 'primary');
-  white-space: pre-line;
-  margin: map.get(v.$spacing, '6') 0;
-
-  &::first-line {
-    font-style: italic;
-    letter-spacing: map.get(v.$letter-spacing, 'wide');
-  }
+/// Midnight Theme Mixin - Dark, muted tones for reduced eye strain in low light
+@mixin midnight {
+  --background-primary: #{map.get(map.get($color-schemes, 'dark'), 'background', 'primary')};
+  --background-secondary: #{map.get(map.get($color-schemes, 'dark'), 'background', 'secondary')};
+  --background-tertiary: #{map.get(map.get($color-schemes, 'dark'), 'background', 'tertiary')};
+  --text-primary: #{map.get(map.get($color-schemes, 'dark'), 'text', 'primary')};
+  --text-secondary: #{map.get(map.get($color-schemes, 'dark'), 'text', 'secondary')};
+  --text-tertiary: #{map.get(map.get($color-schemes, 'dark'), 'text', 'tertiary')};
+  --border-primary: #{map.get(map.get($color-schemes, 'dark'), 'border', 'primary')};
+  --accent-primary: #{map.get(map.get($color-schemes, 'dark'), 'accent', 'primary')};
+  // Additional Midnight theme variables as needed
 }
 
-/// Meta text styling
-@mixin meta-text {
-  @include font-style('xs', 400, 'base', 'secondary');
-  color: map.get(map.get(v.$colors, 'ink'), 'light');
-  letter-spacing: map.get(v.$letter-spacing, 'wide');
-}
-
-/// Truncate text with ellipsis
-@mixin truncate($lines: 1) {
-  @if $lines == 1 {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  } @else {
-    display: -webkit-box;
-    -webkit-line-clamp: $lines;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
+/// Clarity Theme Mixin - High-contrast tones for enhanced accessibility
+@mixin clarity {
+  --background-primary: #000000;  // True black for maximum contrast
+  --background-secondary: #FFFFFF; // True white for high contrast
+  --background-tertiary: #DDDDDD;  // Light gray for softened contrast
+  --text-primary: #FFFFFF;         // White text on black background
+  --text-secondary: #000000;       // Black text on white background
+  --text-tertiary: #333333;        // Dark gray for additional clarity
+  --border-primary: #333333;       // Dark gray border for high contrast
+  --accent-primary: #FF0000;       // High-visibility red for accents
+  // Additional Clarity theme variables for accessibility
 }
 
 // ---------------------------------------------------------------
-// Layout Mixins
+// Theme Application Mixin
 // ---------------------------------------------------------------
 
-/// Container with responsive padding
-@mixin container($size: 'default') {
-  width: 100%;
-  max-width: map.get(v.$content-width, $size);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: map.get(v.$spacing, '4');
-  padding-right: map.get(v.$spacing, '4');
-}
-
-/// Flexbox utilities
-@mixin flex($direction: row, $justify: flex-start, $align: stretch, $wrap: nowrap) {
-  display: flex;
-  flex-direction: $direction;
-  justify-content: $justify;
-  align-items: $align;
-  flex-wrap: $wrap;
-}
-
-/// Grid utilities
-@mixin grid($columns: 1, $gap: '4') {
-  display: grid;
-  grid-template-columns: repeat($columns, minmax(0, 1fr));
-  gap: map.get(v.$spacing, $gap);
-}
-
-/// Center content absolutely
-@mixin center-absolute {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-// ---------------------------------------------------------------
-// Interactive Mixins
-// ---------------------------------------------------------------
-
-/// Elevation with hover effect
-@mixin elevation($level: 'sm', $hover: true) {
-  box-shadow: map.get(v.$shadows, $level);
-  transition: box-shadow map.get(v.$durations, 'quick') map.get(v.$easings, 'standard'),
-  transform map.get(v.$durations, 'quick') map.get(v.$easings, 'standard');
-
-  @if $hover {
-    &:hover {
-      box-shadow: map.get(v.$shadows, 'md');
-      transform: translateY(-2px);
-    }
+/// Mixin to Apply Selected Theme
+/// @param {String} $theme - The theme to apply ('daylight', 'midnight', or 'clarity')
+@mixin apply-theme($theme) {
+  @if $theme == 'daylight' {
+    @include daylight;
+  } @else if $theme == 'midnight' {
+    @include midnight;
+  } @else if $theme == 'clarity' {
+    @include clarity;
   }
 }
 
-/// Focus ring styles
-@mixin focus-ring($offset: true) {
-  &:focus {
-    outline: none;
-  }
+// Apply Default Theme to the `body`
+body {
+  @include apply-theme($default-theme);
+}
 
-  &:focus-visible {
-    outline: 2px solid map.get(map.get(v.$colors, 'accent'), 'base');
-    outline-offset: if($offset, 2px, 0);
+// Optionally, use `shared` utility for high contrast handling if the user preference is detected
+@mixin theme-preference($theme) {
+  @include apply-theme($theme);
+
+  @media (prefers-color-scheme: dark) {
+    @include midnight;
   }
 }
 
-/// Interactive state transitions
-@mixin interactive($scale: true) {
-  transition: all map.get(v.$durations, 'quick') map.get(v.$easings, 'standard');
-
-  @if $scale {
-    &:active {
-      transform: scale(0.98);
-    }
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-}
-
-// ---------------------------------------------------------------
-// Poetry Specific Mixins
-// ---------------------------------------------------------------
-
-/// Literary distinction styles
-@mixin literary-distinction($level: 'emerging') {
-  $distinction: map.get(v.$distinctions, $level);
-  margin: map.get($distinction, 'spacing');
-  font-style: map.get($distinction, 'style');
-  transform: scale(map.get($distinction, 'scale'));
-}
-
-/// Verse layout
-@mixin verse-layout {
-  padding-left: map.get(v.$verse-metrics, 'indent');
-  margin-bottom: map.get(v.$verse-metrics, 'stanza-spacing');
-  position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: map.get(map.get(v.$colors, 'ink'), 'lightest');
-  }
-}
-
-// ---------------------------------------------------------------
-// Social Feature Mixins
-// ---------------------------------------------------------------
-
-/// Appreciation animation
-@mixin appreciation-animation {
-  @keyframes appreciate {
-    0% { transform: scale(1); }
-    50% { transform: scale(map.get(v.$animation-scales, 'appreciation')); }
-    100% { transform: scale(1); }
-  }
-
-  &.appreciating {
-    animation: appreciate map.get(v.$durations, 'quick') map.get(v.$easings, 'out');
-  }
-}
-
-/// Infinite scroll trigger
-@mixin scroll-trigger {
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: map.get(v.$spacing, '4');
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: map.get(map.get(v.$colors, 'accent'), 'lightest');
-    transform: scaleX(0);
-    transition: transform map.get(v.$durations, 'natural') map.get(v.$easings, 'out');
-  }
-
-  &.loading::after {
-    transform: scaleX(1);
-  }
-}
-
-// ---------------------------------------------------------------
-// Responsive Mixins
-// ---------------------------------------------------------------
-
-/// Media query generator
-@mixin breakpoint($size) {
-  @media (min-width: map.get(v.$breakpoints, $size)) {
-    @content;
-  }
-}
-
-/// Responsive hiding
-@mixin hide-until($size) {
-  @media (max-width: map.get(v.$breakpoints, $size) - 1px) {
-    display: none;
-  }
-}
-
-// ---------------------------------------------------------------
-// Print Mixins
-// ---------------------------------------------------------------
-
-/// Print-specific styles
-@mixin print-styles {
-  @media print {
-    @content;
-  }
-}
-
-/// Poetry print layout
-@mixin print-poetry {
-  @include print-styles {
-    page-break-inside: avoid;
-    margin: map.get(v.$spacing, '6') 0;
-    font-size: 11pt;
-    line-height: map.get(v.$line-heights, 'loose');
-  }
-}
-
-// ---------------------------------------------------------------
-// Accessibility Mixins
-// ---------------------------------------------------------------
-
-/// Visually hidden but accessible to screen readers
-@mixin visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-/// Reduced motion styles
+// In _mixins.scss
 @mixin reduced-motion {
   @media (prefers-reduced-motion: reduce) {
     @content;
   }
 }
+
+// ---------------------------------------------------------------
+// Typography Mixins
+// ---------------------------------------------------------------
+
+/// Font Style Mixin
+/// @param {String} $size - Font size key from $type-scale (e.g., 'base', 'lg')
+/// @param {Number} $weight - Font weight (e.g., 400, 700)
+/// @param {String} $line-height - Line height key from $line-heights (e.g., 'base', 'prose')
+/// @param {String} $font-family - Font family key from $fonts (e.g., 'primary', 'display')
+@mixin font-style($size, $weight, $line-height, $font-family) {
+  font-size: map.get($type-scale, $size);
+  font-weight: $weight;
+  line-height: map.get($line-heights, $line-height);
+  font-family: map.get(map.get($fonts, $font-family), 'family');
+}
+
+/// Meta Text Mixin
+/// Applies a smaller font style, often used for metadata
+@mixin meta-text {
+  font-size: map.get($type-scale, '2xs');
+  font-weight: 400;
+  line-height: map.get($line-heights, 'tight');
+  color: map.get(map.get($colors, 'ink'), 'medium');
+}
+
+/// Poetry Text Mixin
+/// Specialized styling for poetry or verse
+/// @param {String} $size - Font size key from $type-scale for poetry (e.g., 'lg')
+@mixin poetry-text($size) {
+  font-size: map.get($type-scale, $size);
+  line-height: map.get($line-heights, 'verse');
+  font-family: map.get(map.get($fonts, 'primary'), 'family');
+  font-style: italic;
+}
+
+// ---------------------------------------------------------------
+// Focus Ring Mixin
+// Provides a consistent and accessible focus ring for interactive elements.
+// ---------------------------------------------------------------
+
+@mixin focus-ring {
+  outline: none; // Remove default outline for consistent styling
+  box-shadow: 0 0 0 2px map.get(map.get($colors, 'editorial'), 'light'),
+  0 0 0 4px map.get(map.get($colors, 'ink'), 'deepest');
+  border-radius: 4px;
+
+  @include reduced-motion {
+    transition: none;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px map.get(map.get($colors, 'editorial'), 'base'),
+    0 0 0 4px map.get(map.get($colors, 'ink'), 'darkest');
+  }
+}
+
+

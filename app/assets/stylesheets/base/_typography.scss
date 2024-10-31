@@ -1,110 +1,256 @@
-// app/assets/stylesheets/base/_typography.scss
+@use "sass:map";
+@use "base/variables" as *;
+@use "base/mixins" as *;
 
-@import "variables";
 
-// Global font settings for readability and consistency
-html {
-  font-size: 16px; // Base font size for scalability
-  line-height: 1.6; // Increased line-height for readability
-}
+// ---------------------------------------------------------------
+// VerseCraft Typography
+// Enforces a sophisticated typographic hierarchy, enhancing readability
+// and visual appeal. Uses design tokens for sizes, line heights, and colors.
+// ---------------------------------------------------------------
 
+/// Base Typography Styles for the Body
 body {
-  font-family: $font-serif; // Main font family
-  color: $color-black; // Standard body text color
-  -webkit-font-smoothing: antialiased; // Smooths font for better readability on WebKit browsers
-  -moz-osx-font-smoothing: grayscale; // Smooths font for macOS
+  @include font-style('base', 400, 'base', 'primary');
+  color: map.get(map.get($colors, 'ink'), 'darkest');
+  line-height: map.get($line-heights, 'prose');
+  font-feature-settings: if(map.get($enable-features, 'variable-fonts'), 'liga', 'normal');
 }
 
-// Heading styles with consistent spacing and sizes
-h1, h2, h3, h4, h5, h6 {
-  font-family: $font-serif;
-  margin-bottom: 0.5em; // Space after each heading
-  line-height: 1.2; // Compact line-height for headers
+// ---------------------------------------------------------------
+// Headings
+// Applies refined font sizes and weights for headings, while maintaining
+// a consistent line-height for each level of the hierarchy.
+// ---------------------------------------------------------------
+
+h1, .heading-1 {
+  @include font-style('4xl', 700, 'display', 'display');
+  color: map.get(map.get($colors, 'ink'), 'deepest');
+  letter-spacing: map.get($letter-spacing, 'display');
+  margin-bottom: map.get($spacing, '5');
 }
 
-h1 {
-  font-size: 2.5rem; // Largest heading
-  margin-top: 0; // Removes top margin on H1 for uniform spacing
+h2, .heading-2 {
+  @include font-style('3xl', 600, 'display', 'display');
+  color: map.get(map.get($colors, 'ink'), 'darkest');
+  letter-spacing: map.get($letter-spacing, 'tracked-tight');
+  margin-bottom: map.get($spacing, '4');
 }
 
-h2 { font-size: 2rem; }
-h3 { font-size: 1.75rem; }
-h4 { font-size: 1.5rem; }
-h5 { font-size: 1.25rem; }
-h6 { font-size: 1rem; }
-
-// Paragraph styling for readability
-p {
-  margin-bottom: 1.5rem; // Standard margin after paragraphs
-  line-height: 1.8; // Increased line-height for optimal readability
+h3, .heading-3 {
+  @include font-style('2xl', 500, 'snug', 'display');
+  color: map.get(map.get($colors, 'ink'), 'dark');
+  letter-spacing: map.get($letter-spacing, 'normal');
+  margin-bottom: map.get($spacing, '3');
 }
 
-// Link styling with transitions for interactivity
-a {
-  color: $color-primary; // Base color for links
-  text-decoration: none; // No underline for links
-  transition: color 0.3s ease; // Smooth color transition on hover
-
-  &:hover {
-    color: $color-hover; // Hover color for emphasis
-  }
-
-  &:focus {
-    outline: none;
-    text-decoration: underline; // Underline for accessibility focus state
-  }
+h4, .heading-4 {
+  @include font-style('xl', 400, 'base', 'primary');
+  color: map.get(map.get($colors, 'ink'), 'darker');
+  margin-bottom: map.get($spacing, '2');
 }
 
-// List styles for ordered and unordered lists
+h5, .heading-5 {
+  @include font-style('lg', 400, 'base', 'primary');
+  color: map.get(map.get($colors, 'ink'), 'base');
+  margin-bottom: map.get($spacing, '2');
+}
+
+h6, .heading-6 {
+  @include font-style('md', 400, 'snug', 'secondary');
+  color: map.get(map.get($colors, 'ink'), 'medium');
+  margin-bottom: map.get($spacing, '1');
+}
+
+// ---------------------------------------------------------------
+// Paragraphs and Meta Text
+// Standard body text and meta information styles, using spacing tokens
+// and variable colors for elegance and readability.
+// ---------------------------------------------------------------
+
+p, .paragraph {
+  @include font-style('base', 400, 'prose', 'primary');
+  color: map.get(map.get($colors, 'ink'), 'dark');
+  margin-bottom: map.get($spacing, '3');
+}
+
+.small-print, .meta {
+  @include meta-text; // From mixins, applies small print style
+  margin-bottom: map.get($spacing, '2');
+  color: map.get(map.get($colors, 'ink'), 'medium');
+}
+
+// ---------------------------------------------------------------
+// Lists
+// Stylish, well-spaced lists with consistent color and indentation.
+// ---------------------------------------------------------------
+
 ul, ol {
-  margin-bottom: 1.5rem; // Space below lists
-  padding-left: 1.5rem; // Indentation for list items
+  @include font-style('base', 400, 'prose', 'primary');
+  color: map.get(map.get($colors, 'ink'), 'dark');
+  margin-bottom: map.get($spacing, '3');
+  padding-left: map.get($spacing, '5');
+  list-style-position: inside;
 }
 
 li {
-  margin-bottom: 0.5rem; // Space between list items
+  margin-bottom: map.get($spacing, '1');
 }
 
-// Poetry-specific typography for VerseCraft
-.poem {
-  line-height: 1.8; // Readability for poetry lines
+// ---------------------------------------------------------------
+// Blockquotes
+// Elegant styling for blockquotes, with distinct color, italic style, and
+// thoughtful spacing for readability.
+// ---------------------------------------------------------------
 
-  &-title {
-    font-size: 2rem;
-    text-align: center; // Center-align for emphasis
-    margin-bottom: 1.5rem;
-  }
-
-  &-content {
-    font-family: $font-serif;
-    font-size: 1.2rem;
-    white-space: pre-wrap; // Keeps poem formatting intact
-  }
-
-  &-meta {
-    font-style: italic; // Italicized metadata
-    font-size: 0.9rem;
-    color: $color-grey; // Muted color for metadata
-    text-align: center;
-    margin-bottom: 2rem;
-  }
-}
-
-// Utility classes for various text formats
-.text-small { font-size: 0.875rem; } // Small text
-.text-large { font-size: 1.125rem; } // Large text
-.text-italic { font-style: italic; }
-.text-bold { font-weight: bold; }
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.text-left { text-align: left; }
-.text-muted { color: $color-grey; } // Muted color for less emphasis
-
-// Blockquote styling for emphasized quotations
 blockquote {
+  @include font-style('lg', 400, 'prose', 'primary');
+  color: map.get(map.get($colors, 'ink'), 'medium');
   font-style: italic;
-  margin: 2rem 0;
-  padding-left: 1.5rem;
-  border-left: 3px solid $color-primary; // Colored left border for emphasis
-  color: $color-grey; // Muted color for blockquote text
+  border-left: 4px solid map.get(map.get($colors, 'editorial'), 'light');
+  padding-left: map.get($spacing, '4');
+  margin: map.get($spacing, '4') 0;
+}
+
+// ---------------------------------------------------------------
+// Poetry and Verse
+// Specialized styles for poetry, using the poetry-text mixin and
+// verse layout settings to distinguish from prose.
+// ---------------------------------------------------------------
+
+.poetry, .verse {
+  @include poetry-text('lg');
+  color: map.get(map.get($colors, 'ink'), 'darkest');
+}
+
+.line-number {
+  @include font-style('3xs', 400, 'verse', 'monospace');
+  color: map.get(map.get($colors, 'ink'), 'light');
+  margin-right: map.get($spacing, '2');
+}
+
+// ---------------------------------------------------------------
+// Marginalia and Annotations
+// Styles for marginal notes and annotations, enhancing reading
+// experience with subtle color and spacing.
+// ---------------------------------------------------------------
+
+.marginalia {
+  @include font-style('3xs', 400, 'snug', 'marginalia');
+  color: map.get(map.get($colors, 'ink'), 'lighter');
+  margin-left: map.get($spacing, 'verse', 'indent');
+}
+
+.annotation {
+  background-color: map.get(map.get($colors, 'poetry'), 'highlight');
+  padding: 0 map.get($spacing, '1');
+  border-radius: 2px;
+}
+
+// ---------------------------------------------------------------
+// Links
+// Consistent, subtle link styling that respects user interaction
+// and focus states. Accessible color contrast is maintained.
+// ---------------------------------------------------------------
+
+a {
+  color: map.get(map.get($colors, 'editorial'), 'base');
+  text-decoration: underline;
+  transition: color map.get($durations, 'quick') map.get($easings, 'out');
+
+  &:hover {
+    color: map.get(map.get($colors, 'editorial'), 'dark');
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+// ---------------------------------------------------------------
+// Poetry Typography
+// ---------------------------------------------------------------
+
+.verse-block {
+  @include poetry-text('lg');
+  margin: map.get($spacing, 'verse', 'stanza') 0;
+  white-space: pre-line;
+
+  .verse-line {
+    display: block;
+    line-height: map.get($line-heights, 'verse');
+
+    &.indented {
+      margin-left: map.get($verse-metrics, 'line-indent');
+    }
+  }
+
+  .stanza {
+    margin-bottom: map.get($verse-metrics, 'stanza-spacing');
+  }
+
+  .verse-number {
+    color: map.get(map.get($colors, 'ink'), 'light');
+    font-size: map.get($type-scale, '3xs');
+    margin-right: map.get($verse-metrics, 'verse-number-width');
+    user-select: none;
+  }
+}
+
+.epigraph {
+  font-style: italic;
+  margin-left: map.get($verse-metrics, 'epigraph-indent');
+  color: map.get(map.get($colors, 'ink'), 'dark');
+  margin-bottom: map.get($spacing, '6');
+}
+
+.verse-citation {
+  font-size: map.get($type-scale, 'xs');
+  color: map.get(map.get($colors, 'ink'), 'medium');
+  margin-top: map.get($verse-metrics, 'citation-space');
+  text-align: right;
+  font-style: italic;
+}
+
+// ---------------------------------------------------------------
+// Buttons
+// Buttons with typography styles that blend with the system, but
+// are distinct through weight, color, and hover effects.
+// ---------------------------------------------------------------
+
+.button, .btn {
+  @include font-style('sm', 600, 'snug', 'secondary');
+  color: map.get(map.get($colors, 'ink'), 'inverse');
+  background-color: map.get(map.get($colors, 'editorial'), 'base');
+  padding: map.get($spacing, '2') map.get($spacing, '4');
+  border-radius: 4px;
+  transition: background-color map.get($durations, 'quick') map.get($easings, 'standard');
+
+  &:hover {
+    background-color: map.get(map.get($colors, 'editorial'), 'dark');
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+}
+
+// ---------------------------------------------------------------
+// Code and Preformatted Text
+// Monospaced font for inline code and preformatted text, with
+// contrasting background for emphasis.
+// ---------------------------------------------------------------
+
+code, pre {
+  @include font-style('xs', 400, 'base', 'monospace');
+  background-color: map.get(map.get($colors, 'paper'), 'chrome');
+  color: map.get(map.get($colors, 'ink'), 'darker');
+  padding: map.get($spacing, '1') map.get($spacing, '2');
+  border-radius: 4px;
+}
+
+pre {
+  overflow-x: auto;
+  padding: map.get($spacing, '2');
+  margin-bottom: map.get($spacing, '3');
 }
