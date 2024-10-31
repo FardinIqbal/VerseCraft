@@ -1,31 +1,23 @@
-// app/assets/stylesheets/application.scss
+/*
+ * VerseCraft - A sophisticated literary platform
+ */
 
-// Import base files
+// Base Styles
 @import "base/variables";
-@import "base/reset";
 @import "base/typography";
-@import "base/utilities";
+@import "base/animations";
+@import "base/layout";
 
-// Import layouts
-@import "layout/layout";
-@import "layout/header";
-@import "layout/footer";
-@import "layout/navigation";
+// Feed Components
+@import "components/feed/poem_card";
+@import "components/feed/daily_feature";
+@import "components/feed/engagement";
 
-// Import components
+// Poet Components
+@import "components/poets/profile";
+@import "components/poets/verification";
+
+// Common Components
 @import "components/buttons";
 @import "components/forms";
-@import "components/cards";
-@import "components/poems";
-@import "components/poem_viewer";
-@import "components/comments";
-@import "components/poetry";
-@import "components/dropdown";
-@import "components/poem_scroll";
-
-
-// Import pages
-@import "pages/home";
-
-// Import themes
-@import "themes/new_yorker";
+@import "components/alerts";
