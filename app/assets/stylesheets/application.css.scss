@@ -1,23 +1,32 @@
-/*
- * VerseCraft - A sophisticated literary platform
- */
 
-// Base Styles
-@import "base/variables";
-@import "base/typography";
-@import "base/animations";
-@import "base/layout";
+// Base
+@import 'base/variables';
+@import 'base/typography';
+@import 'base/layout';
+@import 'base/animations';
+@import 'base/utilities';
 
-// Feed Components
-@import "components/feed/poem_card";
-@import "components/feed/daily_feature";
-@import "components/feed/engagement";
+// Layout
+@import 'layout/grid/feed';
+@import 'layout/grid/sidebar';
+@import 'layout/header';
+@import 'layout/navigation';
+@import 'layout/footer';
+
+// Components
+@import 'components/buttons';
+@import 'components/forms';
+@import 'components/alerts';
+@import 'components/cards';
+@import 'components/poem_card';
+@import 'components/daily_feature';
+@import 'components/engagement';
+@import 'components/annotations';
+@import 'components/dropdown';
 
 // Poet Components
-@import "components/poets/profile";
-@import "components/poets/verification";
+@import 'components/poets/profile';
 
-// Common Components
-@import "components/buttons";
-@import "components/forms";
-@import "components/alerts";
+// Pages
+@import 'pages/home';
+
