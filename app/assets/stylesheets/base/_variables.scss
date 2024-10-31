@@ -1,94 +1,375 @@
-// app/assets/stylesheets/base/_variables.scss
+// app/assets/stylesheets/base/_foundation.scss
 
 /**
- * VerseCraft Typography & Design System
- * Inspired by classical literary aesthetics with modern refinement
+ * VerseCraft Design System Foundation
+ * A comprehensive design system merging literary sophistication with modern interaction
  *
- * This file establishes our core design tokens. We follow a strict
- * typographic scale and limited color palette to maintain sophistication.
+ * This is the single source of truth for our design tokens.
+ * No additional variables should be needed after this foundation is established.
+ *
+ * @author Your Name
+ * @version 1.0.0
  */
 
 // ---------------------------------------------------------------
-// Typography Foundation
+// Core Configuration
+// Application-wide settings
 // ---------------------------------------------------------------
 
-/* Primary: Adobe Caslon Pro - our main serif typeface for poetry
- * Fallbacks maintain elegance across different systems
- */
-$font-primary: "Adobe Caslon Pro", "Perpetua", "Baskerville", "Georgia Pro", Georgia, serif;
+$enable-features: (
+        'reduced-motion': true,
+        'smooth-scroll': true,
+        'text-balance': true,
+        'variable-fonts': false,
+        'dark-mode': false,
+        'high-contrast': false,
+        'font-size-adjust': true,
+        'print-styles': true
+);
 
-/* Secondary: For UI elements and meta information
- * Chosen for its clean lines and clarity
- */
-$font-secondary: "Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif;
-
-// ---------------------------------------------------------------
-// Type Scale
-// Based on a perfect fourth (1.333) for harmonious proportions
-// ---------------------------------------------------------------
-
-$text-xs: 0.75rem;      // 12px - Auxiliary information
-$text-sm: 0.875rem;     // 14px - Meta data
-$text-base: 1rem;       // 16px - Body text
-$text-lg: 1.333rem;     // 21.3px - Poem text
-$text-xl: 1.777rem;     // 28.4px - Section headers
-$text-2xl: 2.369rem;    // 37.9px - Poem titles
-$text-3xl: 3.157rem;    // 50.5px - Featured content
+$environment: 'production' !default;
 
 // ---------------------------------------------------------------
-// Classical Proportions
-// Line heights and spacing following traditional manuscript rules
+// Typography System
+// Complete type scale and fonts
 // ---------------------------------------------------------------
 
-$leading-tight: 1.2;     // Headers
-$leading-normal: 1.5;    // Body text
-$leading-loose: 1.8;     // Poetry
-$leading-display: 1.25;  // Large titles
+/* Font Stacks */
+$fonts: (
+        'primary': (
+                'family': ("Adobe Caslon Pro", "Perpetua", "Baskerville", "Georgia Pro", Georgia, serif),
+                'weights': (300, 400, 400i, 500, 600),
+                'formats': ('woff2', 'woff')
+        ),
+        'secondary': (
+                'family': ("Helvetica Neue", -apple-system, BlinkMacSystemFont, sans-serif),
+                'weights': (400, 500, 600),
+                'formats': ('woff2', 'woff')
+        ),
+        'monospace': (
+                'family': ("SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace),
+                'weights': (400),
+                'formats': ('woff2')
+        )
+);
+
+/* Type Scale - Based on perfect fourth (1.333) */
+$type-scale: (
+        '3xs': 0.563rem,    //  9.0px - Footnotes
+        '2xs': 0.75rem,     // 12.0px - Small print
+        'xs': 0.875rem,     // 14.0px - Meta text
+        'sm': 1rem,         // 16.0px - Body text
+        'base': 1.333rem,   // 21.3px - Large body
+        'md': 1.777rem,     // 28.4px - Subheadings
+        'lg': 2.369rem,     // 37.9px - Headings
+        'xl': 3.157rem,     // 50.5px - Title
+        '2xl': 4.209rem,    // 67.3px - Display
+        '3xl': 5.61rem      // 89.8px - Hero
+);
+
+/* Line Heights */
+$line-heights: (
+        'tight': 1.1,       // Headings
+        'snug': 1.2,        // Subheadings
+        'base': 1.5,        // Body text
+        'relaxed': 1.625,   // Large text
+        'loose': 1.8,       // Poetry
+        'verse': 2,         // Verse spacing
+        'display': 1.25     // Display text
+);
+
+/* Letter Spacing */
+$letter-spacing: (
+        'tight': -0.02em,
+        'normal': 0,
+        'wide': 0.02em,
+        'wider': 0.05em,
+        'widest': 0.1em
+);
 
 // ---------------------------------------------------------------
-// Color Palette
-// Inspired by fine print publications and archival papers
+// Color System
+// Comprehensive color palette
 // ---------------------------------------------------------------
 
-/* Core colors - minimal palette for maximum sophistication */
-$color-ink: #1a1a1a;        // Softer than pure black
-$color-paper: #fcfcfc;      // Warm white, easier on eyes
-$color-graphite: #333333;   // Primary text
-$color-pencil: #666666;     // Secondary text
-$color-mist: #e5e5e5;       // Subtle borders
-$color-vellum: #f8f8f8;     // Background accents
+/* Core Colors */
+$colors: (
+        'ink': (
+                'darkest': #000000,
+                'darker': #1a1a1a,
+                'dark': #333333,
+                'base': #4a4a4a,
+                'light': #666666,
+                'lighter': #808080,
+                'lightest': #999999
+        ),
+        'paper': (
+                'darkest': #e5e5e5,
+                'darker': #f0f0f0,
+                'dark': #f5f5f5,
+                'base': #f8f8f8,
+                'light': #fafafa,
+                'lighter': #fcfcfc,
+                'lightest': #ffffff
+        ),
+        'accent': (
+                'darkest': #4a0000,
+                'darker': #660000,
+                'dark': #8b0000,
+                'base': #cc0000,
+                'light': #ff0000,
+                'lighter': #ff3333,
+                'lightest': #ff6666
+        ),
+        'gold': (
+                'darkest': #5c4d2e,
+                'darker': #7c6840,
+                'dark': #9c8b7d,
+                'base': #c0aa6e,
+                'light': #d4c485,
+                'lighter': #e8dda1,
+                'lightest': #fff6cc
+        )
+);
 
-/* Accent colors - used with extreme restraint */
-$color-editor: #8b0000;     // Deep editorial red
-$color-gold: #9c8b7d;       // Aged gold for special elements
+/* Semantic Colors */
+$semantic-colors: (
+        'success': #2d5a27,
+        'warning': #8a5d00,
+        'error': #8b0000,
+        'info': #2c5282
+);
+
+/* Alpha Values */
+$alpha-values: (
+        'opaque': 1,
+        'semi-opaque': 0.8,
+        'medium': 0.5,
+        'semi-transparent': 0.2,
+        'transparent': 0
+);
 
 // ---------------------------------------------------------------
-// Spacing
-// Based on a 4px grid, scaled exponentially
+// Spacing System
+// Comprehensive spacing scale
 // ---------------------------------------------------------------
 
-$space-1: 0.25rem;   // 4px  - Minimum spacing
-$space-2: 0.5rem;    // 8px  - Tight spacing
-$space-3: 1rem;      // 16px - Standard spacing
-$space-4: 2rem;      // 32px - Component spacing
-$space-5: 4rem;      // 64px - Section spacing
-$space-6: 8rem;      // 128px - Large breaks
+/* Base Spacing */
+$spacing-base: 4px;
+
+$spacing: (
+        '0': 0,
+        '1': $spacing-base,      // 4px
+        '2': $spacing-base * 2,  // 8px
+        '3': $spacing-base * 4,  // 16px
+        '4': $spacing-base * 6,  // 24px
+        '5': $spacing-base * 8,  // 32px
+        '6': $spacing-base * 12, // 48px
+        '7': $spacing-base * 16, // 64px
+        '8': $spacing-base * 24, // 96px
+        '9': $spacing-base * 32, // 128px
+        '10': $spacing-base * 40 // 160px
+);
+
+/* Poetry-Specific Spacing */
+$poetry-spacing: (
+        'verse-indent': map-get($spacing, '4'),
+        'stanza-spacing': map-get($spacing, '6'),
+        'title-spacing': map-get($spacing, '7'),
+        'annotation-offset': map-get($spacing, '3'),
+        'line-number-width': map-get($spacing, '4')
+);
 
 // ---------------------------------------------------------------
-// Layout
-// Optimal line lengths and content containment
+// Layout System
+// Grid and container definitions
 // ---------------------------------------------------------------
 
-$width-prose: 68ch;        // Ideal reading length
-$width-poem: 45ch;         // Poetry container
-$width-content: 1200px;    // Max site width
+/* Breakpoints */
+$breakpoints: (
+        '2xs': 320px,
+        'xs': 480px,
+        'sm': 640px,
+        'md': 768px,
+        'lg': 1024px,
+        'xl': 1280px,
+        '2xl': 1536px
+);
+
+/* Container Settings */
+$containers: (
+        'xs': 100%,
+        'sm': 540px,
+        'md': 720px,
+        'lg': 960px,
+        'xl': 1140px,
+        '2xl': 1320px
+);
+
+/* Grid Configuration */
+$grid: (
+        'columns': 12,
+        'gap': map-get($spacing, '4'),
+        'container-padding': map-get($spacing, '4')
+);
+
+/* Content Widths */
+$content-width: (
+        'prose': 68ch,
+        'poem': 45ch,
+        'narrow': 640px,
+        'default': 800px,
+        'wide': 1200px
+);
 
 // ---------------------------------------------------------------
-// Breakpoints
-// Following standard device sizes with refined adjustments
+// Interaction System
+// Animation and interaction parameters
 // ---------------------------------------------------------------
 
-$bp-sm: 640px;   // Small devices
-$bp-md: 768px;   // Medium devices
-$bp-lg: 1024px;  // Large devices
-$bp-xl: 1280px;  // Extra large devices
+/* Durations */
+$durations: (
+        'instant': 100ms,
+        'fast': 150ms,
+        'quick': 200ms,
+        'natural': 300ms,
+        'relaxed': 400ms,
+        'slow': 500ms
+);
+
+/* Easings */
+$easings: (
+        'standard': cubic-bezier(0.4, 0, 0.2, 1),
+        'in': cubic-bezier(0.4, 0, 1, 1),
+        'out': cubic-bezier(0, 0, 0.2, 1),
+        'in-out': cubic-bezier(0.4, 0, 0.2, 1)
+);
+
+/* Interaction States */
+$interaction: (
+        'hover-lift': translateY(-2px),
+        'active-scale': 0.98,
+        'focus-ring-width': 2px,
+        'focus-ring-offset': 2px
+);
+
+/* Animation Scales */
+$animation-scales: (
+        'appreciation': 1.2,
+        'bookmark': 1.15,
+        'pulse': 1.05
+);
+
+// ---------------------------------------------------------------
+// Social Features
+// Instagram-inspired interaction metrics
+// ---------------------------------------------------------------
+
+/* Interaction Thresholds */
+$interaction-thresholds: (
+        'double-tap': 300ms,
+        'scroll-trigger': 100px,
+        'minimum-swipe': 50px,
+        'hold-duration': 500ms
+);
+
+/* Content Limits */
+$content-limits: (
+        'title-length': 120px,
+        'excerpt-lines': 3,
+        'bio-lines': 4,
+        'username-length': 30
+);
+
+// ---------------------------------------------------------------
+// Layer Management
+// Z-index system
+// ---------------------------------------------------------------
+
+$z-layers: (
+        'underground': -1,
+        'ground': 0,
+        'above': 1,
+        'header': 100,
+        'dropdown': 200,
+        'sticky': 300,
+        'overlay': 400,
+        'modal': 500,
+        'popover': 600,
+        'tooltip': 700,
+        'notification': 800,
+        'spotlight': 900,
+        'highest': 9999
+);
+
+// ---------------------------------------------------------------
+// Literary Distinctions
+// Visual hierarchy for poet categories
+// ---------------------------------------------------------------
+
+$distinctions: (
+        'immortal': (
+                'spacing': map-get($spacing, '7'),
+                'scale': 1.2,
+                'style': 'italic'
+        ),
+        'luminary': (
+                'spacing': map-get($spacing, '6'),
+                'scale': 1.1,
+                'style': 'normal'
+        ),
+        'master': (
+                'spacing': map-get($spacing, '5'),
+                'scale': 1.05,
+                'style': 'normal'
+        ),
+        'emerging': (
+                'spacing': map-get($spacing, '4'),
+                'scale': 1,
+                'style': 'normal'
+        )
+);
+
+// ---------------------------------------------------------------
+// Effects System
+// Shadows, borders, and visual effects
+// ---------------------------------------------------------------
+
+/* Shadows */
+$shadows: (
+        'xs': (0 1px 2px rgba(0, 0, 0, 0.05)),
+        'sm': (0 1px 3px rgba(0, 0, 0, 0.1)),
+        'md': (0 4px 6px rgba(0, 0, 0, 0.1)),
+        'lg': (0 10px 15px rgba(0, 0, 0, 0.1)),
+        'xl': (0 20px 25px rgba(0, 0, 0, 0.1))
+);
+
+/* Border Radii */
+$radii: (
+        'none': 0,
+        'sm': 2px,
+        'md': 4px,
+        'lg': 8px,
+        'xl': 12px,
+        'full': 9999px
+);
+
+/* Border Widths */
+$border-widths: (
+        'none': 0,
+        'hairline': 1px,
+        'thin': 2px,
+        'thick': 4px
+);
+
+// ---------------------------------------------------------------
+// Print Settings
+// Print-specific configurations
+// ---------------------------------------------------------------
+
+$print: (
+        'margin': 0.75in,
+        'font-size': 11pt,
+        'line-height': 1.5,
+        'page-break-inside': 'avoid'
+);
