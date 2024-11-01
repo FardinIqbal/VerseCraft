@@ -1,0 +1,28 @@
+<%= form_for @user do |f| %>
+  <div class="form-group">
+    <%= f.label :pen_name, "Pen Name" %>
+    <%= f.text_field :pen_name, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :bio, "Bio" %>
+    <%= f.text_area :bio, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :location, "Location" %>
+    <%= f.text_field :location, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :website, "Website" %>
+    <%= f.url_field :website, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :avatar, "Avatar" %>
+    <%= f.file_field :avatar, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Save Changes", class: "btn btn-primary" %>
+<% end %>

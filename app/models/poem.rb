@@ -5,4 +5,6 @@ class Poem < ApplicationRecord
 
   validates :title, presence: true, length: { maximum: 100 }
   validates :content, presence: true
+  has_many :appreciations, dependent: :destroy
+
 end

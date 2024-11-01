@@ -26,5 +26,5 @@ Rails.application.routes.draw do
   # Users Routes
   #-----------------
   # Basic user profiles
-  resources :users, only: [:show]
+  resources :users, only: [:show, :edit, :update]
 end
