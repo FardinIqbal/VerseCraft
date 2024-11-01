@@ -1,0 +1,85 @@
+<!-- app/views/shared/_navbar.html.erb -->
+
+<nav class="navbar">
+  <div class="navbar__container">
+    <!-- Logo -->
+    <div class="navbar__brand">
+      <%= link_to root_path, class: "navbar__logo" do %>
+        VerseCraft
+      <% end %>
+    </div>
+
+    <!-- Main Navigation -->
+    <div class="navbar__menu">
+      <%= link_to root_path, class: "navbar__item #{'navbar__item--active' if current_page?(root_path)}" do %>
+        <div class="navbar__icon"><i class="fas fa-book-open"></i></div>
+        <span class="navbar__label">Home</span>
+      <% end %>
+
+      <!-- Search -->
+      <%= link_to "#", class: "navbar__item" do %>
+        <div class="navbar__icon"><i class="fas fa-search"></i></div>
+        <span class="navbar__label">Search</span>
+      <% end %>
+
+      <%= link_to "#", class: "navbar__item" do %>
+        <div class="navbar__icon"><i class="fas fa-binoculars"></i></div>
+        <span class="navbar__label">Discover</span>
+      <% end %>
+
+      <%= link_to new_poem_path, class: "navbar__item" do %>
+        <div class="navbar__icon"><i class="fas fa-feather-alt"></i></div>
+        <span class="navbar__label">Compose</span>
+      <% end %>
+
+      <%= link_to "#", class: "navbar__item" do %>
+        <div class="navbar__icon"><i class="fas fa-lightbulb"></i></div>
+        <span class="navbar__label">Inspire</span>
+      <% end %>
+
+      <!-- Messages -->
+      <%= link_to "#", class: "navbar__item" do %>
+        <div class="navbar__icon"><i class="fas fa-envelope"></i></div>
+        <span class="navbar__label">Messages</span>
+      <% end %>
+
+      <!-- Notifications -->
+      <%= link_to "#", class: "navbar__item" do %>
+        <div class="navbar__icon"><i class="fas fa-bell"></i></div>
+        <span class="navbar__label">Echoes</span>
+      <% end %>
+
+      <% if user_signed_in? %>
+        <%= link_to user_path(current_user), class: "navbar__item" do %>
+          <div class="navbar__icon"><i class="fas fa-user"></i></div>
+          <span class="navbar__label">Profile</span>
+        <% end %>
+      <% end %>
+    </div>
+
+    <!-- Bottom Menu -->
+    <div class="navbar__footer">
+      <!-- Theme Toggle -->
+      <div class="navbar__item theme-toggle" id="theme-toggle">
+        <div class="navbar__icon"><i class="fas fa-adjust"></i></div>
+        <span class="navbar__label" id="theme-toggle-label">Dark Mode</span>
+      </div>
+
+      <% if user_signed_in? %>
+        <!-- Logout Button -->
+        <%= form_with url: destroy_user_session_path, method: :delete, class: "navbar__item", local: true do %>
+          <button type="submit" class="navbar__icon-button">
+            <div class="navbar__icon"><i class="fas fa-sign-out-alt"></i></div>
+            <span class="navbar__label">Logout</span>
+          </button>
+        <% end %>
+      <% else %>
+        <!-- Sign in Button -->
+        <%= link_to new_user_session_path, class: "navbar__item" do %>
+          <div class="navbar__icon"><i class="fas fa-sign-in-alt"></i></div>
+          <span class="navbar__label">Sign in</span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</nav>

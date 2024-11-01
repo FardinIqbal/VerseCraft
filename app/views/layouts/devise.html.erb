@@ -1,0 +1,30 @@
+<!-- app/views/layouts/devise.html.erb -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VerseCraft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <!-- Font Awesome for Icons -->
+  <%= stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" %>
+
+  <!-- Application Stylesheet -->
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+
+  <!-- JavaScript Import Map -->
+  <%= javascript_importmap_tags %>
+</head>
+
+<body>
+<div class="auth-page-container">
+  <div class="auth-card">
+    <%= yield %>
+  </div>
+</div>
+
+<!-- Poem Rotation JavaScript -->
+<%= javascript_include_tag "poems_rotation", "data-turbo-track": "reload" %>
+</body>
+</html>

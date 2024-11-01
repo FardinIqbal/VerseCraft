@@ -1,0 +1,160 @@
+// app/assets/stylesheets/components/_suggested_for_you.scss
+
+@import "../base/variables";
+
+.suggested-for-you {
+  width: 400px;
+  padding: 32px;
+  background-color: var(--color-paper);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  font-family: $font-ui;
+  color: $color-ink;
+  margin-top: 32px;
+
+  /* User Profile Section */
+  .user-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--color-mist);
+
+    &__picture {
+      font-size: 64px;
+      color: $color-subtle;
+      margin-right: 16px;
+    }
+
+    &__info {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__username {
+      font-weight: bold;
+      color: $color-ink;
+      font-size: 18px;
+    }
+
+    &__name {
+      color: $color-subtle;
+      font-size: 15px;
+    }
+
+    &__switch {
+      color: $color-accent;
+      font-weight: bold;
+      font-size: 14px;
+      text-decoration: none;
+      margin-left: auto;
+      transition: color 0.2s;
+
+      &:hover {
+        color: darken($color-accent, 15%);
+      }
+    }
+  }
+
+  /* Suggested Profiles */
+  .suggested-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 18px;
+    font-weight: bold;
+    color: $color-ink;
+
+    &__see-all {
+      font-size: 14px;
+      color: $color-accent;
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: darken($color-accent, 10%);
+      }
+    }
+  }
+
+  .suggested-profiles {
+    .suggested-profile {
+      display: flex;
+      align-items: center;
+      margin-bottom: 24px;
+
+      &__picture {
+        font-size: 48px;
+        color: $color-subtle;
+        margin-right: 16px;
+      }
+
+      &__info {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        .suggested-profile__username {
+          font-weight: bold;
+          color: $color-ink;
+          font-size: 15px;
+        }
+
+        .suggested-profile__name {
+          color: $color-subtle;
+          font-size: 13px;
+        }
+
+        .suggested-profile__mutuals {
+          font-size: 12px;
+          color: $color-subtle;
+        }
+      }
+
+      &__follow {
+        background: $color-accent;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        font-size: 14px;
+        padding: 6px 16px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: darken($color-accent, 10%);
+        }
+      }
+    }
+  }
+
+  /* Footer Links */
+  .footer-links {
+    font-size: 13px;
+    color: $color-subtle;
+    margin-top: 32px;
+    line-height: 1.6;
+    text-align: center;
+
+    a {
+      color: $color-subtle;
+      text-decoration: none;
+      margin: 0 6px;
+      transition: color 0.2s;
+
+      &:hover {
+        color: $color-accent;
+      }
+    }
+
+    p {
+      margin-top: 16px;
+      font-size: 12px;
+      color: $color-subtle;
+    }
+  }
+}

@@ -1,7 +1,7 @@
 # app/controllers/poems_controller.rb
 
 class PoemsController < ApplicationController
-  before_action :authenticate_user!, except: [:show, :index]
+  before_action :authenticate_user!
 
   def index
     @poems = Poem.includes(:user).order(created_at: :desc)

@@ -1,0 +1,10 @@
+@import "base/variables";
+.modal-content {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  border-radius: 10px;
+}
+
+.modal-header, .modal-body {
+  font-family: $font-primary;
+}

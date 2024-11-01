@@ -1,0 +1,55 @@
+<!-- app/views/shared/_suggested_for_you.html.erb -->
+
+<div class="suggested-for-you">
+  <!-- User Profile Section -->
+  <div class="user-profile">
+    <div class="user-profile__picture">
+      <i class="fas fa-user-circle"></i> <!-- Placeholder icon for profile picture -->
+    </div>
+    <div class="user-profile__info">
+      <span class="user-profile__username">your_username</span>
+      <span class="user-profile__name">Your Name</span>
+    </div>
+    <%= link_to "Switch", "#", class: "user-profile__switch" %>
+  </div>
+
+  <!-- Suggested for You Title -->
+  <div class="suggested-title">
+    <span>Suggested for you</span>
+    <%= link_to "See All", "#", class: "suggested-title__see-all" %>
+  </div>
+
+  <!-- Suggested Profiles List -->
+  <div class="suggested-profiles">
+    <% suggestions = [
+      { username: "jane_doe", name: "Jane Doe", mutuals: "Followed by artlover123 + 5 more" },
+      { username: "john_artist", name: "John Artist", mutuals: "Followed by poetryfan_99 + 3 more" },
+      { username: "writers_corner", name: "Writers Corner", mutuals: "Followed by bookworm52 + 8 more" }
+    ] %>
+
+    <% suggestions.each do |suggestion| %>
+      <div class="suggested-profile">
+        <div class="suggested-profile__picture">
+          <i class="fas fa-user-circle"></i> <!-- Placeholder icon for profile picture -->
+        </div>
+        <div class="suggested-profile__info">
+          <span class="suggested-profile__username"><%= suggestion[:username] %></span>
+          <span class="suggested-profile__name"><%= suggestion[:name] %></span>
+          <span class="suggested-profile__mutuals"><%= suggestion[:mutuals] %></span>
+        </div>
+        <%= link_to "Follow", "#", class: "suggested-profile__follow" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- Footer Links -->
+  <div class="footer-links">
+    <%= link_to "About", "#" %> ·
+    <%= link_to "Help", "#" %> ·
+    <%= link_to "Privacy", "#" %> ·
+    <%= link_to "Terms", "#" %> ·
+    <%= link_to "Jobs", "#" %> ·
+    <%= link_to "API", "#" %>
+    <p>&copy; <%= Date.current.year %> VerseCraft</p>
+  </div>
+</div>
