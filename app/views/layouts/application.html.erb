@@ -1,58 +1,42 @@
 <!-- app/views/layouts/application.html.erb -->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="VerseCraft - A platform for poets to share and discover poetry">
-  <title>VerseCraft</title>
 
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VerseCraft</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Georgia&display=swap" rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <%= stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" %>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-  <!-- Stylesheets -->
+  <!-- Application Stylesheet -->
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
 
-  <!-- JavaScript -->
+  <!-- Importmap Tags (includes application.js and themeToggle.js) -->
   <%= javascript_importmap_tags %>
 </head>
 
 <body>
-<!-- Accessibility Skip Link -->
-<a href="#main" class="skip-link">Skip to main content</a>
+<div class="app">
+  <%= render "shared/navbar" %> <!-- Navbar Partial -->
 
-<div class="site-wrapper">
-  <%= render partial: 'shared/header' %>
-
-  <!-- Main Content -->
-  <main id="main" class="main-content" role="main">
-    <div class="container">
-      <%= render partial: 'shared/alerts' %>
-      <%= yield %>
+  <!-- Centered Container Wrapper -->
+  <div class="centered-container">
+    <!-- Left Column with Stories Bar and Main Content -->
+    <div class="content-column">
+      <%= render "shared/stories_bar" %> <!-- Stories Bar -->
+      <main class="main">
+        <%= yield %> <!-- Main Content -->
+      </main>
     </div>
-  </main>
 
-  <!-- Footer -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="container">
-      <p class="copyright">
-        &copy; <%= Time.current.year %> VerseCraft. All rights reserved.
-      </p>
-    </div>
-  </footer>
+    <!-- Right Sidebar for Suggested Profiles -->
+    <aside class="suggested-sidebar">
+      <%= render "shared/suggested_for_you" %> <!-- Suggested for You Section -->
+    </aside>
+  </div>
 </div>
-
-<% if Rails.env.development? %>
-  <script>
-      console.log('Development mode active');
-  </script>
-<% end %>
 </body>
 </html>

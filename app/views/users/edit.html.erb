@@ -1,30 +1,75 @@
-<h1>Edit Profile</h1>
+<%# app/views/users/edit.html.erb %>
 
-<%= form_with(model: @user, local: true, class: 'profile-form') do |form| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation" class="error-messages">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this profile from being saved:</h2>
-      <ul>
-        <% @user.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
+<div class="edit-profile">
+  <h1 class="page-title">Edit Profile</h1>
+
+  <%= form_with(model: @user, local: true, class: "profile-form") do |f| %>
+    <% if @user.errors.any? %>
+      <div class="form-errors">
+        <h2><%= pluralize(@user.errors.count, "error") %> prevented your profile from being saved:</h2>
+        <ul>
+          <% @user.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="form-section avatar-section">
+      <div class="current-avatar">
+        <%= image_tag @user.avatar_url, class: "avatar-preview" %>
+      </div>
+
+      <div class="avatar-upload">
+        <%= f.label :avatar, "Change Avatar" %>
+        <%= f.file_field :avatar,
+                         accept: 'image/png,image/jpeg,image/gif',
+                         data: {
+                           controller: "avatar-preview",
+                           action: "change->avatar-preview#preview"
+                         } %>
+        <p class="help-text">Maximum file size: 5MB. Supported formats: PNG, JPEG, GIF</p>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <%= f.label :pen_name %>
+      <%= f.text_field :pen_name, class: "form-input" %>
+      <p class="help-text">Your pen name will be displayed publicly</p>
+    </div>
+
+    <div class="form-section">
+      <%= f.label :bio %>
+      <%= f.text_area :bio, rows: 4, class: "form-input" %>
+      <p class="help-text">Tell others about yourself (max 500 characters)</p>
+    </div>
+
+    <div class="form-section">
+      <%= f.label :literary_background %>
+      <%= f.text_area :literary_background, rows: 6, class: "form-input" %>
+      <p class="help-text">Share your literary journey and experience</p>
+    </div>
+
+    <div class="form-section">
+      <%= f.label :influences %>
+      <%= f.text_area :influences, rows: 4, class: "form-input" %>
+      <p class="help-text">Who are your literary influences?</p>
+    </div>
+
+    <div class="form-section">
+      <%= f.label :website %>
+      <%= f.url_field :website, class: "form-input" %>
+      <p class="help-text">Optional: Your personal website or blog</p>
+    </div>
+
+    <div class="form-section">
+      <%= f.label :location %>
+      <%= f.text_field :location, class: "form-input" %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit "Update Profile", class: "btn btn-primary" %>
+      <%= link_to "Cancel", user_path(@user), class: "btn btn-secondary" %>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :bio, class: 'form-label' %>
-    <%= form.text_area :bio, class: 'form-input' %>
-  </div>
-
-  <div class="field">
-    <%= form.label :location, class: 'form-label' %>
-    <%= form.text_field :location, class: 'form-input' %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit 'Update Profile', class: 'btn' %>
-  </div>
-<% end %>
-
-<%= link_to 'Back to Profile', user_path(@user), class: 'btn btn-secondary' %>
+</div>

@@ -1,0 +1,25 @@
+<!-- app/views/shared/_stories_bar.html.erb -->
+
+<div class="stories-bar">
+  <div class="stories-bar__container">
+    <% poets = [
+      { name: "William Shakespeare", icon: "fas fa-feather" },
+      { name: "Emily Dickinson", icon: "fas fa-leaf" },
+      { name: "Robert Frost", icon: "fas fa-snowflake" },
+      { name: "Maya Angelou", icon: "fas fa-dove" },
+      { name: "Langston Hughes", icon: "fas fa-music" },
+      { name: "Pablo Neruda", icon: "fas fa-globe" },
+      { name: "Sylvia Plath", icon: "fas fa-moon" },
+      { name: "T.S. Eliot", icon: "fas fa-book" }
+    ] %>
+
+    <% poets.each do |poet| %>
+      <div class="story">
+        <div class="story__avatar">
+          <i class="<%= poet[:icon] %>"></i>
+        </div>
+        <span class="story__name"><%= poet[:name] %></span>
+      </div>
+    <% end %>
+  </div>
+</div>

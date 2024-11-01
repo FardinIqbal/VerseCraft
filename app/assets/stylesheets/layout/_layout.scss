@@ -2,50 +2,53 @@
 
 @import "../base/variables";
 
-// Main layout container
-.site-wrapper {
-  min-height: 100vh;
+.app {
+  display: flex;
+}
+
+.navbar {
+  width: $navbar-width;
+  flex-shrink: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  z-index: 1000;
+  background-color: var(--color-paper);
+  border-right: 1px solid var(--color-mist);
+}
+
+.centered-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 40px;
+  flex: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding-left: $navbar-width;
+}
+
+.content-column {
   display: flex;
   flex-direction: column;
+  flex: 2;
+  max-width: $main-content-width;
+  margin-right: 60px;
 }
 
-// Main content area
-.main-content {
+.stories-bar {
+  margin-bottom: 24px;
+  padding: 0 24px;
+}
+
+.main {
+  padding: 0 24px;
+}
+
+.suggested-sidebar {
   flex: 1;
-  padding: 2rem 0;
-  background-color: $color-white;
-}
-
-// Container sizes
-.container {
-  width: 100%;
-  max-width: $container-max-width;
-  margin: 0 auto;
-  padding: 0 $spacing-unit;
-
-  // Container variations
-  &-sm {
-    max-width: 600px;
-  }
-
-  &-md {
-    max-width: 800px;
-  }
-
-  &-lg {
-    max-width: 1200px;
-  }
-}
-
-// Section spacing
-.section {
-  padding: 4rem 0;
-
-  &-sm {
-    padding: 2rem 0;
-  }
-
-  &-lg {
-    padding: 6rem 0;
-  }
+  max-width: $sidebar-width;
+  padding: 0 24px;
+  margin-top: 40px;
 }

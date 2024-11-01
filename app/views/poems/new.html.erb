@@ -1,5 +1,21 @@
-<h1>New Poem</h1>
+<!-- app/views/poems/new.html.erb -->
 
-<%= render 'form', poem: @poem %>
+<div class="compose-poem">
+  <h2>Compose a New Poem</h2>
 
-<%= link_to 'Back', poems_path %>
+  <%= form_with(model: @poem, local: true, html: { class: 'compose-form' }) do |form| %>
+    <div class="form-group">
+      <%= form.label :title, 'Title', class: 'form-label' %>
+      <%= form.text_field :title, class: 'form-control', maxlength: 100, placeholder: "Title of your poem" %>
+    </div>
+
+    <div class="form-group">
+      <%= form.label :content, 'Poem Content', class: 'form-label' %>
+      <%= form.text_area :content, class: 'form-control', rows: 15, placeholder: "Write your poem here..." %>
+    </div>
+
+    <div class="form-group">
+      <%= form.submit 'Publish Poem', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>

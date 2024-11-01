@@ -76,3 +76,7 @@ gem "nokogiri", "~> 1.16"
 gem "httparty", "~> 0.22.0"
 
 gem 'pg'
+
+gem "importmap-rails"
+gem "turbo-rails"
+gem "stimulus-rails"

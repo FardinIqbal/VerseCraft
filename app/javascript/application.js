@@ -1,7 +1,5 @@
 // app/javascript/application.js
-import "@hotwired/turbo-rails"
-import { Application } from "@hotwired/stimulus"
-import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
 
-window.Stimulus = Application.start()
-eagerLoadControllersFrom("controllers", window.Stimulus)
+import "@hotwired/turbo-rails"
+import "./controllers"
+import "./themeToggle"  // Import themeToggle.js

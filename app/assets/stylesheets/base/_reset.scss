@@ -1,68 +1,13 @@
-// ---------------------------------------------------------------
-// VerseCraft Reset
-// ---------------------------------------------------------------
-// Removes default browser styling for a consistent foundation
-// across different environments, while incorporating accessible
-// adjustments and a modern, minimal design language.
-// ---------------------------------------------------------------
-
-@use "base/variables" as *;
-@use "sass:map";
-
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed,
-figure, figcaption, footer, header, hgroup,
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font: inherit;
-  vertical-align: baseline;
-}
-
-// Box-sizing and display adjustments
+// app/assets/stylesheets/base/_reset.scss
+@import "base/variables";
 *, *::before, *::after {
   box-sizing: border-box;
-}
-
-// Set up base styles for HTML and body
-html {
-  scroll-behavior: smooth;
-  text-size-adjust: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  line-height: map.get($line-heights, 'prose');
-  color: map.get(map.get($colors, 'ink'), 'darkest');
-  font-family: map.get($fonts, 'primary', 'family');
-  background-color: map.get(map.get($color-schemes, 'light'), 'background', 'primary');
-}
-
-// Remove list styles on ul, ol elements
-ul, ol {
-  list-style: none;
-}
-
-// Remove quotes on blockquote and q elements
-blockquote, q {
-  quotes: none;
-
-  &:before, &:after {
-    content: '';
-  }
-}
-
-// Anchor tag reset
-a {
-  color: inherit;
-  text-decoration: none;
+  font-family: $font-ui;
+  color: $color-ink;
+  line-height: 1.5;
 }

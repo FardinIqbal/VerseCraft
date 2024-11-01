@@ -1,32 +1,8 @@
-
-// Base
-@import 'base/variables';
-@import 'base/typography';
-@import 'base/layout';
-@import 'base/animations';
-@import 'base/utilities';
-
-// Layout
-@import 'layout/grid/feed';
-@import 'layout/grid/sidebar';
-@import 'layout/header';
-@import 'layout/navigation';
-@import 'layout/footer';
-
-// Components
-@import 'components/buttons';
-@import 'components/forms';
-@import 'components/alerts';
-@import 'components/cards';
-@import 'components/poem_card';
-@import 'components/daily_feature';
-@import 'components/engagement';
-@import 'components/annotations';
-@import 'components/dropdown';
-
-// Poet Components
-@import 'components/poets/profile';
-
-// Pages
-@import 'pages/home';
-
+// app/assets/stylesheets/application.css.scss
+@import "base/variables";
+@import "base/reset";
+@import "layout/layout";
+@import "components/navbar";
+@import "components/stories_bar"; // Add this line
+@import "components/suggested_for_you"; // Add this line
+@import "components/poems"; // Import the poems styles

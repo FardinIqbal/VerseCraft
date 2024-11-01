@@ -1,61 +1,36 @@
 <!-- app/views/poems/index.html.erb -->
-<div id="poem-container" class="poem-container">
-  <% @poems.each_with_index do |poem, index| %>
-    <article class="poem <%= index == 0 ? 'active' : '' %>" id="poem-<%= index %>">
-      <h3 class="poem-title">
-        <%= link_to poem.title, poem_path(poem), class: 'poem-link' %>
-      </h3>
-      <p class="poem-meta">By <%= poem.user.email %> | <%= poem.created_at.strftime("%B %d, %Y") %></p>
-      <div class="poem-content">
-        <%= simple_format(poem.content) %>
+
+<div class="poem-feed">
+  <% @poems.each do |poem| %>
+    <div class="poem-card">
+      <div class="poem-card__header">
+        <div class="poem-card__author">
+          <div class="author-avatar">
+            <!-- Placeholder icon for author avatar -->
+            <i class="fas fa-user-circle"></i>
+          </div>
+          <div class="author-info">
+            <span class="author-name"><%= poem.user.username %></span>
+          </div>
+        </div>
+        <!-- Optional: More options icon -->
+        <div class="poem-card__options">
+          <i class="fas fa-ellipsis-h"></i>
+        </div>
       </div>
-      <%= link_to 'View Details', poem_path(poem), class: 'btn' %>
-    </article>
+      <div class="poem-card__body">
+        <h2 class="poem-title"><%= link_to poem.title, poem_path(poem) %></h2>
+        <div class="poem-content">
+          <%= simple_format(poem.content.truncate(300)) %>
+        </div>
+      </div>
+      <div class="poem-card__footer">
+        <!-- Like and comment icons -->
+        <div class="poem-actions">
+          <i class="far fa-heart"></i>
+          <i class="far fa-comment"></i>
+        </div>
+      </div>
+    </div>
   <% end %>
-
-  <div class="navigation-buttons">
-    <button id="prev-button" class="btn" onclick="showPreviousPoem()">&lt;</button>
-    <button id="next-button" class="btn" onclick="showNextPoem()">&gt;</button>
-  </div>
 </div>
-
-<% if user_signed_in? %>
-  <div class="text-center mt-3">
-    <%= link_to 'Compose New Poem', new_poem_path, class: 'btn' %>
-  </div>
-<% end %>
-
-<script>
-    let currentPoemIndex = 0;
-    const totalPoems = <%= @poems.size %>;
-
-    function showPoem(index) {
-        document.querySelectorAll('.poem').forEach(poem => {
-            poem.classList.remove('active');
-        });
-        const currentPoem = document.getElementById(`poem-${index}`);
-        currentPoem.classList.add('active');
-        currentPoemIndex = index;
-        updateButtonState();
-    }
-
-    function showNextPoem() {
-        if (currentPoemIndex < totalPoems - 1) {
-            showPoem(currentPoemIndex + 1);
-        }
-    }
-
-    function showPreviousPoem() {
-        if (currentPoemIndex > 0) {
-            showPoem(currentPoemIndex - 1);
-        }
-    }
-
-    function updateButtonState() {
-        document.getElementById('prev-button').disabled = currentPoemIndex === 0;
-        document.getElementById('next-button').disabled = currentPoemIndex === totalPoems - 1;
-    }
-
-    // Initialize the first poem and button states
-    showPoem(0);
-</script>
