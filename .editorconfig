@@ -1,3 +1,49 @@
+# Path: .editorconfig
 root = true
 
 [*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.{rb,erb,rake,slim,jbuilder,json,yml,yaml,js,css,scss}]
+indent_style = space
+indent_size = 2
+
+[*.{html,html.erb}]
+indent_style = space
+indent_size = 2
+
+[Gemfile*]
+indent_style = space
+indent_size = 2
+
+[*.{css,scss,sass}]
+indent_style = space
+indent_size = 2
+
+[*.js]
+indent_style = space
+indent_size = 2
+
+[*.coffee]
+indent_style = space
+indent_size = 2
+
+[*.{yml,yaml}]
+indent_style = space
+indent_size = 2
+
+[Rakefile]
+indent_style = space
+indent_size = 2
+
+[config.ru]
+indent_style = space
+indent_size = 2
