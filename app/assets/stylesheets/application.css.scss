@@ -5,9 +5,10 @@
 @import "components/navbar";
 @import "components/stories_bar"; // Add this line
 @import "components/suggested_for_you"; // Add this line
-@import "components/poems"; // Import the poems styles
 @import "components/auth";
 @import "components/_poems_rotation";
 @import "components/_profile";
 @import "components/_profile_edit";
 @import "components/_modal";
+@import "components/_poem_feed";
+@import "components/_poem_display";

@@ -1,44 +1,52 @@
 @import "base/variables";
 
 .profile-page {
-  max-width: 750px;
+  max-width: 1000px;
   margin: 40px auto;
-  padding: 20px;
+  padding: 30px;
   background-color: var(--color-paper);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   border-radius: 12px;
 
+  .centered-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   .profile-banner {
     display: flex;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     padding: 20px;
     border-bottom: 1px solid var(--color-mist);
 
     .profile-avatar {
-      width: 130px;
-      height: 130px;
+      width: 150px;
+      height: 150px;
       border-radius: 50%;
       overflow: hidden;
-      margin-right: 20px;
+      margin-right: 30px;
+      background-color: var(--color-highlight);
       display: flex;
       align-items: center;
       justify-content: center;
-      background-color: var(--color-highlight);
 
       .avatar-icon {
-        font-size: 6rem;
+        font-size: 7rem;
         color: var(--color-subtle);
       }
     }
 
     .profile-details {
+      flex: 1;
+
       .profile-pen-name {
         font-family: $font-primary;
-        font-size: 26px;
+        font-size: 28px;
         font-weight: bold;
         color: var(--color-accent);
-        margin-bottom: 6px;
+        margin-bottom: 8px;
       }
 
       .profile-bio, .profile-location, .profile-website {
@@ -51,6 +59,7 @@
       .profile-website a {
         color: var(--color-accent);
         text-decoration: none;
+
         &:hover {
           text-decoration: underline;
         }
@@ -58,24 +67,24 @@
 
       .profile-actions {
         margin-top: 16px;
-      }
 
-      .btn-update-profile {
-        display: inline-block;
-        padding: 8px 16px;
-        font-size: 14px;
-        font-weight: bold;
-        color: #ffffff;
-        background-color: $color-accent;
-        border: none;
-        border-radius: 6px;
-        text-decoration: none;
-        font-family: $font-ui;
-        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        .btn-update-profile {
+          display: inline-block;
+          padding: 10px 20px;
+          font-size: 14px;
+          font-weight: bold;
+          color: #ffffff;
+          background-color: $color-accent; // Use Sass variable here
+          border: none;
+          border-radius: 6px;
+          text-decoration: none;
+          font-family: $font-ui;
+          transition: background-color 0.3s ease, box-shadow 0.3s ease;
 
-        &:hover {
-          background-color: darken($color-accent, 10%);
-          box-shadow: 0 4px 10px rgba($color-accent, 0.3);
+          &:hover {
+            background-color: darken($color-accent, 10%); // Use Sass variable for darken
+            box-shadow: 0 4px 10px rgba($color-accent, 0.3);
+          }
         }
       }
     }
@@ -83,9 +92,9 @@
 
   .profile-stats {
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-around;
     padding: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     background-color: var(--color-highlight);
     border-radius: 8px;
 
@@ -110,12 +119,11 @@
 
   .profile-poem-feed {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 24px;
-    padding: 20px 0;
 
     .poem-card {
-      padding: 18px;
+      padding: 20px;
       background-color: var(--color-paper);
       border: 1px solid var(--color-mist);
       border-radius: 8px;
@@ -138,6 +146,7 @@
       a {
         color: var(--color-accent);
         text-decoration: none;
+
         &:hover {
           text-decoration: underline;
         }

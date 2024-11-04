@@ -1,5 +1,3 @@
-// app/assets/stylesheets/layout/_layout.scss
-
 @import "../base/variables";
 
 .app {
@@ -27,6 +25,12 @@
   max-width: 1400px;
   margin: 0 auto;
   padding-left: $navbar-width;
+
+  // Adjustments specific to the profile page
+  &.profile-page {
+    max-width: 100%;  // Expand to full width
+    padding-left: calc($navbar-width + 20px);  // Add slight padding for consistency
+  }
 }
 
 .content-column {
@@ -35,6 +39,12 @@
   flex: 2;
   max-width: $main-content-width;
   margin-right: 60px;
+
+  // Profile page adjustments
+  &.profile-content {
+    max-width: 100%;
+    margin-right: 0;
+  }
 }
 
 .stories-bar {

@@ -1,0 +1,82 @@
+/* app/assets/stylesheets/components/_poem_display.scss */
+
+.poem-display {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: var(--color-paper);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  font-family: $font-primary;
+
+  .poem-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+
+    .author-avatar {
+      margin-right: 16px;
+
+      .avatar-icon {
+        color: var(--color-accent);
+      }
+    }
+
+    .author-info {
+      .author-name {
+        font-size: 20px;
+        font-weight: bold;
+        color: var(--color-ink);
+      }
+
+      .post-date {
+        display: block;
+        font-size: 14px;
+        color: var(--color-subtle);
+        margin-top: 4px;
+      }
+    }
+  }
+
+  .poem-content {
+    text-align: center;
+
+    .poem-title {
+      font-family: $font-primary;
+      font-size: 28px;
+      font-weight: bold;
+      color: var(--color-accent);
+      margin-bottom: 16px;
+    }
+
+    .poem-body {
+      font-size: 18px;
+      line-height: 1.8;
+      color: var(--color-ink);
+      margin-bottom: 20px;
+    }
+  }
+
+  .poem-footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--color-mist);
+
+    .poem-actions {
+      display: flex;
+      gap: 20px;
+
+      i {
+        font-size: 24px;
+        color: var(--color-accent);
+        cursor: pointer;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: rgba(178, 34, 34, 0.9); // Darker version of the accent color for hover
+        }
+      }
+    }
+  }
+}

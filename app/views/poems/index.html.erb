@@ -6,29 +6,30 @@
       <div class="poem-card__header">
         <div class="poem-card__author">
           <div class="author-avatar">
-            <!-- Placeholder icon for author avatar -->
-            <i class="fas fa-user-circle"></i>
+            <!-- Use Font Awesome icon for user avatar -->
+            <i class="fas fa-user-circle fa-3x avatar-icon"></i>
           </div>
           <div class="author-info">
-            <span class="author-name"><%= poem.user.username %></span>
+            <span class="author-name"><%= poem.user.pen_name || poem.user.username %></span>
+            <span class="post-date"><%= poem.created_at.strftime("%b %d, %Y") %></span>
           </div>
         </div>
-        <!-- Optional: More options icon -->
         <div class="poem-card__options">
-          <i class="fas fa-ellipsis-h"></i>
+          <i class="fas fa-ellipsis-h options-icon"></i>
         </div>
       </div>
+
       <div class="poem-card__body">
-        <h2 class="poem-title"><%= link_to poem.title, poem_path(poem) %></h2>
+        <h2 class="poem-title"><%= link_to poem.title, poem_path(poem), class: "title-link" %></h2>
         <div class="poem-content">
           <%= simple_format(poem.content.truncate(300)) %>
         </div>
       </div>
+
       <div class="poem-card__footer">
-        <!-- Like and comment icons -->
         <div class="poem-actions">
-          <i class="far fa-heart"></i>
-          <i class="far fa-comment"></i>
+          <i class="far fa-heart like-icon"></i>
+          <i class="far fa-comment comment-icon"></i>
         </div>
       </div>
     </div>

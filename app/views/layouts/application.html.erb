@@ -22,19 +22,26 @@
     <%= render "shared/navbar" %> <!-- Navbar Partial -->
 
     <!-- Centered Container Wrapper -->
-    <div class="centered-container">
+    <div class="centered-container <%= 'profile-page' if controller_name == 'users' && action_name == 'show' %>">
       <!-- Left Column with Stories Bar and Main Content -->
-      <div class="content-column">
-        <%= render "shared/stories_bar" %> <!-- Stories Bar -->
+      <div class="content-column <%= 'profile-content' if controller_name == 'users' && action_name == 'show' %>">
+        <!-- Conditionally render stories_bar unless on profile page -->
+        <% unless controller_name == 'users' && action_name == 'show' %>
+          <%= render "shared/stories_bar" %> <!-- Stories Bar -->
+        <% end %>
+
         <main class="main">
           <%= yield %> <!-- Main Content -->
         </main>
       </div>
 
       <!-- Right Sidebar for Suggested Profiles -->
-      <aside class="suggested-sidebar">
-        <%= render "shared/suggested_for_you" %> <!-- Suggested for You Section -->
-      </aside>
+      <!-- Conditionally render suggested_for_you unless on profile page -->
+      <% unless controller_name == 'users' && action_name == 'show' %>
+        <aside class="suggested-sidebar">
+          <%= render "shared/suggested_for_you" %> <!-- Suggested for You Section -->
+        </aside>
+      <% end %>
     </div>
   </div>
 <% else %>

@@ -1,16 +1,18 @@
 <!-- app/views/poems/show.html.erb -->
 
 <div class="poem-display">
+  <!-- Poem Header with Author Information -->
   <div class="poem-header">
     <div class="author-avatar">
-      <i class="fas fa-user-circle"></i>
+      <i class="fas fa-user-circle fa-3x avatar-icon"></i>
     </div>
     <div class="author-info">
-      <span class="author-name"><%= @poem.user.username %></span>
+      <span class="author-name"><%= @poem.user.pen_name || @poem.user.username %></span>
       <span class="post-date"><%= @poem.created_at.strftime("%B %d, %Y") %></span>
     </div>
   </div>
 
+  <!-- Poem Content Section -->
   <div class="poem-content">
     <h1 class="poem-title"><%= @poem.title %></h1>
     <div class="poem-body">
@@ -18,11 +20,11 @@
     </div>
   </div>
 
+  <!-- Footer with Like and Comment Icons -->
   <div class="poem-footer">
-    <!-- Like and comment icons -->
     <div class="poem-actions">
-      <i class="far fa-heart"></i>
-      <i class="far fa-comment"></i>
+      <i class="far fa-heart like-icon" aria-label="Like"></i>
+      <i class="far fa-comment comment-icon" aria-label="Comment"></i>
     </div>
   </div>
 </div>
