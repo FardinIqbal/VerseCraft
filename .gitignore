@@ -4,72 +4,63 @@
 # or operating system, you probably want to add a global ignore instead:
 #   git config --global core.excludesfile '~/.gitignore_global'
 
-# Ignore bundler config.
-/.bundle
+# Bundler config
+.bundle
 
-# Ignore all environment files (except templates).
-/.env*
+# Environment files (except templates)
+.env*
 !/.env*.erb
 
-# Ignore all logfiles and tempfiles.
+# Log and temp files
 /log/*
-/tmp/*
 !/log/.keep
+/tmp/*
 !/tmp/.keep
 
-# Ignore pidfiles, but keep the directory.
+# PID files (keep the directory)
 /tmp/pids/*
 !/tmp/pids/
 !/tmp/pids/.keep
 
-# Ignore storage (uploaded files in development and any SQLite databases).
+# Storage files (uploaded files in development)
 /storage/*
 !/storage/.keep
 /tmp/storage/*
 !/tmp/storage/
 !/tmp/storage/.keep
 
+# Compiled assets
 /public/assets
-
-# Ignore master key for decrypting credentials and more.
-/config/master.key
-
-# Ignore precompiled javascript packs
 /public/packs
 /public/packs-test
+
+# Uploaded files in development
+/public/uploads
+
+# Node modules and Yarn logs
 /node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
 
-# Ignore uploaded files in development
-/public/uploads
-
-# Ignore Byebug command history file.
+# Byebug history
 .byebug_history
 
-# Ignore database configuration
+# Database configuration
 /config/database.yml
 
-# Ignore macOS system files
+# MacOS system files
 .DS_Store
 
-# Ignore coverage files
+# Coverage files (e.g., for testing reports)
 /coverage
 
-# Ignore RSpec state
+# RSpec state
 spec/examples.txt
 
-# Ignore local Rubymine settings
+# RubyMine IDE settings
 .idea
 
-# Ignore precompiled assets
-/public/assets
-
-# Ignore yarn files
-/yarn-error.log
-yarn-debug.log*
-
-# Ignore built documentation
+# Documentation files
 /doc/app
 .yardoc
