@@ -13,6 +13,47 @@ import { relations } from "drizzle-orm";
 
 export const postTypeEnum = pgEnum("post_type", ["poetry", "prose", "quote"]);
 
+// Authors table (for literary figures like Shakespeare, Dickinson, Rumi)
+export const authors = pgTable(
+  "authors",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    name: varchar("name", { length: 100 }).notNull(),
+    slug: varchar("slug", { length: 100 }).unique().notNull(),
+    bio: text("bio"),
+    birthYear: integer("birth_year"),
+    deathYear: integer("death_year"),
+    nationality: varchar("nationality", { length: 50 }),
+    era: varchar("era", { length: 50 }), // e.g., "Victorian", "Romantic", "Modern"
+    portraitUrl: text("portrait_url"),
+    worksCount: integer("works_count").default(0).notNull(),
+    followersCount: integer("followers_count").default(0).notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    index("authors_slug_idx").on(table.slug),
+    index("authors_name_idx").on(table.name),
+  ]
+);
+
+// Author follows (users following authors)
+export const authorFollows = pgTable(
+  "author_follows",
+  {
+    userId: uuid("user_id")
+      .references(() => users.id, { onDelete: "cascade" })
+      .notNull(),
+    authorId: uuid("author_id")
+      .references(() => authors.id, { onDelete: "cascade" })
+      .notNull(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.authorId] }),
+    index("author_follows_author_id_idx").on(table.authorId),
+  ]
+);
+
 // Users table
 export const users = pgTable(
   "users",
@@ -35,8 +76,9 @@ export const posts = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+    authorId: uuid("author_id").references(() => authors.id, { onDelete: "set null" }),
     content: text("content").notNull(),
-    author: varchar("author", { length: 100 }),
+    author: varchar("author", { length: 100 }), // Legacy field for display
     source: varchar("source", { length: 200 }),
     type: postTypeEnum("type").default("poetry").notNull(),
     likesCount: integer("likes_count").default(0).notNull(),
@@ -46,6 +88,7 @@ export const posts = pgTable(
   },
   (table) => [
     index("posts_user_id_idx").on(table.userId),
+    index("posts_author_id_idx").on(table.authorId),
     index("posts_created_at_idx").on(table.createdAt),
     index("posts_likes_count_idx").on(table.likesCount),
   ]
@@ -127,6 +170,22 @@ export const comments = pgTable(
 );
 
 // Relations
+export const authorsRelations = relations(authors, ({ many }) => ({
+  posts: many(posts),
+  followers: many(authorFollows),
+}));
+
+export const authorFollowsRelations = relations(authorFollows, ({ one }) => ({
+  user: one(users, {
+    fields: [authorFollows.userId],
+    references: [users.id],
+  }),
+  author: one(authors, {
+    fields: [authorFollows.authorId],
+    references: [authors.id],
+  }),
+}));
+
 export const usersRelations = relations(users, ({ many }) => ({
   posts: many(posts),
   likes: many(likes),
@@ -134,12 +193,17 @@ export const usersRelations = relations(users, ({ many }) => ({
   followers: many(follows, { relationName: "following" }),
   following: many(follows, { relationName: "follower" }),
   comments: many(comments),
+  authorFollows: many(authorFollows),
 }));
 
 export const postsRelations = relations(posts, ({ one, many }) => ({
   user: one(users, {
     fields: [posts.userId],
     references: [users.id],
+  }),
+  author: one(authors, {
+    fields: [posts.authorId],
+    references: [authors.id],
   }),
   likes: many(likes),
   saves: many(saves),
@@ -199,6 +263,9 @@ export const commentsRelations = relations(comments, ({ one, many }) => ({
 }));
 
 // Types
+export type Author = typeof authors.$inferSelect;
+export type NewAuthor = typeof authors.$inferInsert;
+export type AuthorFollow = typeof authorFollows.$inferSelect;
 export type User = typeof users.$inferSelect;
 export type NewUser = typeof users.$inferInsert;
 export type Post = typeof posts.$inferSelect;
