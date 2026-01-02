@@ -35,6 +35,8 @@ export function ReelsFeed() {
   const [showComments, setShowComments] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
+  const [canNavigateUp, setCanNavigateUp] = useState(true);
+  const [canNavigateDown, setCanNavigateDown] = useState(true);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Fetch posts
@@ -65,29 +67,35 @@ export function ReelsFeed() {
     }
   }, [currentIndex, posts.length, fetchPosts]);
 
+  // Handle scroll boundary updates from ReelCard
+  const handleScrollBoundary = useCallback((atTop: boolean, atBottom: boolean) => {
+    setCanNavigateUp(atTop);
+    setCanNavigateDown(atBottom);
+  }, []);
+
   // Navigate between posts
   const goToNext = useCallback(() => {
-    if (currentIndex < posts.length - 1 && !isAnimating) {
+    if (currentIndex < posts.length - 1 && !isAnimating && canNavigateDown) {
       setIsAnimating(true);
       setCurrentIndex((prev) => prev + 1);
       setTimeout(() => setIsAnimating(false), 400);
     }
-  }, [currentIndex, posts.length, isAnimating]);
+  }, [currentIndex, posts.length, isAnimating, canNavigateDown]);
 
   const goToPrev = useCallback(() => {
-    if (currentIndex > 0 && !isAnimating) {
+    if (currentIndex > 0 && !isAnimating && canNavigateUp) {
       setIsAnimating(true);
       setCurrentIndex((prev) => prev - 1);
       setTimeout(() => setIsAnimating(false), 400);
     }
-  }, [currentIndex, isAnimating]);
+  }, [currentIndex, isAnimating, canNavigateUp]);
 
   // Handle swipe gestures
   const handleDragEnd = (_: never, info: PanInfo) => {
     const threshold = 50;
-    if (info.offset.y < -threshold) {
+    if (info.offset.y < -threshold && canNavigateDown) {
       goToNext();
-    } else if (info.offset.y > threshold) {
+    } else if (info.offset.y > threshold && canNavigateUp) {
       goToPrev();
     }
   };
@@ -181,6 +189,7 @@ export function ReelsFeed() {
               onAuthRequired={handleAuthRequired}
               onOpenComments={() => setShowComments(true)}
               onUpdate={(updates) => updatePost(currentPost.id, updates)}
+              onScrollBoundary={handleScrollBoundary}
             />
           </motion.div>
         </AnimatePresence>

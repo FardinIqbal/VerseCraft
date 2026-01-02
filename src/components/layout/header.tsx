@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, PlusSquare, User, LogIn } from "lucide-react";
+import { Home, Search, Compass, PlusSquare, User, LogIn } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { Avatar } from "@/components/ui/avatar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function Header() {
   const { user, loading } = useAuth();
@@ -14,6 +15,7 @@ export function Header() {
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
+    { href: "/explore", icon: Compass, label: "Explore" },
     { href: "/search", icon: Search, label: "Search" },
     ...(user
       ? [
@@ -39,6 +41,7 @@ export function Header() {
           </Link>
 
           <nav className="flex items-center gap-1">
+            <ThemeToggle />
             {navItems.map((item) => {
               const isActive =
                 pathname === item.href ||

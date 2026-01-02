@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, PlusSquare, User, LogIn } from "lucide-react";
+import { Home, Search, Compass, PlusSquare, User, LogIn } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -14,6 +14,7 @@ export function MobileNav() {
 
   const navItems = [
     { href: "/", icon: Home, label: "Home" },
+    { href: "/explore", icon: Compass, label: "Explore" },
     { href: "/search", icon: Search, label: "Search" },
     ...(user
       ? [

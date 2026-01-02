@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import { Heart, MessageCircle, Bookmark, Share2, Volume2, VolumeX } from "lucide-react";
+import { Heart, MessageCircle, Bookmark, Share2, ChevronDown } from "lucide-react";
 import { Avatar } from "../ui/avatar";
 
 interface Post {
@@ -30,6 +30,7 @@ interface ReelCardProps {
   onAuthRequired: () => void;
   onOpenComments: () => void;
   onUpdate: (updates: Partial<Post>) => void;
+  onScrollBoundary: (atTop: boolean, atBottom: boolean) => void;
 }
 
 export function ReelCard({
@@ -38,12 +39,40 @@ export function ReelCard({
   onAuthRequired,
   onOpenComments,
   onUpdate,
+  onScrollBoundary,
 }: ReelCardProps) {
   const [isLiked, setIsLiked] = useState(post.isLiked ?? false);
   const [isSaved, setIsSaved] = useState(post.isSaved ?? false);
   const [likesCount, setLikesCount] = useState(post.likesCount);
   const [showHeart, setShowHeart] = useState(false);
+  const [canScrollDown, setCanScrollDown] = useState(false);
   const lastTapRef = useRef<number>(0);
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  // Check if content is scrollable and update boundaries
+  const checkScrollPosition = useCallback(() => {
+    const el = contentRef.current;
+    if (!el) {
+      onScrollBoundary(true, true);
+      return;
+    }
+
+    const atTop = el.scrollTop <= 5;
+    const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 5;
+    const isScrollable = el.scrollHeight > el.clientHeight;
+
+    setCanScrollDown(isScrollable && !atBottom);
+    onScrollBoundary(atTop, atBottom || !isScrollable);
+  }, [onScrollBoundary]);
+
+  // Initial check and on content change
+  useEffect(() => {
+    checkScrollPosition();
+    // Reset scroll position when post changes
+    if (contentRef.current) {
+      contentRef.current.scrollTop = 0;
+    }
+  }, [post.id, checkScrollPosition]);
 
   // Double tap to like
   const handleDoubleTap = () => {
@@ -125,34 +154,25 @@ export function ReelCard({
     ));
   };
 
-  // Get background gradient based on post type
-  const getBackground = () => {
-    switch (post.type) {
-      case "poetry":
-        return "bg-gradient-to-b from-background via-background to-background-secondary";
-      case "prose":
-        return "bg-gradient-to-b from-background via-background-secondary/50 to-background";
-      case "quote":
-        return "bg-gradient-to-b from-background to-accent/5";
-      default:
-        return "bg-background";
-    }
-  };
-
   return (
     <div
-      className={`h-full w-full flex flex-col ${getBackground()}`}
+      className="h-full w-full flex flex-col bg-background"
       onClick={handleDoubleTap}
     >
-      {/* Content area */}
-      <div className="flex-1 flex items-center justify-center px-6 pb-32 pt-20 relative">
+      {/* Scrollable content area */}
+      <div
+        ref={contentRef}
+        onScroll={checkScrollPosition}
+        className="flex-1 overflow-y-auto overflow-x-hidden px-6 pb-36 pt-16 scroll-smooth"
+        style={{ WebkitOverflowScrolling: "touch" }}
+      >
         {/* Double-tap heart animation */}
         {showHeart && (
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="absolute inset-0 flex items-center justify-center pointer-events-none z-50"
+            className="fixed inset-0 flex items-center justify-center pointer-events-none z-50"
           >
             <motion.div
               initial={{ scale: 0.5 }}
@@ -164,26 +184,41 @@ export function ReelCard({
           </motion.div>
         )}
 
-        {/* Quote marks for quotes */}
-        {post.type === "quote" && (
-          <div className="absolute top-24 left-8 text-accent/20 text-[120px] font-serif leading-none select-none">
-            &ldquo;
+        {/* Main content - centered */}
+        <div className="min-h-full flex items-center justify-center">
+          <div className="max-w-lg w-full text-center py-8">
+            <p
+              className={`text-text-primary leading-relaxed font-serif ${
+                post.content.length > 800
+                  ? "text-base md:text-lg"
+                  : post.content.length > 400
+                  ? "text-lg md:text-xl"
+                  : "text-xl md:text-2xl"
+              }`}
+            >
+              {formatContent(post.content)}
+            </p>
           </div>
-        )}
-
-        {/* Main content */}
-        <div className="max-w-lg w-full text-center">
-          <p
-            className={`text-text-primary leading-relaxed ${
-              post.type === "quote"
-                ? "text-xl md:text-2xl font-medium"
-                : "text-lg md:text-xl font-serif"
-            } ${post.content.length > 500 ? "text-base md:text-lg" : ""}`}
-          >
-            {formatContent(post.content)}
-          </p>
         </div>
       </div>
+
+      {/* Scroll indicator for long poems */}
+      {canScrollDown && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed bottom-44 left-1/2 -translate-x-1/2 z-40"
+        >
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ repeat: Infinity, duration: 1.2 }}
+            className="flex flex-col items-center text-text-tertiary"
+          >
+            <ChevronDown className="w-5 h-5" />
+            <span className="text-xs">Scroll to read more</span>
+          </motion.div>
+        </motion.div>
+      )}
 
       {/* Side actions (Reels-style) */}
       <div className="fixed right-4 bottom-48 flex flex-col items-center gap-6 z-40">
@@ -198,16 +233,16 @@ export function ReelCard({
         >
           <div
             className={`p-3 rounded-full ${
-              isLiked ? "bg-red-500/20" : "bg-white/10"
+              isLiked ? "bg-red-500/20" : "bg-bg-tertiary/80"
             } backdrop-blur-sm`}
           >
             <Heart
               className={`w-7 h-7 ${
-                isLiked ? "text-red-500 fill-red-500" : "text-white"
+                isLiked ? "text-red-500 fill-red-500" : "text-text-primary"
               }`}
             />
           </div>
-          <span className="text-white text-xs font-medium">
+          <span className="text-text-primary text-xs font-medium">
             {likesCount > 999 ? `${(likesCount / 1000).toFixed(1)}k` : likesCount}
           </span>
         </motion.button>
@@ -221,10 +256,10 @@ export function ReelCard({
           }}
           className="flex flex-col items-center gap-1"
         >
-          <div className="p-3 rounded-full bg-white/10 backdrop-blur-sm">
-            <MessageCircle className="w-7 h-7 text-white" />
+          <div className="p-3 rounded-full bg-bg-tertiary/80 backdrop-blur-sm">
+            <MessageCircle className="w-7 h-7 text-text-primary" />
           </div>
-          <span className="text-white text-xs font-medium">
+          <span className="text-text-primary text-xs font-medium">
             {post.commentsCount}
           </span>
         </motion.button>
@@ -240,16 +275,16 @@ export function ReelCard({
         >
           <div
             className={`p-3 rounded-full ${
-              isSaved ? "bg-accent/20" : "bg-white/10"
+              isSaved ? "bg-accent/20" : "bg-bg-tertiary/80"
             } backdrop-blur-sm`}
           >
             <Bookmark
               className={`w-7 h-7 ${
-                isSaved ? "text-accent fill-accent" : "text-white"
+                isSaved ? "text-accent fill-accent" : "text-text-primary"
               }`}
             />
           </div>
-          <span className="text-white text-xs font-medium">Save</span>
+          <span className="text-text-primary text-xs font-medium">Save</span>
         </motion.button>
 
         {/* Share button */}
@@ -261,15 +296,15 @@ export function ReelCard({
           }}
           className="flex flex-col items-center gap-1"
         >
-          <div className="p-3 rounded-full bg-white/10 backdrop-blur-sm">
-            <Share2 className="w-7 h-7 text-white" />
+          <div className="p-3 rounded-full bg-bg-tertiary/80 backdrop-blur-sm">
+            <Share2 className="w-7 h-7 text-text-primary" />
           </div>
-          <span className="text-white text-xs font-medium">Share</span>
+          <span className="text-text-primary text-xs font-medium">Share</span>
         </motion.button>
       </div>
 
       {/* Bottom info overlay */}
-      <div className="fixed bottom-0 left-0 right-16 p-6 bg-gradient-to-t from-background via-background/80 to-transparent z-30">
+      <div className="fixed bottom-0 left-0 right-16 p-6 bg-gradient-to-t from-bg-primary via-bg-primary/80 to-transparent z-30">
         <div className="flex items-end gap-4">
           {/* Author avatar or icon */}
           <div className="flex-shrink-0">
@@ -290,7 +325,7 @@ export function ReelCard({
 
           {/* Author info */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-white font-semibold text-lg truncate">
+            <h3 className="text-text-primary font-semibold text-lg truncate">
               {post.user
                 ? post.user.displayName || `@${post.user.username}`
                 : post.author || "Anonymous"}
@@ -300,19 +335,6 @@ export function ReelCard({
                 {post.source}
               </p>
             )}
-            <div className="flex items-center gap-2 mt-1">
-              <span
-                className={`text-xs px-2 py-0.5 rounded-full ${
-                  post.type === "poetry"
-                    ? "bg-purple-500/20 text-purple-300"
-                    : post.type === "prose"
-                    ? "bg-blue-500/20 text-blue-300"
-                    : "bg-amber-500/20 text-amber-300"
-                }`}
-              >
-                {post.type}
-              </span>
-            </div>
           </div>
         </div>
       </div>

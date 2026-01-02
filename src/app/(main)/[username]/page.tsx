@@ -3,9 +3,12 @@
 import { useEffect, useState, use } from "react";
 import { motion } from "framer-motion";
 import { Settings, Grid, Bookmark } from "lucide-react";
+import Link from "next/link";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { PostCard, type PostData } from "@/components/post/post-card";
+import { Modal } from "@/components/ui/modal";
+import { PostsGrid } from "@/components/post/posts-grid";
+import { PostModal } from "@/components/post/post-modal";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/hooks/use-auth";
 import { formatNumber } from "@/lib/utils";
@@ -23,6 +26,24 @@ interface ProfileData {
   isFollowing: boolean;
 }
 
+interface PostData {
+  id: string;
+  content: string;
+  author: string | null;
+  source: string | null;
+  type: "poetry" | "prose" | "quote";
+  likesCount: number;
+  commentsCount: number;
+  isLiked?: boolean;
+  isSaved?: boolean;
+  user?: {
+    id: string;
+    username: string;
+    displayName: string | null;
+    avatarUrl: string | null;
+  } | null;
+}
+
 export default function ProfilePage({
   params,
 }: {
@@ -36,6 +57,8 @@ export default function ProfilePage({
   const [activeTab, setActiveTab] = useState<"posts" | "saved">("posts");
   const [following, setFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<PostData | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const isOwnProfile = user?.username === username;
 
@@ -166,10 +189,12 @@ export default function ProfilePage({
                 <p className="text-[var(--text-muted)]">@{profile.username}</p>
               </div>
               {isOwnProfile ? (
-                <Button variant="secondary" size="sm">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Edit
-                </Button>
+                <Link href="/settings">
+                  <Button variant="secondary" size="sm">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Edit
+                  </Button>
+                </Link>
               ) : user ? (
                 <Button
                   variant={following ? "secondary" : "primary"}
@@ -250,24 +275,52 @@ export default function ProfilePage({
         </div>
       )}
 
-      {/* Posts */}
-      <div>
-        {posts.length === 0 ? (
-          <div className="p-8 text-center text-[var(--text-muted)]">
-            No posts yet
+      {/* Posts Grid */}
+      <PostsGrid
+        posts={posts}
+        onPostClick={(post) => setSelectedPost(post as PostData)}
+      />
+
+      {/* Post Modal */}
+      <PostModal
+        post={selectedPost}
+        isOpen={!!selectedPost}
+        onClose={() => setSelectedPost(null)}
+        isAuthenticated={!!user}
+        onAuthRequired={() => setShowAuthModal(true)}
+        onUpdate={(postId, updates) => {
+          setPosts((prev) =>
+            prev.map((p) => (p.id === postId ? { ...p, ...updates } : p))
+          );
+        }}
+      />
+
+      {/* Auth Modal */}
+      <Modal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        title="Sign in to continue"
+      >
+        <div className="space-y-4">
+          <p className="text-text-secondary">
+            Sign in to like, save, and share your favorite literature.
+          </p>
+          <div className="space-y-2">
+            <Link
+              href="/login"
+              className="block w-full py-2 px-4 text-center rounded-lg bg-accent text-bg-primary font-medium hover:bg-accent-hover transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/signup"
+              className="block w-full py-2 px-4 text-center rounded-lg bg-bg-tertiary text-text-primary font-medium hover:bg-border transition-colors"
+            >
+              Create Account
+            </Link>
           </div>
-        ) : (
-          posts.map((post) => (
-            <PostCard
-              key={post.id}
-              post={post}
-              onLike={handleLike}
-              onSave={handleSave}
-              isAuthenticated={!!user}
-            />
-          ))
-        )}
-      </div>
+        </div>
+      </Modal>
     </motion.div>
   );
 }
