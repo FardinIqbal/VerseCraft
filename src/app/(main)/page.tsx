@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 
-import { ReelsFeed } from "@/components/feed/reels-feed";
+import { HomePage } from "@/components/home/home-page";
 
-export default function HomePage() {
-  return <ReelsFeed />;
+export default function Page() {
+  return <HomePage />;
 }

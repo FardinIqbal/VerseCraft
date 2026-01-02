@@ -8,6 +8,7 @@ import {
   primaryKey,
   index,
   integer,
+  jsonb,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
@@ -64,6 +65,10 @@ export const users = pgTable(
     displayName: varchar("display_name", { length: 50 }),
     bio: text("bio"),
     avatarUrl: text("avatar_url"),
+    preferences: jsonb("preferences").$type<{
+      eras?: string[];
+      styles?: string[];
+    }>(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
