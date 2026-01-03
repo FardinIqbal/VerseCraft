@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Compass, PlusSquare, User, LogIn } from "lucide-react";
+import { Home, Search, Compass, PlusSquare, User, LogIn, Settings, Feather } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
@@ -13,7 +13,9 @@ export function MobileNav() {
   const { user } = useAuth();
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
+  const [desktopNavVisible, setDesktopNavVisible] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const desktopHideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastScrollY = useRef(0);
 
   const navItems = [
@@ -33,7 +35,25 @@ export function MobileNav() {
       : [{ href: "/login", icon: LogIn, label: "Sign In" }]),
   ];
 
-  // Auto-hide logic
+  const desktopNavItems = [
+    { href: "/", icon: Home, label: "Home" },
+    { href: "/explore", icon: Compass, label: "Explore" },
+    { href: "/search", icon: Search, label: "Search" },
+    ...(user
+      ? [
+          { href: "/create", icon: PlusSquare, label: "Create" },
+          {
+            href: `/${user.username}`,
+            icon: User,
+            label: "Profile",
+            isProfile: true,
+          },
+          { href: "/settings", icon: Settings, label: "Settings" },
+        ]
+      : [{ href: "/login", icon: LogIn, label: "Sign In" }]),
+  ];
+
+  // Mobile auto-hide logic
   useEffect(() => {
     const showNav = () => {
       setIsVisible(true);
@@ -43,10 +63,8 @@ export function MobileNav() {
       }, 2000);
     };
 
-    // Show on any interaction
     const handleInteraction = () => showNav();
 
-    // Show on scroll up, hide on scroll down
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY < lastScrollY.current) {
@@ -55,7 +73,6 @@ export function MobileNav() {
       lastScrollY.current = currentScrollY;
     };
 
-    // Show on swipe up from bottom
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
@@ -63,13 +80,11 @@ export function MobileNav() {
     const handleTouchEnd = (e: TouchEvent) => {
       const touchEndY = e.changedTouches[0].clientY;
       const screenHeight = window.innerHeight;
-      // If swipe started in bottom 100px and swiped up
       if (touchStartY > screenHeight - 100 && touchEndY < touchStartY - 30) {
         showNav();
       }
     };
 
-    // Initial show then hide
     showNav();
 
     document.addEventListener("click", handleInteraction);
@@ -86,8 +101,163 @@ export function MobileNav() {
     };
   }, []);
 
+  // Desktop hover zone detection
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      // Show when mouse is within 20px of left edge
+      if (e.clientX <= 20) {
+        setDesktopNavVisible(true);
+        if (desktopHideTimeoutRef.current) {
+          clearTimeout(desktopHideTimeoutRef.current);
+        }
+      }
+    };
+
+    // Keyboard shortcut: press 'n' to toggle nav
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'n' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        const target = e.target as HTMLElement;
+        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') {
+          setDesktopNavVisible(prev => !prev);
+        }
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("keydown", handleKeyDown);
+      if (desktopHideTimeoutRef.current) {
+        clearTimeout(desktopHideTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  const handleDesktopNavMouseLeave = () => {
+    desktopHideTimeoutRef.current = setTimeout(() => {
+      setDesktopNavVisible(false);
+    }, 300);
+  };
+
+  const handleDesktopNavMouseEnter = () => {
+    if (desktopHideTimeoutRef.current) {
+      clearTimeout(desktopHideTimeoutRef.current);
+    }
+  };
+
   return (
     <>
+      {/* ============ DESKTOP SIDEBAR ============ */}
+      {/* Hover trigger zone - invisible */}
+      <div
+        className="hidden md:block fixed left-0 top-0 w-5 h-full z-50"
+        onMouseEnter={() => setDesktopNavVisible(true)}
+      />
+
+      {/* Desktop sidebar */}
+      <AnimatePresence>
+        {desktopNavVisible && (
+          <motion.nav
+            initial={{ x: -80, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -80, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            onMouseEnter={handleDesktopNavMouseEnter}
+            onMouseLeave={handleDesktopNavMouseLeave}
+            className="hidden md:flex fixed left-0 top-0 h-full z-40 flex-col"
+          >
+            {/* Background */}
+            <div className="absolute inset-0 bg-bg-primary/95 backdrop-blur-xl border-r border-border/30" />
+
+            {/* Content */}
+            <div className="relative z-10 flex flex-col h-full py-6 px-3 w-20">
+              {/* Logo */}
+              <Link
+                href="/"
+                className="flex items-center justify-center mb-8 p-2 rounded-xl hover:bg-bg-secondary transition-colors"
+              >
+                <motion.div
+                  whileHover={{ rotate: 10 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                >
+                  <Feather className="w-6 h-6 text-accent" />
+                </motion.div>
+              </Link>
+
+              {/* Nav items */}
+              <div className="flex-1 flex flex-col gap-2">
+                {desktopNavItems.map((item, index) => {
+                  const isActive =
+                    pathname === item.href ||
+                    (item.isProfile && pathname === `/${user?.username}`);
+
+                  return (
+                    <Link key={item.href} href={item.href}>
+                      <motion.div
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={cn(
+                          "relative flex flex-col items-center gap-1 p-3 rounded-xl transition-colors",
+                          isActive
+                            ? "text-text-primary bg-bg-secondary"
+                            : "text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/50"
+                        )}
+                      >
+                        {item.isProfile && user ? (
+                          <Avatar
+                            src={user.avatarUrl}
+                            fallback={user.displayName || user.username}
+                            size="sm"
+                            className={cn(
+                              "w-6 h-6",
+                              isActive && "ring-2 ring-accent ring-offset-1 ring-offset-bg-primary"
+                            )}
+                          />
+                        ) : (
+                          <item.icon className={cn("w-5 h-5", isActive && "stroke-[2.5]")} />
+                        )}
+                        <span className="text-[10px] font-medium">{item.label}</span>
+                      </motion.div>
+                    </Link>
+                  );
+                })}
+              </div>
+
+              {/* Keyboard hint */}
+              <div className="text-center">
+                <span className="text-[10px] text-text-muted">
+                  Press <kbd className="px-1.5 py-0.5 bg-bg-secondary rounded text-text-tertiary">N</kbd>
+                </span>
+              </div>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
+
+      {/* Desktop edge indicator when nav hidden */}
+      <AnimatePresence>
+        {!desktopNavVisible && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="hidden md:block fixed left-0 top-1/2 -translate-y-1/2 z-30"
+          >
+            <motion.div
+              className="w-1 h-16 rounded-r-full bg-border/20"
+              animate={{ opacity: [0.2, 0.4, 0.2] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ============ MOBILE NAV ============ */}
       {/* Swipe hint - subtle line at bottom when nav is hidden */}
       <AnimatePresence>
         {!isVisible && (
