@@ -122,6 +122,37 @@ body {
   outline-offset: 2px;
 }
 
+/* Hide scrollbar utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch action utilities for mobile scroll */
+.touch-pan-y {
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+}
+
+.touch-pan-x {
+  touch-action: pan-x;
+}
+
+/* Poetry typography */
+.poetry-content {
+  font-feature-settings: "liga" 1, "kern" 1;
+  text-rendering: optimizeLegibility;
+}
+
+.poetry-content p {
+  margin: 0;
+  padding: 0.15em 0;
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *,

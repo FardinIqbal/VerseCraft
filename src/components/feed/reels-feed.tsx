@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { ReelCard } from "./reel-card";
 import { CommentsDrawer } from "../post/comments-drawer";
 import { Modal } from "../ui/modal";
@@ -28,7 +29,8 @@ interface Post {
 }
 
 export function ReelsFeed() {
-  const { user, signInWithGoogle, signInWithGithub } = useAuth();
+  const router = useRouter();
+  const { user } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -262,18 +264,17 @@ export function ReelsFeed() {
           </p>
           <div className="space-y-2">
             <Button
-              onClick={signInWithGoogle}
-              variant="secondary"
+              onClick={() => router.push("/login")}
               className="w-full"
             >
-              Continue with Google
+              Sign In
             </Button>
             <Button
-              onClick={signInWithGithub}
+              onClick={() => router.push("/signup")}
               variant="secondary"
               className="w-full"
             >
-              Continue with GitHub
+              Create Account
             </Button>
           </div>
         </div>

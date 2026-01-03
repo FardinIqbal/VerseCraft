@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { PostCard, type PostData } from "@/components/post/post-card";
 import { PostCardSkeleton } from "@/components/ui/skeleton";
@@ -15,7 +16,8 @@ interface FeedProps {
 }
 
 export function Feed({ initialPosts = [] }: FeedProps) {
-  const { user, supabaseUser, signInWithGoogle, signInWithGithub } = useAuth();
+  const router = useRouter();
+  const { user, supabaseUser } = useAuth();
   const [posts, setPosts] = useState<PostData[]>(initialPosts);
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
@@ -177,18 +179,17 @@ export function Feed({ initialPosts = [] }: FeedProps) {
           </p>
           <div className="space-y-2">
             <Button
-              onClick={signInWithGoogle}
-              variant="secondary"
+              onClick={() => router.push("/login")}
               className="w-full"
             >
-              Continue with Google
+              Sign In
             </Button>
             <Button
-              onClick={signInWithGithub}
+              onClick={() => router.push("/signup")}
               variant="secondary"
               className="w-full"
             >
-              Continue with GitHub
+              Create Account
             </Button>
           </div>
         </div>

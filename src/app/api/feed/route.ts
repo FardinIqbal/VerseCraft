@@ -1,19 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { posts, users, likes, saves } from "@/lib/db/schema";
-import { desc, eq, lt, and, sql } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const cursor = searchParams.get("cursor");
     const userId = searchParams.get("userId");
-    const limit = 10;
+    const limit = 20;
 
-    // Build query conditions
-    const conditions = cursor ? [lt(posts.createdAt, new Date(cursor))] : [];
+    // For initial load, get random posts. For pagination, use offset
+    const offset = cursor ? parseInt(cursor) : 0;
 
-    // Get posts with user info
+    // Get posts with user info, ordered randomly for variety
     const feedPosts = await db
       .select({
         id: posts.id,
@@ -34,9 +34,9 @@ export async function GET(request: NextRequest) {
       })
       .from(posts)
       .leftJoin(users, eq(posts.userId, users.id))
-      .where(conditions.length > 0 ? and(...conditions) : undefined)
-      .orderBy(desc(posts.createdAt))
-      .limit(limit + 1);
+      .orderBy(sql`RANDOM()`)
+      .limit(limit + 1)
+      .offset(offset);
 
     const hasMore = feedPosts.length > limit;
     const postsToReturn = hasMore ? feedPosts.slice(0, limit) : feedPosts;
@@ -106,9 +106,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       posts: formattedPosts,
-      nextCursor: hasMore
-        ? postsToReturn[postsToReturn.length - 1].createdAt.toISOString()
-        : null,
+      nextCursor: hasMore ? String(offset + limit) : null,
       hasMore,
     });
   } catch (error) {
