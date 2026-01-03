@@ -275,8 +275,8 @@ export function MusicPlayer() {
   const activeAmbientCount = Object.values(ambientStates).filter(s => s.playing).length;
 
   return (
-    <>
-      {/* Floating trigger */}
+    <div className="md:hidden">
+      {/* Floating trigger - mobile only */}
       <AnimatePresence>
         {isVisible && (
           <motion.button
@@ -703,6 +703,6 @@ export function MusicPlayer() {
           </>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

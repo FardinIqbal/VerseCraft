@@ -135,8 +135,19 @@ export function HomePage() {
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Poem navigation (left/right)
       if (e.key === "ArrowRight" || e.key === "l") goNext();
       if (e.key === "ArrowLeft" || e.key === "h") goPrev();
+
+      // Scroll within poem (up/down)
+      if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "j" || e.key === "k") {
+        const scrollContainer = document.querySelector('.poetry-scroll-container');
+        if (scrollContainer) {
+          e.preventDefault();
+          const scrollAmount = e.key === "ArrowUp" || e.key === "k" ? -120 : 120;
+          scrollContainer.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+        }
+      }
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);

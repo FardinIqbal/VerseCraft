@@ -3,17 +3,29 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Compass, PlusSquare, User, LogIn, Settings, Feather } from "lucide-react";
+import { Home, Search, Compass, PlusSquare, User, LogIn, Settings, Feather, Palette, Music } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
+import { useTheme } from "@/hooks/use-theme";
 import { Avatar } from "@/components/ui/avatar";
+
+const THEMES = [
+  { id: "dark", label: "Dark", color: "#0a0a0a" },
+  { id: "light", label: "Light", color: "#ffffff" },
+  { id: "sepia", label: "Sepia", color: "#f4ecd8" },
+  { id: "midnight", label: "Mid", color: "#0d1117" },
+  { id: "forest", label: "Forest", color: "#1a1f1a" },
+] as const;
 
 export function MobileNav() {
   const { user } = useAuth();
+  const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const [desktopNavVisible, setDesktopNavVisible] = useState(false);
+  const [showThemePanel, setShowThemePanel] = useState(false);
+  const [showMusicPanel, setShowMusicPanel] = useState(false);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const desktopHideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastScrollY = useRef(0);
@@ -226,6 +238,47 @@ export function MobileNav() {
                     </Link>
                   );
                 })}
+
+                {/* Divider */}
+                <div className="my-2 mx-3 h-px bg-border/30" />
+
+                {/* Theme button */}
+                <motion.button
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: desktopNavItems.length * 0.05 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowThemePanel(!showThemePanel)}
+                  className={cn(
+                    "relative flex flex-col items-center gap-1 p-3 rounded-xl transition-colors",
+                    showThemePanel
+                      ? "text-text-primary bg-bg-secondary"
+                      : "text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/50"
+                  )}
+                >
+                  <Palette className="w-5 h-5" />
+                  <span className="text-[10px] font-medium">Theme</span>
+                </motion.button>
+
+                {/* Music button */}
+                <motion.button
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: (desktopNavItems.length + 1) * 0.05 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowMusicPanel(!showMusicPanel)}
+                  className={cn(
+                    "relative flex flex-col items-center gap-1 p-3 rounded-xl transition-colors",
+                    showMusicPanel
+                      ? "text-text-primary bg-bg-secondary"
+                      : "text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/50"
+                  )}
+                >
+                  <Music className="w-5 h-5" />
+                  <span className="text-[10px] font-medium">Music</span>
+                </motion.button>
               </div>
 
               {/* Keyboard hint */}
@@ -236,6 +289,69 @@ export function MobileNav() {
               </div>
             </div>
           </motion.nav>
+        )}
+      </AnimatePresence>
+
+      {/* Theme Panel - appears next to sidebar */}
+      <AnimatePresence>
+        {showThemePanel && desktopNavVisible && (
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -100, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            className="hidden md:block fixed left-20 top-0 h-full z-30"
+            onMouseEnter={handleDesktopNavMouseEnter}
+            onMouseLeave={handleDesktopNavMouseLeave}
+          >
+            <div className="h-full py-6 px-4 bg-bg-primary/95 backdrop-blur-xl border-r border-border/30">
+              <p className="text-text-secondary text-xs font-medium mb-4 tracking-wide">THEME</p>
+              <div className="flex flex-col gap-2">
+                {THEMES.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setTheme(t.id)}
+                    className={cn(
+                      "flex items-center gap-3 px-3 py-2 rounded-lg transition-colors",
+                      theme === t.id
+                        ? "bg-bg-secondary text-text-primary"
+                        : "text-text-tertiary hover:text-text-primary hover:bg-bg-secondary/50"
+                    )}
+                  >
+                    <div
+                      className="w-4 h-4 rounded-full border border-border"
+                      style={{ backgroundColor: t.color }}
+                    />
+                    <span className="text-sm">{t.label}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Music Panel - appears next to sidebar */}
+      <AnimatePresence>
+        {showMusicPanel && desktopNavVisible && (
+          <motion.div
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: -100, opacity: 0 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            className="hidden md:block fixed left-20 top-0 h-full z-30"
+            onMouseEnter={handleDesktopNavMouseEnter}
+            onMouseLeave={handleDesktopNavMouseLeave}
+          >
+            <div className="h-full py-6 px-4 bg-bg-primary/95 backdrop-blur-xl border-r border-border/30">
+              <p className="text-text-secondary text-xs font-medium mb-4 tracking-wide">MUSIC</p>
+              <p className="text-text-tertiary text-xs">
+                Use the floating music button
+                <br />
+                to control audio playback
+              </p>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
 

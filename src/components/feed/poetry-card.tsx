@@ -187,7 +187,7 @@ export function PoetryCard({
 
       {/* Scrollable content */}
       <div
-        className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide touch-pan-y"
+        className="poetry-scroll-container flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide touch-pan-y"
         onClick={handleTap}
       >
         <div className="min-h-full flex items-center justify-center px-8 py-16 pb-40">

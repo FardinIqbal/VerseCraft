@@ -88,8 +88,8 @@ export function FloatingControls() {
   }, [isExpanded]);
 
   return (
-    <>
-      {/* Floating trigger */}
+    <div className="md:hidden">
+      {/* Floating trigger - mobile only */}
       <AnimatePresence>
         {isVisible && (
           <motion.button
@@ -285,6 +285,6 @@ export function FloatingControls() {
           </>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }
