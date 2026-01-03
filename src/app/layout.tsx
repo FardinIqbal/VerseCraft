@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Libre_Baskerville } from "next/font/google";
 import { ThemeProvider } from "@/hooks/use-theme";
+import { FloatingControls } from "@/components/ui/floating-controls";
 import "./globals.css";
 
 const inter = Inter({
@@ -46,7 +47,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${libreBaskerville.variable} antialiased`}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider>
+          <FloatingControls />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );

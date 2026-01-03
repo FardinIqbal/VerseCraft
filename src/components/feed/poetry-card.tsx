@@ -146,26 +146,24 @@ export function PoetryCard({
 
   const lines = post.content.split("\n");
 
-  // Stagger animation for lines
+  // Fast, clean animation for lines
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.03,
-        delayChildren: 0.1,
+        staggerChildren: 0.015,
+        delayChildren: 0,
       },
     },
   };
 
   const lineVariants = {
-    hidden: { opacity: 0, y: 8 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
-        duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1] as const,
+        duration: 0.2,
       },
     },
   };
