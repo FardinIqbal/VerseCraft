@@ -190,7 +190,7 @@ export function PoetryCard({
         className="flex-1 overflow-y-auto overflow-x-hidden scrollbar-hide touch-pan-y"
         onClick={handleTap}
       >
-        <div className="min-h-full flex items-center justify-center px-8 py-12 pb-32">
+        <div className="min-h-full flex items-center justify-center px-8 py-16 pb-40">
           <div className="max-w-md w-full">
             {/* The poem with staggered animation */}
             <motion.div
@@ -198,7 +198,7 @@ export function PoetryCard({
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              className="text-center"
+              className="text-center poetry-content"
             >
               {lines.map((line, i) => {
                 if (line.trim() === "") {
@@ -215,7 +215,7 @@ export function PoetryCard({
                   <motion.p
                     key={i}
                     variants={lineVariants}
-                    className="font-serif text-text-primary text-xl leading-[2] tracking-wide"
+                    className="text-text-primary tracking-wide"
                     style={{
                       textShadow: "0 0 40px rgba(255,255,255,0.03)",
                     }}
@@ -270,7 +270,7 @@ export function PoetryCard({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 10 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-30"
+            className="fixed bottom-28 left-1/2 -translate-x-1/2 z-30"
           >
             <div className="flex items-center gap-8 px-8 py-4 rounded-2xl bg-bg-primary/90 backdrop-blur-xl border border-border/30 shadow-2xl">
               <motion.button

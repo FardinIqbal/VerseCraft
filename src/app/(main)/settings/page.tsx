@@ -3,19 +3,17 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowLeft, Camera, LogOut, Sun, Moon } from "lucide-react";
+import { ArrowLeft, Camera, LogOut } from "lucide-react";
 import Link from "next/link";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/hooks/use-auth";
-import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
 
 export default function SettingsPage() {
   const router = useRouter();
   const { user, signOut, refreshUser } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const [displayName, setDisplayName] = useState("");
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(false);
@@ -156,41 +154,6 @@ export default function SettingsPage() {
           <Button onClick={handleSave} loading={loading} className="w-full">
             Save Changes
           </Button>
-        </div>
-
-        {/* Divider */}
-        <div className="border-t border-border pt-6">
-          <h2 className="text-lg font-semibold mb-4">Preferences</h2>
-
-          {/* Theme Toggle */}
-          <div className="flex items-center justify-between py-3">
-            <div className="flex items-center gap-3">
-              {theme === "dark" ? (
-                <Moon className="w-5 h-5 text-text-secondary" />
-              ) : (
-                <Sun className="w-5 h-5 text-text-secondary" />
-              )}
-              <div>
-                <p className="font-medium text-text-primary">Theme</p>
-                <p className="text-sm text-text-muted">
-                  {theme === "dark" ? "Dark mode" : "Light mode"}
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={toggleTheme}
-              className={cn(
-                "relative w-12 h-6 rounded-full transition-colors",
-                theme === "dark" ? "bg-accent" : "bg-border"
-              )}
-            >
-              <motion.div
-                initial={false}
-                animate={{ x: theme === "dark" ? 24 : 2 }}
-                className="absolute top-1 w-4 h-4 rounded-full bg-bg-primary"
-              />
-            </button>
-          </div>
         </div>
 
         {/* Sign Out */}

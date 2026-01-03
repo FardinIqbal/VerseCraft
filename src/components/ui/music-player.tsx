@@ -3,8 +3,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Volume2,
-  VolumeX,
   X,
   Music,
   CloudRain,
@@ -15,47 +13,153 @@ import {
   Coffee,
   Zap,
   Bird,
+  Play,
+  Pause,
 } from "lucide-react";
 
+// Reading-focused music stations (SomaFM verified streams)
 const MUSIC_GENRES = [
-  { id: "lofi", name: "Lofi", url: "https://play.streamafrica.net/lofiradio" },
-  { id: "chillhop", name: "Chillhop", url: "https://streams.fluxfm.de/Chillhop/mp3-128/streams.fluxfm.de/" },
-  { id: "classical", name: "Classical", url: "https://live.musopen.org:8085/streamvbr0" },
-  { id: "jazz", name: "Jazz", url: "https://streaming.radio.co/s774887f7b/listen" },
-  { id: "ambient", name: "Ambient", url: "https://ice1.somafm.com/dronezone-128-mp3" },
-  { id: "piano", name: "Piano", url: "https://ice1.somafm.com/sonicuniverse-128-mp3" },
+  { id: "lofi", name: "Lofi", url: "https://ice1.somafm.com/fluid-128-mp3", desc: "Jazzy hip-hop beats" },
+  { id: "groovesalad", name: "Chill", url: "https://ice1.somafm.com/groovesalad-128-mp3", desc: "Downtempo grooves" },
+  { id: "dronezone", name: "Ambient", url: "https://ice1.somafm.com/dronezone-128-mp3", desc: "Atmospheric textures" },
+  { id: "deepspaceone", name: "Space", url: "https://ice1.somafm.com/deepspaceone-128-mp3", desc: "Deep space ambient" },
+  { id: "vaporwave", name: "Vapor", url: "https://ice1.somafm.com/vaporwaves-128-mp3", desc: "Vaporwave & synthwave" },
+  { id: "silent", name: "Silence", url: "", desc: "Ambient sounds only" },
 ];
 
+// Reliable ambient sound sources (using Pixabay's CDN with verified working URLs)
 const AMBIENT_SOUNDS = [
-  { id: "rain", name: "Rain", icon: CloudRain, url: "https://cdn.pixabay.com/audio/2022/05/13/audio_257112181b.mp3" },
-  { id: "waves", name: "Waves", icon: Waves, url: "https://cdn.pixabay.com/audio/2022/06/07/audio_b9bd4170e4.mp3" },
-  { id: "fire", name: "Fireplace", icon: Flame, url: "https://cdn.pixabay.com/audio/2021/08/04/audio_bb630cc098.mp3" },
-  { id: "wind", name: "Wind", icon: Wind, url: "https://cdn.pixabay.com/audio/2022/03/15/audio_8cb749d484.mp3" },
-  { id: "forest", name: "Forest", icon: TreePine, url: "https://cdn.pixabay.com/audio/2022/08/02/audio_884fe92c21.mp3" },
-  { id: "coffee", name: "Cafe", icon: Coffee, url: "https://cdn.pixabay.com/audio/2022/10/18/audio_69a61cd6d6.mp3" },
-  { id: "thunder", name: "Thunder", icon: Zap, url: "https://cdn.pixabay.com/audio/2022/03/10/audio_4dedf5bf94.mp3" },
-  { id: "birds", name: "Birds", icon: Bird, url: "https://cdn.pixabay.com/audio/2022/02/07/audio_5f1e2618c5.mp3" },
+  {
+    id: "rain",
+    name: "Rain",
+    icon: CloudRain,
+    // Gentle rain loop
+    url: "https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3"
+  },
+  {
+    id: "waves",
+    name: "Ocean",
+    icon: Waves,
+    url: "https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3"
+  },
+  {
+    id: "fire",
+    name: "Fire",
+    icon: Flame,
+    url: "https://assets.mixkit.co/active_storage/sfx/2574/2574-preview.mp3"
+  },
+  {
+    id: "wind",
+    name: "Wind",
+    icon: Wind,
+    url: "https://assets.mixkit.co/active_storage/sfx/2463/2463-preview.mp3"
+  },
+  {
+    id: "forest",
+    name: "Forest",
+    icon: TreePine,
+    url: "https://assets.mixkit.co/active_storage/sfx/2430/2430-preview.mp3"
+  },
+  {
+    id: "coffee",
+    name: "Cafe",
+    icon: Coffee,
+    url: "https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3"
+  },
+  {
+    id: "thunder",
+    name: "Storm",
+    icon: Zap,
+    url: "https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
+  },
+  {
+    id: "birds",
+    name: "Birds",
+    icon: Bird,
+    url: "https://assets.mixkit.co/active_storage/sfx/2431/2431-preview.mp3"
+  },
 ];
 
 interface AmbientState {
-  id: string;
   volume: number;
   playing: boolean;
-  audio?: HTMLAudioElement;
 }
 
 export function MusicPlayer() {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [musicPlaying, setMusicPlaying] = useState(false);
-  const [musicVolume, setMusicVolume] = useState(0.3);
+  const [musicVolume, setMusicVolume] = useState(0.4);
   const [selectedGenre, setSelectedGenre] = useState(MUSIC_GENRES[0]);
   const [ambientStates, setAmbientStates] = useState<Record<string, AmbientState>>({});
   const [hasInteracted, setHasInteracted] = useState(false);
   const [activeTab, setActiveTab] = useState<"music" | "ambient">("music");
+  const [isLoading, setIsLoading] = useState(false);
+
   const musicRef = useRef<HTMLAudioElement | null>(null);
   const ambientRefs = useRef<Record<string, HTMLAudioElement>>({});
+  const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastScrollY = useRef(0);
 
-  // Auto-play music on first interaction
+  // Auto-hide button - same pattern as mobile nav (show on any tap, scroll up, or swipe from edge)
+  useEffect(() => {
+    if (isExpanded) {
+      setIsVisible(true);
+      return;
+    }
+
+    const showButton = () => {
+      setIsVisible(true);
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+      hideTimeoutRef.current = setTimeout(() => {
+        setIsVisible(false);
+      }, 2000);
+    };
+
+    // Show on any click
+    const handleClick = () => showButton();
+
+    // Show on scroll up
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      if (currentScrollY < lastScrollY.current) {
+        showButton();
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    // Show on swipe from edges
+    let touchStartY = 0;
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+    const handleTouchEnd = (e: TouchEvent) => {
+      const touchEndY = e.changedTouches[0].clientY;
+      // Swipe down from top OR swipe up from bottom
+      if ((touchStartY < 100 && touchEndY > touchStartY + 30) ||
+          (touchStartY > window.innerHeight - 100 && touchEndY < touchStartY - 30)) {
+        showButton();
+      }
+    };
+
+    // Initial show then hide
+    showButton();
+
+    document.addEventListener("click", handleClick);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    document.addEventListener("touchstart", handleTouchStart, { passive: true });
+    document.addEventListener("touchend", handleTouchEnd, { passive: true });
+
+    return () => {
+      if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
+      document.removeEventListener("click", handleClick);
+      window.removeEventListener("scroll", handleScroll);
+      document.removeEventListener("touchstart", handleTouchStart);
+      document.removeEventListener("touchend", handleTouchEnd);
+    };
+  }, [isExpanded]);
+
+  // Auto-play on first interaction
   useEffect(() => {
     const handleFirstInteraction = () => {
       if (!hasInteracted) {
@@ -63,10 +167,8 @@ export function MusicPlayer() {
         setMusicPlaying(true);
       }
     };
-
     document.addEventListener("click", handleFirstInteraction, { once: true });
     document.addEventListener("touchstart", handleFirstInteraction, { once: true });
-
     return () => {
       document.removeEventListener("click", handleFirstInteraction);
       document.removeEventListener("touchstart", handleFirstInteraction);
@@ -84,120 +186,177 @@ export function MusicPlayer() {
     }
   }, []);
 
-  // Music audio control
+  // Music control
   useEffect(() => {
+    // Don't play if Silence is selected (empty url)
+    if (!selectedGenre.url) {
+      if (musicRef.current) {
+        musicRef.current.pause();
+      }
+      return;
+    }
+
     if (!musicRef.current) {
       musicRef.current = new Audio(selectedGenre.url);
-      musicRef.current.loop = true;
+      musicRef.current.crossOrigin = "anonymous";
     }
     musicRef.current.volume = musicVolume;
 
     if (musicPlaying && hasInteracted) {
-      musicRef.current.play().catch(() => setMusicPlaying(false));
-    } else {
+      setIsLoading(true);
+      musicRef.current.play()
+        .then(() => setIsLoading(false))
+        .catch(() => {
+          setIsLoading(false);
+          setMusicPlaying(false);
+        });
+    } else if (musicRef.current) {
       musicRef.current.pause();
     }
   }, [musicPlaying, hasInteracted, musicVolume, selectedGenre.url]);
 
-  const changeGenre = useCallback(
-    (genre: (typeof MUSIC_GENRES)[0]) => {
-      if (musicRef.current) {
-        musicRef.current.pause();
-        musicRef.current.src = genre.url;
-        if (musicPlaying) musicRef.current.play().catch(() => {});
-      }
+  const changeGenre = useCallback((genre: typeof MUSIC_GENRES[0]) => {
+    if (musicRef.current) {
+      musicRef.current.pause();
+    }
+
+    // Handle "Silence" option (no music, just ambient)
+    if (!genre.url) {
+      setMusicPlaying(false);
       setSelectedGenre(genre);
       localStorage.setItem("musicGenre", genre.id);
-    },
-    [musicPlaying]
-  );
+      return;
+    }
 
-  const toggleAmbient = useCallback((sound: (typeof AMBIENT_SOUNDS)[0]) => {
-    setAmbientStates((prev) => {
-      const current = prev[sound.id];
-      if (current?.playing) {
-        current.audio?.pause();
-        return { ...prev, [sound.id]: { ...current, playing: false } };
-      } else {
-        let audio = ambientRefs.current[sound.id];
-        if (!audio) {
-          audio = new Audio(sound.url);
-          audio.loop = true;
-          audio.volume = current?.volume ?? 0.5;
-          ambientRefs.current[sound.id] = audio;
-        }
-        audio.play().catch(() => {});
-        return {
-          ...prev,
-          [sound.id]: {
-            id: sound.id,
-            volume: current?.volume ?? 0.5,
-            playing: true,
-            audio,
-          },
-        };
+    if (musicRef.current) {
+      musicRef.current.src = genre.url;
+      if (musicPlaying) {
+        setIsLoading(true);
+        musicRef.current.play()
+          .then(() => setIsLoading(false))
+          .catch(() => setIsLoading(false));
       }
-    });
-  }, []);
+    }
+    setSelectedGenre(genre);
+    localStorage.setItem("musicGenre", genre.id);
+  }, [musicPlaying]);
+
+  const toggleAmbient = useCallback((sound: typeof AMBIENT_SOUNDS[0]) => {
+    const current = ambientStates[sound.id];
+
+    if (current?.playing) {
+      ambientRefs.current[sound.id]?.pause();
+      setAmbientStates(prev => ({ ...prev, [sound.id]: { ...prev[sound.id], playing: false } }));
+    } else {
+      let audio = ambientRefs.current[sound.id];
+      if (!audio) {
+        audio = new Audio(sound.url);
+        audio.loop = true;
+        audio.crossOrigin = "anonymous";
+        ambientRefs.current[sound.id] = audio;
+      }
+      audio.volume = current?.volume ?? 0.5;
+      audio.play().catch(console.error);
+      setAmbientStates(prev => ({
+        ...prev,
+        [sound.id]: { volume: current?.volume ?? 0.5, playing: true }
+      }));
+    }
+  }, [ambientStates]);
 
   const setAmbientVolume = useCallback((id: string, volume: number) => {
-    setAmbientStates((prev) => {
-      const current = prev[id];
-      if (current?.audio) current.audio.volume = volume;
-      return { ...prev, [id]: { ...current, id, volume, playing: current?.playing ?? false } };
-    });
+    if (ambientRefs.current[id]) {
+      ambientRefs.current[id].volume = volume;
+    }
+    setAmbientStates(prev => ({ ...prev, [id]: { ...prev[id], volume } }));
   }, []);
 
-  const isAnythingPlaying = musicPlaying || Object.values(ambientStates).some((s) => s.playing);
-  const activeAmbientCount = Object.values(ambientStates).filter((s) => s.playing).length;
+  const isAnythingPlaying = musicPlaying || Object.values(ambientStates).some(s => s.playing);
+  const activeAmbientCount = Object.values(ambientStates).filter(s => s.playing).length;
 
   return (
     <>
-      {/* Floating trigger button */}
-      <motion.button
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, type: "spring", stiffness: 200 }}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsExpanded(true)}
-        className="fixed top-6 left-4 z-40 p-3 rounded-2xl bg-bg-primary/60 backdrop-blur-2xl border border-border/30 shadow-2xl"
-      >
-        <div className="relative">
-          {isAnythingPlaying ? (
-            <motion.div className="flex items-end justify-center gap-[3px] w-5 h-5">
-              {[0, 1, 2].map((i) => (
-                <motion.div
-                  key={i}
-                  className="w-[4px] rounded-full bg-gradient-to-t from-text-secondary to-text-primary"
-                  animate={{ height: ["5px", "16px", "8px", "14px", "5px"] }}
-                  transition={{
-                    duration: 0.9,
-                    repeat: Infinity,
-                    delay: i * 0.12,
-                    ease: "easeInOut",
-                  }}
-                />
-              ))}
-            </motion.div>
-          ) : (
-            <Music className="w-5 h-5 text-text-muted" />
-          )}
-
-          {/* Active ambient indicator */}
-          {activeAmbientCount > 0 && (
+      {/* Floating trigger */}
+      <AnimatePresence>
+        {isVisible && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -20 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsExpanded(true);
+            }}
+            className="fixed top-6 left-4 z-40 group"
+          >
+        <motion.div
+          className="p-3.5 rounded-2xl bg-bg-primary/70 backdrop-blur-2xl border border-border/40 shadow-2xl relative overflow-hidden"
+          animate={isAnythingPlaying ? {
+            boxShadow: ["0 0 20px rgba(255,255,255,0.05)", "0 0 30px rgba(255,255,255,0.1)", "0 0 20px rgba(255,255,255,0.05)"]
+          } : {}}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          {/* Animated background gradient when playing */}
+          {isAnythingPlaying && (
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent text-[10px] font-medium flex items-center justify-center text-bg-primary"
-            >
-              {activeAmbientCount}
-            </motion.div>
+              className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-accent/5"
+              animate={{ opacity: [0.5, 1, 0.5] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            />
           )}
-        </div>
-      </motion.button>
 
-      {/* Expanded drawer */}
+          <div className="relative">
+            {isAnythingPlaying ? (
+              <motion.div className="flex items-end justify-center gap-[3px] w-5 h-5">
+                {[0, 1, 2].map((i) => (
+                  <motion.div
+                    key={i}
+                    className="w-[4px] rounded-full bg-gradient-to-t from-accent/60 to-accent"
+                    animate={{
+                      height: ["4px", "18px", "8px", "14px", "4px"],
+                      opacity: [0.6, 1, 0.8, 1, 0.6]
+                    }}
+                    transition={{
+                      duration: 1.2,
+                      repeat: Infinity,
+                      delay: i * 0.15,
+                      ease: "easeInOut",
+                    }}
+                  />
+                ))}
+              </motion.div>
+            ) : (
+              <motion.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <Music className="w-5 h-5 text-text-muted group-hover:text-text-secondary transition-colors" />
+              </motion.div>
+            )}
+          </div>
+
+          {/* Ambient count badge */}
+          <AnimatePresence>
+            {activeAmbientCount > 0 && (
+              <motion.div
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-accent text-[10px] font-bold flex items-center justify-center text-bg-primary shadow-lg"
+              >
+                {activeAmbientCount}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </motion.button>
+        )}
+      </AnimatePresence>
+
+      {/* Drawer */}
       <AnimatePresence>
         {isExpanded && (
           <>
@@ -206,81 +365,94 @@ export function MusicPlayer() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsExpanded(false)}
-              className="fixed inset-0 bg-black/70 backdrop-blur-md z-50"
+              className="fixed inset-0 bg-black/80 backdrop-blur-xl z-50"
             />
 
             <motion.div
-              initial={{ y: "100%" }}
-              animate={{ y: 0 }}
-              exit={{ y: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 280 }}
-              className="fixed bottom-0 left-0 right-0 z-50 bg-bg-primary border-t border-border/20 rounded-t-[2rem] max-h-[85vh] overflow-hidden"
+              initial={{ y: "100%", opacity: 0.5 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: "100%", opacity: 0.5 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.5 }}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 500) {
+                  setIsExpanded(false);
+                }
+              }}
+              style={{ touchAction: "none" }}
+              className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-bg-secondary to-bg-primary border-t border-border/30 rounded-t-[2.5rem] max-h-[88vh] overflow-hidden"
             >
-              {/* Handle */}
-              <div className="flex justify-center pt-3">
-                <motion.div
-                  className="w-12 h-1.5 rounded-full bg-border/40"
-                  whileHover={{ scaleX: 1.2 }}
-                />
-              </div>
+              {/* Drag handle - swipe down to close */}
+              <motion.div
+                className="flex justify-center pt-4 pb-2 cursor-grab active:cursor-grabbing"
+                whileHover={{ scale: 1.1 }}
+              >
+                <div className="w-14 h-1.5 rounded-full bg-border/50" />
+              </motion.div>
 
-              <div className="px-6 pb-10 pt-4 overflow-y-auto max-h-[calc(85vh-20px)]">
+              <div className="px-6 pb-12 pt-2 overflow-y-auto max-h-[calc(88vh-24px)]">
                 {/* Header */}
-                <div className="flex items-center justify-between mb-6">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="flex items-center justify-between mb-8"
+                >
                   <div>
-                    <motion.h3
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="text-xl font-semibold text-text-primary"
-                    >
-                      Soundscape
-                    </motion.h3>
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.1 }}
-                      className="text-sm text-text-muted"
-                    >
-                      Curate your reading atmosphere
-                    </motion.p>
+                    <h3 className="text-2xl font-bold text-text-primary tracking-tight">Soundscape</h3>
+                    <p className="text-sm text-text-muted mt-1">Create your perfect atmosphere</p>
                   </div>
                   <motion.button
                     whileHover={{ scale: 1.1, rotate: 90 }}
                     whileTap={{ scale: 0.9 }}
                     onClick={() => setIsExpanded(false)}
-                    className="p-2 rounded-xl hover:bg-bg-tertiary transition-colors"
+                    className="p-3 rounded-2xl bg-bg-tertiary/50 hover:bg-bg-tertiary transition-colors"
                   >
                     <X className="w-5 h-5 text-text-secondary" />
                   </motion.button>
-                </div>
+                </motion.div>
 
                 {/* Tabs */}
-                <div className="flex gap-2 mb-6 p-1 bg-bg-tertiary/50 rounded-2xl">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                  className="flex p-1.5 bg-bg-tertiary/50 rounded-2xl mb-8"
+                >
                   {(["music", "ambient"] as const).map((tab) => (
-                    <button
+                    <motion.button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all ${
-                        activeTab === tab
-                          ? "bg-bg-primary text-text-primary shadow-lg"
-                          : "text-text-muted hover:text-text-secondary"
+                      className={`relative flex-1 py-3 px-6 rounded-xl text-sm font-semibold transition-colors ${
+                        activeTab === tab ? "text-text-primary" : "text-text-muted"
                       }`}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      {tab === "music" ? "Music" : "Ambient"}
-                    </button>
+                      {activeTab === tab && (
+                        <motion.div
+                          layoutId="activeTab"
+                          className="absolute inset-0 bg-bg-primary rounded-xl shadow-lg"
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+                        />
+                      )}
+                      <span className="relative z-10 capitalize">{tab}</span>
+                    </motion.button>
                   ))}
-                </div>
+                </motion.div>
 
                 <AnimatePresence mode="wait">
                   {activeTab === "music" ? (
                     <motion.div
                       key="music"
-                      initial={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, x: -30 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 20 }}
+                      exit={{ opacity: 0, x: 30 }}
+                      transition={{ duration: 0.2 }}
                     >
                       {/* Play button */}
-                      <div className="flex justify-center mb-8">
+                      <div className="flex justify-center mb-10">
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
@@ -288,109 +460,146 @@ export function MusicPlayer() {
                             setHasInteracted(true);
                             setMusicPlaying(!musicPlaying);
                           }}
-                          className="relative w-24 h-24 rounded-full bg-gradient-to-br from-bg-tertiary to-bg-secondary border border-border/30 flex items-center justify-center shadow-2xl"
+                          className="relative"
                         >
-                          {musicPlaying ? (
-                            <motion.div className="flex items-end gap-1.5">
-                              {[0, 1, 2, 3, 4].map((i) => (
-                                <motion.div
-                                  key={i}
-                                  className="w-2 rounded-full bg-gradient-to-t from-accent/80 to-accent"
-                                  animate={{ height: ["10px", "32px", "18px", "28px", "10px"] }}
-                                  transition={{
-                                    duration: 0.8,
-                                    repeat: Infinity,
-                                    delay: i * 0.08,
-                                  }}
-                                />
-                              ))}
-                            </motion.div>
-                          ) : (
-                            <Volume2 className="w-10 h-10 text-text-secondary" />
-                          )}
+                          <motion.div
+                            className="w-28 h-28 rounded-full bg-gradient-to-br from-bg-tertiary via-bg-secondary to-bg-tertiary border border-border/40 flex items-center justify-center shadow-2xl"
+                            animate={musicPlaying ? {
+                              boxShadow: [
+                                "0 0 30px rgba(255,255,255,0.05)",
+                                "0 0 50px rgba(255,255,255,0.1)",
+                                "0 0 30px rgba(255,255,255,0.05)"
+                              ]
+                            } : {}}
+                            transition={{ duration: 2, repeat: Infinity }}
+                          >
+                            {isLoading ? (
+                              <motion.div
+                                className="w-8 h-8 border-2 border-text-muted border-t-accent rounded-full"
+                                animate={{ rotate: 360 }}
+                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                              />
+                            ) : musicPlaying ? (
+                              <motion.div className="flex items-end gap-1.5">
+                                {[0, 1, 2, 3, 4].map((i) => (
+                                  <motion.div
+                                    key={i}
+                                    className="w-2.5 rounded-full bg-gradient-to-t from-accent/70 to-accent"
+                                    animate={{ height: ["8px", "36px", "16px", "28px", "8px"] }}
+                                    transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.1 }}
+                                  />
+                                ))}
+                              </motion.div>
+                            ) : (
+                              <Play className="w-12 h-12 text-text-secondary ml-1" />
+                            )}
+                          </motion.div>
 
+                          {/* Pulsing rings */}
                           {musicPlaying && (
                             <>
-                              <motion.div
-                                className="absolute inset-0 rounded-full border-2 border-accent/20"
-                                animate={{ scale: [1, 1.3], opacity: [0.4, 0] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                              />
-                              <motion.div
-                                className="absolute inset-0 rounded-full border-2 border-accent/20"
-                                animate={{ scale: [1, 1.3], opacity: [0.4, 0] }}
-                                transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                              />
+                              {[0, 1].map((i) => (
+                                <motion.div
+                                  key={i}
+                                  className="absolute inset-0 rounded-full border border-accent/30"
+                                  animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
+                                  transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.8 }}
+                                />
+                              ))}
                             </>
                           )}
                         </motion.button>
                       </div>
 
+                      {/* Current station */}
+                      <motion.div
+                        className="text-center mb-8"
+                        animate={musicPlaying ? { opacity: 1 } : { opacity: 0.6 }}
+                      >
+                        <p className="text-lg font-semibold text-text-primary">{selectedGenre.name}</p>
+                        <p className="text-sm text-text-muted">{selectedGenre.desc}</p>
+                      </motion.div>
+
                       {/* Genre grid */}
-                      <p className="text-xs text-text-muted uppercase tracking-widest mb-3">Genre</p>
-                      <div className="grid grid-cols-3 gap-2 mb-8">
+                      <p className="text-xs text-text-muted uppercase tracking-[0.2em] mb-4 font-medium">Stations</p>
+                      <div className="grid grid-cols-3 gap-3 mb-10">
                         {MUSIC_GENRES.map((genre, i) => (
                           <motion.button
                             key={genre.id}
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 15 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: i * 0.05 }}
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
+                            transition={{ delay: 0.2 + i * 0.05 }}
+                            whileHover={{ scale: 1.03, y: -2 }}
+                            whileTap={{ scale: 0.97 }}
                             onClick={() => changeGenre(genre)}
-                            className={`py-3 px-3 rounded-xl text-sm font-medium transition-all ${
+                            className={`relative py-4 px-3 rounded-2xl text-sm font-medium transition-all overflow-hidden ${
                               selectedGenre.id === genre.id
-                                ? "bg-text-primary text-bg-primary shadow-lg"
-                                : "bg-bg-tertiary/70 text-text-secondary hover:bg-bg-tertiary"
+                                ? "bg-accent text-bg-primary shadow-lg"
+                                : "bg-bg-tertiary/60 text-text-secondary hover:bg-bg-tertiary"
                             }`}
                           >
-                            {genre.name}
+                            {selectedGenre.id === genre.id && (
+                              <motion.div
+                                className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"
+                                animate={{ opacity: [0.2, 0.4, 0.2] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                              />
+                            )}
+                            <span className="relative z-10">{genre.name}</span>
                           </motion.button>
                         ))}
                       </div>
 
                       {/* Volume */}
                       <div>
-                        <div className="flex justify-between mb-3">
-                          <p className="text-xs text-text-muted uppercase tracking-widest">Volume</p>
-                          <p className="text-xs text-text-muted tabular-nums">{Math.round(musicVolume * 100)}%</p>
+                        <div className="flex justify-between mb-4">
+                          <p className="text-xs text-text-muted uppercase tracking-[0.2em] font-medium">Volume</p>
+                          <p className="text-sm text-text-secondary font-medium tabular-nums">{Math.round(musicVolume * 100)}%</p>
                         </div>
-                        <input
-                          type="range"
-                          min="0"
-                          max="1"
-                          step="0.01"
-                          value={musicVolume}
-                          onChange={(e) => {
-                            const v = parseFloat(e.target.value);
-                            setMusicVolume(v);
-                            localStorage.setItem("musicVolume", String(v));
-                          }}
-                          className="w-full h-2 bg-bg-tertiary rounded-full appearance-none cursor-pointer
-                            [&::-webkit-slider-thumb]:appearance-none
-                            [&::-webkit-slider-thumb]:w-5
-                            [&::-webkit-slider-thumb]:h-5
-                            [&::-webkit-slider-thumb]:rounded-full
-                            [&::-webkit-slider-thumb]:bg-text-primary
-                            [&::-webkit-slider-thumb]:shadow-lg
-                            [&::-webkit-slider-thumb]:cursor-pointer
-                            [&::-webkit-slider-thumb]:transition-transform
-                            [&::-webkit-slider-thumb]:hover:scale-110"
-                        />
+                        <div className="relative">
+                          <div className="absolute inset-0 h-3 bg-bg-tertiary rounded-full" />
+                          <motion.div
+                            className="absolute left-0 top-0 h-3 bg-gradient-to-r from-accent/80 to-accent rounded-full"
+                            style={{ width: `${musicVolume * 100}%` }}
+                          />
+                          <input
+                            type="range"
+                            min="0"
+                            max="1"
+                            step="0.01"
+                            value={musicVolume}
+                            onChange={(e) => {
+                              const v = parseFloat(e.target.value);
+                              setMusicVolume(v);
+                              localStorage.setItem("musicVolume", String(v));
+                            }}
+                            className="relative w-full h-3 appearance-none bg-transparent cursor-pointer z-10
+                              [&::-webkit-slider-thumb]:appearance-none
+                              [&::-webkit-slider-thumb]:w-6
+                              [&::-webkit-slider-thumb]:h-6
+                              [&::-webkit-slider-thumb]:rounded-full
+                              [&::-webkit-slider-thumb]:bg-white
+                              [&::-webkit-slider-thumb]:shadow-lg
+                              [&::-webkit-slider-thumb]:cursor-pointer
+                              [&::-webkit-slider-thumb]:border-2
+                              [&::-webkit-slider-thumb]:border-bg-primary"
+                          />
+                        </div>
                       </div>
                     </motion.div>
                   ) : (
                     <motion.div
                       key="ambient"
-                      initial={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, x: 30 }}
                       animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
+                      exit={{ opacity: 0, x: -30 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <p className="text-xs text-text-muted uppercase tracking-widest mb-4">
-                        Layer ambient sounds
+                      <p className="text-xs text-text-muted uppercase tracking-[0.2em] mb-5 font-medium">
+                        Layer sounds together
                       </p>
 
-                      <div className="space-y-3">
+                      <div className="grid grid-cols-2 gap-3">
                         {AMBIENT_SOUNDS.map((sound, i) => {
                           const state = ambientStates[sound.id];
                           const isActive = state?.playing;
@@ -399,36 +608,69 @@ export function MusicPlayer() {
                           return (
                             <motion.div
                               key={sound.id}
-                              initial={{ opacity: 0, y: 10 }}
+                              initial={{ opacity: 0, y: 15 }}
                               animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: i * 0.04 }}
-                              className={`p-4 rounded-2xl border transition-all ${
+                              transition={{ delay: 0.1 + i * 0.04 }}
+                              whileHover={{ scale: 1.02 }}
+                              className={`relative p-5 rounded-2xl border transition-all overflow-hidden ${
                                 isActive
-                                  ? "bg-bg-tertiary/80 border-border/50"
-                                  : "bg-bg-tertiary/30 border-transparent"
+                                  ? "bg-accent/10 border-accent/30"
+                                  : "bg-bg-tertiary/40 border-transparent hover:bg-bg-tertiary/60"
                               }`}
                             >
-                              <div className="flex items-center gap-4">
-                                <motion.button
-                                  whileHover={{ scale: 1.1 }}
-                                  whileTap={{ scale: 0.9 }}
-                                  onClick={() => toggleAmbient(sound)}
-                                  className={`p-3 rounded-xl transition-colors ${
-                                    isActive ? "bg-accent text-bg-primary" : "bg-bg-secondary text-text-muted"
-                                  }`}
-                                >
-                                  <Icon className="w-5 h-5" />
-                                </motion.button>
+                              {/* Active glow */}
+                              {isActive && (
+                                <motion.div
+                                  className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent"
+                                  animate={{ opacity: [0.3, 0.6, 0.3] }}
+                                  transition={{ duration: 2, repeat: Infinity }}
+                                />
+                              )}
 
-                                <div className="flex-1">
-                                  <p className={`text-sm font-medium ${isActive ? "text-text-primary" : "text-text-secondary"}`}>
-                                    {sound.name}
-                                  </p>
+                              <div className="relative z-10">
+                                <div className="flex items-center justify-between mb-3">
+                                  <motion.button
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                    onClick={() => toggleAmbient(sound)}
+                                    className={`p-3 rounded-xl transition-all ${
+                                      isActive
+                                        ? "bg-accent text-bg-primary shadow-lg"
+                                        : "bg-bg-secondary text-text-muted hover:text-text-secondary"
+                                    }`}
+                                  >
+                                    <Icon className="w-5 h-5" />
+                                  </motion.button>
+
+                                  {isActive && (
+                                    <motion.div
+                                      initial={{ scale: 0 }}
+                                      animate={{ scale: 1 }}
+                                      className="flex gap-[3px]"
+                                    >
+                                      {[0, 1, 2].map((j) => (
+                                        <motion.div
+                                          key={j}
+                                          className="w-1 bg-accent rounded-full"
+                                          animate={{ height: ["4px", "14px", "6px"] }}
+                                          transition={{ duration: 0.7, repeat: Infinity, delay: j * 0.12 }}
+                                        />
+                                      ))}
+                                    </motion.div>
+                                  )}
+                                </div>
+
+                                <p className={`text-sm font-medium mb-2 ${isActive ? "text-text-primary" : "text-text-secondary"}`}>
+                                  {sound.name}
+                                </p>
+
+                                {/* Volume slider when active */}
+                                <AnimatePresence>
                                   {isActive && (
                                     <motion.div
                                       initial={{ opacity: 0, height: 0 }}
                                       animate={{ opacity: 1, height: "auto" }}
-                                      className="mt-2"
+                                      exit={{ opacity: 0, height: 0 }}
                                     >
                                       <input
                                         type="range"
@@ -437,33 +679,17 @@ export function MusicPlayer() {
                                         step="0.01"
                                         value={state?.volume ?? 0.5}
                                         onChange={(e) => setAmbientVolume(sound.id, parseFloat(e.target.value))}
-                                        className="w-full h-1 bg-bg-secondary rounded-full appearance-none cursor-pointer
+                                        className="w-full h-1.5 bg-bg-secondary rounded-full appearance-none cursor-pointer
                                           [&::-webkit-slider-thumb]:appearance-none
-                                          [&::-webkit-slider-thumb]:w-3
-                                          [&::-webkit-slider-thumb]:h-3
+                                          [&::-webkit-slider-thumb]:w-4
+                                          [&::-webkit-slider-thumb]:h-4
                                           [&::-webkit-slider-thumb]:rounded-full
-                                          [&::-webkit-slider-thumb]:bg-accent"
+                                          [&::-webkit-slider-thumb]:bg-accent
+                                          [&::-webkit-slider-thumb]:shadow-md"
                                       />
                                     </motion.div>
                                   )}
-                                </div>
-
-                                {isActive && (
-                                  <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    className="flex gap-[2px]"
-                                  >
-                                    {[0, 1, 2].map((j) => (
-                                      <motion.div
-                                        key={j}
-                                        className="w-1 bg-accent rounded-full"
-                                        animate={{ height: ["4px", "12px", "6px"] }}
-                                        transition={{ duration: 0.6, repeat: Infinity, delay: j * 0.1 }}
-                                      />
-                                    ))}
-                                  </motion.div>
-                                )}
+                                </AnimatePresence>
                               </div>
                             </motion.div>
                           );

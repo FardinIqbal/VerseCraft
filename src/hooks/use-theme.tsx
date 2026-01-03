@@ -8,45 +8,74 @@ import {
   type ReactNode,
 } from "react";
 
-type Theme = "light" | "dark";
+type Theme = "dark" | "light" | "sepia" | "midnight" | "forest";
+type FontSize = "small" | "medium" | "large";
+type FontStyle = "serif" | "sans";
 
-interface ThemeContextType {
+interface ThemeSettings {
   theme: Theme;
-  toggleTheme: () => void;
-  setTheme: (theme: Theme) => void;
+  fontSize: FontSize;
+  fontStyle: FontStyle;
+  lineHeight: number;
 }
+
+interface ThemeContextType extends ThemeSettings {
+  setTheme: (theme: Theme) => void;
+  setFontSize: (size: FontSize) => void;
+  setFontStyle: (style: FontStyle) => void;
+  setLineHeight: (height: number) => void;
+}
+
+const defaultSettings: ThemeSettings = {
+  theme: "dark",
+  fontSize: "medium",
+  fontStyle: "serif",
+  lineHeight: 1.8,
+};
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("dark");
+  const [settings, setSettings] = useState<ThemeSettings>(defaultSettings);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const stored = localStorage.getItem("theme") as Theme | null;
-    const systemPreference = window.matchMedia("(prefers-color-scheme: light)")
-      .matches
-      ? "light"
-      : "dark";
-    const initialTheme = stored || systemPreference;
-    setThemeState(initialTheme);
-    document.documentElement.setAttribute("data-theme", initialTheme);
+    const stored = localStorage.getItem("themeSettings");
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        setSettings({ ...defaultSettings, ...parsed });
+      } catch {
+        // Use defaults
+      }
+    }
   }, []);
 
   useEffect(() => {
     if (mounted) {
-      document.documentElement.setAttribute("data-theme", theme);
-      localStorage.setItem("theme", theme);
+      document.documentElement.setAttribute("data-theme", settings.theme);
+      document.documentElement.setAttribute("data-font-size", settings.fontSize);
+      document.documentElement.setAttribute("data-font-style", settings.fontStyle);
+      document.documentElement.style.setProperty("--line-height-poem", String(settings.lineHeight));
+      localStorage.setItem("themeSettings", JSON.stringify(settings));
     }
-  }, [theme, mounted]);
+  }, [settings, mounted]);
 
-  const toggleTheme = () => {
-    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+  const setTheme = (theme: Theme) => {
+    setSettings((prev) => ({ ...prev, theme }));
   };
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
+  const setFontSize = (fontSize: FontSize) => {
+    setSettings((prev) => ({ ...prev, fontSize }));
+  };
+
+  const setFontStyle = (fontStyle: FontStyle) => {
+    setSettings((prev) => ({ ...prev, fontStyle }));
+  };
+
+  const setLineHeight = (lineHeight: number) => {
+    setSettings((prev) => ({ ...prev, lineHeight }));
   };
 
   if (!mounted) {
@@ -54,7 +83,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+    <ThemeContext.Provider
+      value={{
+        ...settings,
+        setTheme,
+        setFontSize,
+        setFontStyle,
+        setLineHeight,
+      }}
+    >
       {children}
     </ThemeContext.Provider>
   );

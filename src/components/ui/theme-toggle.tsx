@@ -5,7 +5,11 @@ import { Sun, Moon } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   return (
     <motion.button
