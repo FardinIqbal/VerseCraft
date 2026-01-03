@@ -228,13 +228,13 @@ export function PoetryCard({
               {/* Attribution with fade */}
               <motion.div
                 variants={lineVariants}
-                className="mt-12 pt-8 border-t border-border/30"
+                className="mt-12 pt-8 border-t border-border/50"
               >
                 {post.user ? (
                   <Link
                     href={`/${post.user.username}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="text-text-muted text-xs font-light tracking-[0.3em] uppercase hover:text-text-secondary transition-colors duration-300"
+                    className="text-text-secondary text-sm font-medium tracking-[0.2em] uppercase hover:text-text-primary transition-colors duration-300"
                   >
                     {post.user.displayName || `@${post.user.username}`}
                   </Link>
@@ -242,17 +242,17 @@ export function PoetryCard({
                   <Link
                     href={`/author/${encodeURIComponent(post.author.toLowerCase().replace(/\s+/g, "-"))}`}
                     onClick={(e) => e.stopPropagation()}
-                    className="text-text-muted text-xs font-light tracking-[0.3em] uppercase hover:text-text-secondary transition-colors duration-300"
+                    className="text-text-secondary text-sm font-medium tracking-[0.2em] uppercase hover:text-text-primary transition-colors duration-300"
                   >
                     {post.author}
                   </Link>
                 ) : (
-                  <span className="text-text-muted text-xs font-light tracking-[0.3em] uppercase">
+                  <span className="text-text-tertiary text-sm font-medium tracking-[0.2em] uppercase">
                     Unknown
                   </span>
                 )}
                 {post.source && (
-                  <p className="text-text-muted/60 text-xs italic mt-2 tracking-wide">
+                  <p className="text-text-tertiary text-sm italic mt-3 tracking-wide">
                     {post.source}
                   </p>
                 )}
