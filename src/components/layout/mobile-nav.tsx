@@ -3,11 +3,12 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Search, Compass, PlusSquare, User, LogIn, Settings, Feather, Palette, Music } from "lucide-react";
+import { Home, Search, Compass, PlusSquare, User, LogIn, Settings, Feather, Palette, Music, Play, Pause, Volume2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/use-auth";
 import { useTheme } from "@/hooks/use-theme";
+import { useMusic } from "@/hooks/use-music";
 import { Avatar } from "@/components/ui/avatar";
 
 const THEMES = [
@@ -21,6 +22,7 @@ const THEMES = [
 export function MobileNav() {
   const { user } = useAuth();
   const { theme, setTheme } = useTheme();
+  const { genres, selectedGenre, musicPlaying, musicVolume, setSelectedGenre, setMusicVolume, toggleMusic } = useMusic();
   const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const [desktopNavVisible, setDesktopNavVisible] = useState(false);
@@ -343,13 +345,73 @@ export function MobileNav() {
             onMouseEnter={handleDesktopNavMouseEnter}
             onMouseLeave={handleDesktopNavMouseLeave}
           >
-            <div className="h-full py-6 px-4 bg-bg-primary/95 backdrop-blur-xl border-r border-border/30">
+            <div className="h-full py-6 px-4 bg-bg-primary/95 backdrop-blur-xl border-r border-border/30 w-48">
               <p className="text-text-secondary text-xs font-medium mb-4 tracking-wide">MUSIC</p>
-              <p className="text-text-tertiary text-xs">
-                Use the floating music button
-                <br />
-                to control audio playback
+
+              {/* Play/Pause button */}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={toggleMusic}
+                className={cn(
+                  "w-full flex items-center gap-3 px-3 py-3 rounded-xl mb-4 transition-colors",
+                  musicPlaying
+                    ? "bg-accent text-bg-primary"
+                    : "bg-bg-secondary text-text-secondary hover:text-text-primary"
+                )}
+              >
+                {musicPlaying ? (
+                  <>
+                    <Pause className="w-4 h-4" />
+                    <span className="text-sm font-medium">Playing</span>
+                  </>
+                ) : (
+                  <>
+                    <Play className="w-4 h-4" />
+                    <span className="text-sm font-medium">Play</span>
+                  </>
+                )}
+              </motion.button>
+
+              {/* Current station */}
+              <p className="text-text-muted text-[10px] uppercase tracking-wider mb-2">Station</p>
+              <div className="flex flex-col gap-1 mb-4">
+                {genres.map((genre) => (
+                  <button
+                    key={genre.id}
+                    onClick={() => setSelectedGenre(genre)}
+                    className={cn(
+                      "text-left px-2 py-1.5 rounded-lg text-xs transition-colors",
+                      selectedGenre.id === genre.id
+                        ? "bg-bg-secondary text-text-primary font-medium"
+                        : "text-text-tertiary hover:text-text-secondary"
+                    )}
+                  >
+                    {genre.name}
+                  </button>
+                ))}
+              </div>
+
+              {/* Volume */}
+              <p className="text-text-muted text-[10px] uppercase tracking-wider mb-2 flex items-center gap-1">
+                <Volume2 className="w-3 h-3" />
+                Volume
               </p>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={musicVolume}
+                onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
+                className="w-full h-1.5 bg-bg-tertiary rounded-full appearance-none cursor-pointer
+                  [&::-webkit-slider-thumb]:appearance-none
+                  [&::-webkit-slider-thumb]:w-3
+                  [&::-webkit-slider-thumb]:h-3
+                  [&::-webkit-slider-thumb]:rounded-full
+                  [&::-webkit-slider-thumb]:bg-accent
+                  [&::-webkit-slider-thumb]:cursor-pointer"
+              />
             </div>
           </motion.div>
         )}

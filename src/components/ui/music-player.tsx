@@ -14,70 +14,19 @@ import {
   Zap,
   Bird,
   Play,
-  Pause,
 } from "lucide-react";
+import { useMusic } from "@/hooks/use-music";
 
-// Reading-focused music stations (SomaFM verified streams)
-const MUSIC_GENRES = [
-  { id: "lofi", name: "Lofi", url: "https://ice1.somafm.com/fluid-128-mp3", desc: "Jazzy hip-hop beats" },
-  { id: "groovesalad", name: "Chill", url: "https://ice1.somafm.com/groovesalad-128-mp3", desc: "Downtempo grooves" },
-  { id: "dronezone", name: "Ambient", url: "https://ice1.somafm.com/dronezone-128-mp3", desc: "Atmospheric textures" },
-  { id: "deepspaceone", name: "Space", url: "https://ice1.somafm.com/deepspaceone-128-mp3", desc: "Deep space ambient" },
-  { id: "vaporwave", name: "Vapor", url: "https://ice1.somafm.com/vaporwaves-128-mp3", desc: "Vaporwave & synthwave" },
-  { id: "silent", name: "Silence", url: "", desc: "Ambient sounds only" },
-];
-
-// Reliable ambient sound sources (using Pixabay's CDN with verified working URLs)
+// Reliable ambient sound sources
 const AMBIENT_SOUNDS = [
-  {
-    id: "rain",
-    name: "Rain",
-    icon: CloudRain,
-    // Gentle rain loop
-    url: "https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3"
-  },
-  {
-    id: "waves",
-    name: "Ocean",
-    icon: Waves,
-    url: "https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3"
-  },
-  {
-    id: "fire",
-    name: "Fire",
-    icon: Flame,
-    url: "https://assets.mixkit.co/active_storage/sfx/2574/2574-preview.mp3"
-  },
-  {
-    id: "wind",
-    name: "Wind",
-    icon: Wind,
-    url: "https://assets.mixkit.co/active_storage/sfx/2463/2463-preview.mp3"
-  },
-  {
-    id: "forest",
-    name: "Forest",
-    icon: TreePine,
-    url: "https://assets.mixkit.co/active_storage/sfx/2430/2430-preview.mp3"
-  },
-  {
-    id: "coffee",
-    name: "Cafe",
-    icon: Coffee,
-    url: "https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3"
-  },
-  {
-    id: "thunder",
-    name: "Storm",
-    icon: Zap,
-    url: "https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3"
-  },
-  {
-    id: "birds",
-    name: "Birds",
-    icon: Bird,
-    url: "https://assets.mixkit.co/active_storage/sfx/2431/2431-preview.mp3"
-  },
+  { id: "rain", name: "Rain", icon: CloudRain, url: "https://assets.mixkit.co/active_storage/sfx/212/212-preview.mp3" },
+  { id: "waves", name: "Ocean", icon: Waves, url: "https://assets.mixkit.co/active_storage/sfx/2432/2432-preview.mp3" },
+  { id: "fire", name: "Fire", icon: Flame, url: "https://assets.mixkit.co/active_storage/sfx/2574/2574-preview.mp3" },
+  { id: "wind", name: "Wind", icon: Wind, url: "https://assets.mixkit.co/active_storage/sfx/2463/2463-preview.mp3" },
+  { id: "forest", name: "Forest", icon: TreePine, url: "https://assets.mixkit.co/active_storage/sfx/2430/2430-preview.mp3" },
+  { id: "coffee", name: "Cafe", icon: Coffee, url: "https://assets.mixkit.co/active_storage/sfx/2515/2515-preview.mp3" },
+  { id: "thunder", name: "Storm", icon: Zap, url: "https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" },
+  { id: "birds", name: "Birds", icon: Bird, url: "https://assets.mixkit.co/active_storage/sfx/2431/2431-preview.mp3" },
 ];
 
 interface AmbientState {
@@ -86,22 +35,27 @@ interface AmbientState {
 }
 
 export function MusicPlayer() {
+  const {
+    genres,
+    selectedGenre,
+    musicPlaying,
+    musicVolume,
+    isLoading,
+    setSelectedGenre,
+    setMusicVolume,
+    toggleMusic,
+  } = useMusic();
+
   const [isExpanded, setIsExpanded] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [musicPlaying, setMusicPlaying] = useState(false);
-  const [musicVolume, setMusicVolume] = useState(0.4);
-  const [selectedGenre, setSelectedGenre] = useState(MUSIC_GENRES[0]);
   const [ambientStates, setAmbientStates] = useState<Record<string, AmbientState>>({});
-  const [hasInteracted, setHasInteracted] = useState(false);
   const [activeTab, setActiveTab] = useState<"music" | "ambient">("music");
-  const [isLoading, setIsLoading] = useState(false);
 
-  const musicRef = useRef<HTMLAudioElement | null>(null);
   const ambientRefs = useRef<Record<string, HTMLAudioElement>>({});
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastScrollY = useRef(0);
 
-  // Auto-hide button - same pattern as mobile nav (show on any tap, scroll up, or swipe from edge)
+  // Auto-hide button
   useEffect(() => {
     if (isExpanded) {
       setIsVisible(true);
@@ -116,10 +70,7 @@ export function MusicPlayer() {
       }, 2000);
     };
 
-    // Show on any click
     const handleClick = () => showButton();
-
-    // Show on scroll up
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
       if (currentScrollY < lastScrollY.current) {
@@ -128,21 +79,18 @@ export function MusicPlayer() {
       lastScrollY.current = currentScrollY;
     };
 
-    // Show on swipe from edges
     let touchStartY = 0;
     const handleTouchStart = (e: TouchEvent) => {
       touchStartY = e.touches[0].clientY;
     };
     const handleTouchEnd = (e: TouchEvent) => {
       const touchEndY = e.changedTouches[0].clientY;
-      // Swipe down from top OR swipe up from bottom
       if ((touchStartY < 100 && touchEndY > touchStartY + 30) ||
           (touchStartY > window.innerHeight - 100 && touchEndY < touchStartY - 30)) {
         showButton();
       }
     };
 
-    // Initial show then hide
     showButton();
 
     document.addEventListener("click", handleClick);
@@ -158,88 +106,6 @@ export function MusicPlayer() {
       document.removeEventListener("touchend", handleTouchEnd);
     };
   }, [isExpanded]);
-
-  // Auto-play on first interaction
-  useEffect(() => {
-    const handleFirstInteraction = () => {
-      if (!hasInteracted) {
-        setHasInteracted(true);
-        setMusicPlaying(true);
-      }
-    };
-    document.addEventListener("click", handleFirstInteraction, { once: true });
-    document.addEventListener("touchstart", handleFirstInteraction, { once: true });
-    return () => {
-      document.removeEventListener("click", handleFirstInteraction);
-      document.removeEventListener("touchstart", handleFirstInteraction);
-    };
-  }, [hasInteracted]);
-
-  // Load preferences
-  useEffect(() => {
-    const savedVolume = localStorage.getItem("musicVolume");
-    const savedGenre = localStorage.getItem("musicGenre");
-    if (savedVolume) setMusicVolume(parseFloat(savedVolume));
-    if (savedGenre) {
-      const found = MUSIC_GENRES.find((g) => g.id === savedGenre);
-      if (found) setSelectedGenre(found);
-    }
-  }, []);
-
-  // Music control
-  useEffect(() => {
-    // Don't play if Silence is selected (empty url)
-    if (!selectedGenre.url) {
-      if (musicRef.current) {
-        musicRef.current.pause();
-      }
-      return;
-    }
-
-    if (!musicRef.current) {
-      musicRef.current = new Audio(selectedGenre.url);
-      musicRef.current.crossOrigin = "anonymous";
-    }
-    musicRef.current.volume = musicVolume;
-
-    if (musicPlaying && hasInteracted) {
-      setIsLoading(true);
-      musicRef.current.play()
-        .then(() => setIsLoading(false))
-        .catch(() => {
-          setIsLoading(false);
-          setMusicPlaying(false);
-        });
-    } else if (musicRef.current) {
-      musicRef.current.pause();
-    }
-  }, [musicPlaying, hasInteracted, musicVolume, selectedGenre.url]);
-
-  const changeGenre = useCallback((genre: typeof MUSIC_GENRES[0]) => {
-    if (musicRef.current) {
-      musicRef.current.pause();
-    }
-
-    // Handle "Silence" option (no music, just ambient)
-    if (!genre.url) {
-      setMusicPlaying(false);
-      setSelectedGenre(genre);
-      localStorage.setItem("musicGenre", genre.id);
-      return;
-    }
-
-    if (musicRef.current) {
-      musicRef.current.src = genre.url;
-      if (musicPlaying) {
-        setIsLoading(true);
-        musicRef.current.play()
-          .then(() => setIsLoading(false))
-          .catch(() => setIsLoading(false));
-      }
-    }
-    setSelectedGenre(genre);
-    localStorage.setItem("musicGenre", genre.id);
-  }, [musicPlaying]);
 
   const toggleAmbient = useCallback((sound: typeof AMBIENT_SOUNDS[0]) => {
     const current = ambientStates[sound.id];
@@ -292,67 +158,65 @@ export function MusicPlayer() {
             }}
             className="fixed top-6 left-4 z-40 group"
           >
-        <motion.div
-          className="p-3.5 rounded-2xl bg-bg-primary/70 backdrop-blur-2xl border border-border/40 shadow-2xl relative overflow-hidden"
-          animate={isAnythingPlaying ? {
-            boxShadow: ["0 0 20px rgba(255,255,255,0.05)", "0 0 30px rgba(255,255,255,0.1)", "0 0 20px rgba(255,255,255,0.05)"]
-          } : {}}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          {/* Animated background gradient when playing */}
-          {isAnythingPlaying && (
             <motion.div
-              className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-accent/5"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            />
-          )}
+              className="p-3.5 rounded-2xl bg-bg-primary/70 backdrop-blur-2xl border border-border/40 shadow-2xl relative overflow-hidden"
+              animate={isAnythingPlaying ? {
+                boxShadow: ["0 0 20px rgba(255,255,255,0.05)", "0 0 30px rgba(255,255,255,0.1)", "0 0 20px rgba(255,255,255,0.05)"]
+              } : {}}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {isAnythingPlaying && (
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-br from-accent/10 via-transparent to-accent/5"
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+              )}
 
-          <div className="relative">
-            {isAnythingPlaying ? (
-              <motion.div className="flex items-end justify-center gap-[3px] w-5 h-5">
-                {[0, 1, 2].map((i) => (
+              <div className="relative">
+                {isAnythingPlaying ? (
+                  <motion.div className="flex items-end justify-center gap-[3px] w-5 h-5">
+                    {[0, 1, 2].map((i) => (
+                      <motion.div
+                        key={i}
+                        className="w-[4px] rounded-full bg-gradient-to-t from-accent/60 to-accent"
+                        animate={{
+                          height: ["4px", "18px", "8px", "14px", "4px"],
+                          opacity: [0.6, 1, 0.8, 1, 0.6]
+                        }}
+                        transition={{
+                          duration: 1.2,
+                          repeat: Infinity,
+                          delay: i * 0.15,
+                          ease: "easeInOut",
+                        }}
+                      />
+                    ))}
+                  </motion.div>
+                ) : (
                   <motion.div
-                    key={i}
-                    className="w-[4px] rounded-full bg-gradient-to-t from-accent/60 to-accent"
-                    animate={{
-                      height: ["4px", "18px", "8px", "14px", "4px"],
-                      opacity: [0.6, 1, 0.8, 1, 0.6]
-                    }}
-                    transition={{
-                      duration: 1.2,
-                      repeat: Infinity,
-                      delay: i * 0.15,
-                      ease: "easeInOut",
-                    }}
-                  />
-                ))}
-              </motion.div>
-            ) : (
-              <motion.div
-                animate={{ rotate: [0, 5, -5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              >
-                <Music className="w-5 h-5 text-text-muted group-hover:text-text-secondary transition-colors" />
-              </motion.div>
-            )}
-          </div>
+                    animate={{ rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <Music className="w-5 h-5 text-text-muted group-hover:text-text-secondary transition-colors" />
+                  </motion.div>
+                )}
+              </div>
 
-          {/* Ambient count badge */}
-          <AnimatePresence>
-            {activeAmbientCount > 0 && (
-              <motion.div
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-                className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-accent text-[10px] font-bold flex items-center justify-center text-bg-primary shadow-lg"
-              >
-                {activeAmbientCount}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      </motion.button>
+              <AnimatePresence>
+                {activeAmbientCount > 0 && (
+                  <motion.div
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0, opacity: 0 }}
+                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-accent text-[10px] font-bold flex items-center justify-center text-bg-primary shadow-lg"
+                  >
+                    {activeAmbientCount}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </motion.button>
         )}
       </AnimatePresence>
 
@@ -384,58 +248,31 @@ export function MusicPlayer() {
               style={{ touchAction: "none" }}
               className="fixed bottom-0 left-0 right-0 z-50 bg-gradient-to-b from-bg-secondary to-bg-primary border-t border-border/30 rounded-t-[2.5rem] max-h-[88vh] overflow-hidden"
             >
-              {/* Drag handle - swipe down to close */}
-              <motion.div
-                className="flex justify-center pt-4 pb-2 cursor-grab active:cursor-grabbing"
-                whileHover={{ scale: 1.1 }}
-              >
+              <motion.div className="flex justify-center pt-4 pb-2 cursor-grab active:cursor-grabbing" whileHover={{ scale: 1.1 }}>
                 <div className="w-14 h-1.5 rounded-full bg-border/50" />
               </motion.div>
 
               <div className="px-6 pb-12 pt-2 overflow-y-auto max-h-[calc(88vh-24px)]">
-                {/* Header */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="flex items-center justify-between mb-8"
-                >
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex items-center justify-between mb-8">
                   <div>
                     <h3 className="text-2xl font-bold text-text-primary tracking-tight">Soundscape</h3>
                     <p className="text-sm text-text-muted mt-1">Create your perfect atmosphere</p>
                   </div>
-                  <motion.button
-                    whileHover={{ scale: 1.1, rotate: 90 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setIsExpanded(false)}
-                    className="p-3 rounded-2xl bg-bg-tertiary/50 hover:bg-bg-tertiary transition-colors"
-                  >
+                  <motion.button whileHover={{ scale: 1.1, rotate: 90 }} whileTap={{ scale: 0.9 }} onClick={() => setIsExpanded(false)} className="p-3 rounded-2xl bg-bg-tertiary/50 hover:bg-bg-tertiary transition-colors">
                     <X className="w-5 h-5 text-text-secondary" />
                   </motion.button>
                 </motion.div>
 
-                {/* Tabs */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.15 }}
-                  className="flex p-1.5 bg-bg-tertiary/50 rounded-2xl mb-8"
-                >
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="flex p-1.5 bg-bg-tertiary/50 rounded-2xl mb-8">
                   {(["music", "ambient"] as const).map((tab) => (
                     <motion.button
                       key={tab}
                       onClick={() => setActiveTab(tab)}
-                      className={`relative flex-1 py-3 px-6 rounded-xl text-sm font-semibold transition-colors ${
-                        activeTab === tab ? "text-text-primary" : "text-text-muted"
-                      }`}
+                      className={`relative flex-1 py-3 px-6 rounded-xl text-sm font-semibold transition-colors ${activeTab === tab ? "text-text-primary" : "text-text-muted"}`}
                       whileTap={{ scale: 0.98 }}
                     >
                       {activeTab === tab && (
-                        <motion.div
-                          layoutId="activeTab"
-                          className="absolute inset-0 bg-bg-primary rounded-xl shadow-lg"
-                          transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
-                        />
+                        <motion.div layoutId="activeTab" className="absolute inset-0 bg-bg-primary rounded-xl shadow-lg" transition={{ type: "spring", bounce: 0.2, duration: 0.5 }} />
                       )}
                       <span className="relative z-10 capitalize">{tab}</span>
                     </motion.button>
@@ -444,50 +281,20 @@ export function MusicPlayer() {
 
                 <AnimatePresence mode="wait">
                   {activeTab === "music" ? (
-                    <motion.div
-                      key="music"
-                      initial={{ opacity: 0, x: -30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: 30 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {/* Play button */}
+                    <motion.div key="music" initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 30 }} transition={{ duration: 0.2 }}>
                       <div className="flex justify-center mb-10">
-                        <motion.button
-                          whileHover={{ scale: 1.05 }}
-                          whileTap={{ scale: 0.95 }}
-                          onClick={() => {
-                            setHasInteracted(true);
-                            setMusicPlaying(!musicPlaying);
-                          }}
-                          className="relative"
-                        >
+                        <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={toggleMusic} className="relative">
                           <motion.div
                             className="w-28 h-28 rounded-full bg-gradient-to-br from-bg-tertiary via-bg-secondary to-bg-tertiary border border-border/40 flex items-center justify-center shadow-2xl"
-                            animate={musicPlaying ? {
-                              boxShadow: [
-                                "0 0 30px rgba(255,255,255,0.05)",
-                                "0 0 50px rgba(255,255,255,0.1)",
-                                "0 0 30px rgba(255,255,255,0.05)"
-                              ]
-                            } : {}}
+                            animate={musicPlaying ? { boxShadow: ["0 0 30px rgba(255,255,255,0.05)", "0 0 50px rgba(255,255,255,0.1)", "0 0 30px rgba(255,255,255,0.05)"] } : {}}
                             transition={{ duration: 2, repeat: Infinity }}
                           >
                             {isLoading ? (
-                              <motion.div
-                                className="w-8 h-8 border-2 border-text-muted border-t-accent rounded-full"
-                                animate={{ rotate: 360 }}
-                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                              />
+                              <motion.div className="w-8 h-8 border-2 border-text-muted border-t-accent rounded-full" animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} />
                             ) : musicPlaying ? (
                               <motion.div className="flex items-end gap-1.5">
                                 {[0, 1, 2, 3, 4].map((i) => (
-                                  <motion.div
-                                    key={i}
-                                    className="w-2.5 rounded-full bg-gradient-to-t from-accent/70 to-accent"
-                                    animate={{ height: ["8px", "36px", "16px", "28px", "8px"] }}
-                                    transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.1 }}
-                                  />
+                                  <motion.div key={i} className="w-2.5 rounded-full bg-gradient-to-t from-accent/70 to-accent" animate={{ height: ["8px", "36px", "16px", "28px", "8px"] }} transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.1 }} />
                                 ))}
                               </motion.div>
                             ) : (
@@ -495,35 +302,24 @@ export function MusicPlayer() {
                             )}
                           </motion.div>
 
-                          {/* Pulsing rings */}
                           {musicPlaying && (
                             <>
                               {[0, 1].map((i) => (
-                                <motion.div
-                                  key={i}
-                                  className="absolute inset-0 rounded-full border border-accent/30"
-                                  animate={{ scale: [1, 1.4], opacity: [0.5, 0] }}
-                                  transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.8 }}
-                                />
+                                <motion.div key={i} className="absolute inset-0 rounded-full border border-accent/30" animate={{ scale: [1, 1.4], opacity: [0.5, 0] }} transition={{ duration: 2.5, repeat: Infinity, delay: i * 0.8 }} />
                               ))}
                             </>
                           )}
                         </motion.button>
                       </div>
 
-                      {/* Current station */}
-                      <motion.div
-                        className="text-center mb-8"
-                        animate={musicPlaying ? { opacity: 1 } : { opacity: 0.6 }}
-                      >
+                      <motion.div className="text-center mb-8" animate={musicPlaying ? { opacity: 1 } : { opacity: 0.6 }}>
                         <p className="text-lg font-semibold text-text-primary">{selectedGenre.name}</p>
                         <p className="text-sm text-text-muted">{selectedGenre.desc}</p>
                       </motion.div>
 
-                      {/* Genre grid */}
                       <p className="text-xs text-text-muted uppercase tracking-[0.2em] mb-4 font-medium">Stations</p>
                       <div className="grid grid-cols-3 gap-3 mb-10">
-                        {MUSIC_GENRES.map((genre, i) => (
+                        {genres.map((genre, i) => (
                           <motion.button
                             key={genre.id}
                             initial={{ opacity: 0, y: 15 }}
@@ -531,26 +327,17 @@ export function MusicPlayer() {
                             transition={{ delay: 0.2 + i * 0.05 }}
                             whileHover={{ scale: 1.03, y: -2 }}
                             whileTap={{ scale: 0.97 }}
-                            onClick={() => changeGenre(genre)}
-                            className={`relative py-4 px-3 rounded-2xl text-sm font-medium transition-all overflow-hidden ${
-                              selectedGenre.id === genre.id
-                                ? "bg-accent text-bg-primary shadow-lg"
-                                : "bg-bg-tertiary/60 text-text-secondary hover:bg-bg-tertiary"
-                            }`}
+                            onClick={() => setSelectedGenre(genre)}
+                            className={`relative py-4 px-3 rounded-2xl text-sm font-medium transition-all overflow-hidden ${selectedGenre.id === genre.id ? "bg-accent text-bg-primary shadow-lg" : "bg-bg-tertiary/60 text-text-secondary hover:bg-bg-tertiary"}`}
                           >
                             {selectedGenre.id === genre.id && (
-                              <motion.div
-                                className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"
-                                animate={{ opacity: [0.2, 0.4, 0.2] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                              />
+                              <motion.div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" animate={{ opacity: [0.2, 0.4, 0.2] }} transition={{ duration: 2, repeat: Infinity }} />
                             )}
                             <span className="relative z-10">{genre.name}</span>
                           </motion.button>
                         ))}
                       </div>
 
-                      {/* Volume */}
                       <div>
                         <div className="flex justify-between mb-4">
                           <p className="text-xs text-text-muted uppercase tracking-[0.2em] font-medium">Volume</p>
@@ -558,46 +345,22 @@ export function MusicPlayer() {
                         </div>
                         <div className="relative">
                           <div className="absolute inset-0 h-3 bg-bg-tertiary rounded-full" />
-                          <motion.div
-                            className="absolute left-0 top-0 h-3 bg-gradient-to-r from-accent/80 to-accent rounded-full"
-                            style={{ width: `${musicVolume * 100}%` }}
-                          />
+                          <motion.div className="absolute left-0 top-0 h-3 bg-gradient-to-r from-accent/80 to-accent rounded-full" style={{ width: `${musicVolume * 100}%` }} />
                           <input
                             type="range"
                             min="0"
                             max="1"
                             step="0.01"
                             value={musicVolume}
-                            onChange={(e) => {
-                              const v = parseFloat(e.target.value);
-                              setMusicVolume(v);
-                              localStorage.setItem("musicVolume", String(v));
-                            }}
-                            className="relative w-full h-3 appearance-none bg-transparent cursor-pointer z-10
-                              [&::-webkit-slider-thumb]:appearance-none
-                              [&::-webkit-slider-thumb]:w-6
-                              [&::-webkit-slider-thumb]:h-6
-                              [&::-webkit-slider-thumb]:rounded-full
-                              [&::-webkit-slider-thumb]:bg-white
-                              [&::-webkit-slider-thumb]:shadow-lg
-                              [&::-webkit-slider-thumb]:cursor-pointer
-                              [&::-webkit-slider-thumb]:border-2
-                              [&::-webkit-slider-thumb]:border-bg-primary"
+                            onChange={(e) => setMusicVolume(parseFloat(e.target.value))}
+                            className="relative w-full h-3 appearance-none bg-transparent cursor-pointer z-10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-6 [&::-webkit-slider-thumb]:h-6 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-lg [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-bg-primary"
                           />
                         </div>
                       </div>
                     </motion.div>
                   ) : (
-                    <motion.div
-                      key="ambient"
-                      initial={{ opacity: 0, x: 30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -30 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <p className="text-xs text-text-muted uppercase tracking-[0.2em] mb-5 font-medium">
-                        Layer sounds together
-                      </p>
+                    <motion.div key="ambient" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.2 }}>
+                      <p className="text-xs text-text-muted uppercase tracking-[0.2em] mb-5 font-medium">Layer sounds together</p>
 
                       <div className="grid grid-cols-2 gap-3">
                         {AMBIENT_SOUNDS.map((sound, i) => {
@@ -612,19 +375,10 @@ export function MusicPlayer() {
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: 0.1 + i * 0.04 }}
                               whileHover={{ scale: 1.02 }}
-                              className={`relative p-5 rounded-2xl border transition-all overflow-hidden ${
-                                isActive
-                                  ? "bg-accent/10 border-accent/30"
-                                  : "bg-bg-tertiary/40 border-transparent hover:bg-bg-tertiary/60"
-                              }`}
+                              className={`relative p-5 rounded-2xl border transition-all overflow-hidden ${isActive ? "bg-accent/10 border-accent/30" : "bg-bg-tertiary/40 border-transparent hover:bg-bg-tertiary/60"}`}
                             >
-                              {/* Active glow */}
                               {isActive && (
-                                <motion.div
-                                  className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent"
-                                  animate={{ opacity: [0.3, 0.6, 0.3] }}
-                                  transition={{ duration: 2, repeat: Infinity }}
-                                />
+                                <motion.div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-transparent" animate={{ opacity: [0.3, 0.6, 0.3] }} transition={{ duration: 2, repeat: Infinity }} />
                               )}
 
                               <div className="relative z-10">
@@ -633,45 +387,25 @@ export function MusicPlayer() {
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
                                     onClick={() => toggleAmbient(sound)}
-                                    className={`p-3 rounded-xl transition-all ${
-                                      isActive
-                                        ? "bg-accent text-bg-primary shadow-lg"
-                                        : "bg-bg-secondary text-text-muted hover:text-text-secondary"
-                                    }`}
+                                    className={`p-3 rounded-xl transition-all ${isActive ? "bg-accent text-bg-primary shadow-lg" : "bg-bg-secondary text-text-muted hover:text-text-secondary"}`}
                                   >
                                     <Icon className="w-5 h-5" />
                                   </motion.button>
 
                                   {isActive && (
-                                    <motion.div
-                                      initial={{ scale: 0 }}
-                                      animate={{ scale: 1 }}
-                                      className="flex gap-[3px]"
-                                    >
+                                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="flex gap-[3px]">
                                       {[0, 1, 2].map((j) => (
-                                        <motion.div
-                                          key={j}
-                                          className="w-1 bg-accent rounded-full"
-                                          animate={{ height: ["4px", "14px", "6px"] }}
-                                          transition={{ duration: 0.7, repeat: Infinity, delay: j * 0.12 }}
-                                        />
+                                        <motion.div key={j} className="w-1 bg-accent rounded-full" animate={{ height: ["4px", "14px", "6px"] }} transition={{ duration: 0.7, repeat: Infinity, delay: j * 0.12 }} />
                                       ))}
                                     </motion.div>
                                   )}
                                 </div>
 
-                                <p className={`text-sm font-medium mb-2 ${isActive ? "text-text-primary" : "text-text-secondary"}`}>
-                                  {sound.name}
-                                </p>
+                                <p className={`text-sm font-medium mb-2 ${isActive ? "text-text-primary" : "text-text-secondary"}`}>{sound.name}</p>
 
-                                {/* Volume slider when active */}
                                 <AnimatePresence>
                                   {isActive && (
-                                    <motion.div
-                                      initial={{ opacity: 0, height: 0 }}
-                                      animate={{ opacity: 1, height: "auto" }}
-                                      exit={{ opacity: 0, height: 0 }}
-                                    >
+                                    <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}>
                                       <input
                                         type="range"
                                         min="0"
@@ -679,13 +413,7 @@ export function MusicPlayer() {
                                         step="0.01"
                                         value={state?.volume ?? 0.5}
                                         onChange={(e) => setAmbientVolume(sound.id, parseFloat(e.target.value))}
-                                        className="w-full h-1.5 bg-bg-secondary rounded-full appearance-none cursor-pointer
-                                          [&::-webkit-slider-thumb]:appearance-none
-                                          [&::-webkit-slider-thumb]:w-4
-                                          [&::-webkit-slider-thumb]:h-4
-                                          [&::-webkit-slider-thumb]:rounded-full
-                                          [&::-webkit-slider-thumb]:bg-accent
-                                          [&::-webkit-slider-thumb]:shadow-md"
+                                        className="w-full h-1.5 bg-bg-secondary rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-accent [&::-webkit-slider-thumb]:shadow-md"
                                       />
                                     </motion.div>
                                   )}
