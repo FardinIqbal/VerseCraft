@@ -278,16 +278,44 @@ export function HomePage() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Minimal progress bar at top */}
-          <div className="absolute top-0 left-0 right-0 h-[2px] bg-border/20 z-40">
+          {/* Elegant progress indicator */}
+          <div className="absolute top-0 left-0 right-0 h-[3px] z-40 overflow-hidden">
+            {/* Background track */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-border/10 to-transparent" />
+
+            {/* Progress fill with glow */}
             <motion.div
-              className="h-full bg-text-tertiary/50"
+              className="h-full relative"
               initial={false}
               animate={{
                 width: `${((currentIndex + 1) / posts.length) * 100}%`,
               }}
-              transition={{ duration: 0.2, ease: "easeOut" }}
-            />
+              transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+            >
+              {/* Main bar */}
+              <div className="absolute inset-0 bg-gradient-to-r from-text-tertiary/20 via-text-secondary/40 to-text-tertiary/20" />
+
+              {/* Glowing tip */}
+              <motion.div
+                className="absolute right-0 top-0 w-8 h-full"
+                style={{
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+                }}
+                animate={{ opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              />
+
+              {/* Shimmer effect */}
+              <motion.div
+                className="absolute inset-0"
+                style={{
+                  background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)",
+                  backgroundSize: "200% 100%",
+                }}
+                animate={{ backgroundPosition: ["200% 0", "-200% 0"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              />
+            </motion.div>
           </div>
         </div>
       </div>
