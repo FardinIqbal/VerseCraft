@@ -278,28 +278,16 @@ export function HomePage() {
             </motion.div>
           </AnimatePresence>
 
-          {/* Minimal progress dots */}
-          <div className="fixed bottom-20 left-1/2 -translate-x-1/2 flex items-center gap-1 z-40 pointer-events-none">
-            {Array.from({ length: Math.min(5, posts.length) }).map((_, i) => {
-              const startIdx = Math.max(
-                0,
-                Math.min(currentIndex - 2, posts.length - 5)
-              );
-              const dotIndex = startIdx + i;
-              if (dotIndex >= posts.length) return null;
-
-              return (
-                <div
-                  key={dotIndex}
-                  className={cn(
-                    "rounded-full transition-all duration-200",
-                    dotIndex === currentIndex
-                      ? "w-5 h-1 bg-text-primary"
-                      : "w-1 h-1 bg-text-tertiary/30"
-                  )}
-                />
-              );
-            })}
+          {/* Minimal progress bar at top */}
+          <div className="absolute top-0 left-0 right-0 h-[2px] bg-border/20 z-40">
+            <motion.div
+              className="h-full bg-text-tertiary/50"
+              initial={false}
+              animate={{
+                width: `${((currentIndex + 1) / posts.length) * 100}%`,
+              }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+            />
           </div>
         </div>
       </div>
