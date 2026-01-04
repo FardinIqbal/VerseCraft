@@ -17,7 +17,7 @@ interface FeedProps {
 
 export function Feed({ initialPosts = [] }: FeedProps) {
   const router = useRouter();
-  const { user, supabaseUser } = useAuth();
+  const { user, clerkUser } = useAuth();
   const [posts, setPosts] = useState<PostData[]>(initialPosts);
   const [cursor, setCursor] = useState<string | null>(null);
   const [hasMore, setHasMore] = useState(true);
@@ -33,7 +33,7 @@ export function Feed({ initialPosts = [] }: FeedProps) {
       try {
         const params = new URLSearchParams();
         if (cursorParam) params.set("cursor", cursorParam);
-        if (supabaseUser) params.set("userId", supabaseUser.id);
+        if (clerkUser) params.set("userId", clerkUser.id);
 
         const res = await fetch(`/api/feed?${params}`);
         const data = await res.json();
@@ -50,7 +50,7 @@ export function Feed({ initialPosts = [] }: FeedProps) {
         console.error("Error fetching posts:", error);
       }
     },
-    [supabaseUser]
+    [clerkUser]
   );
 
   useEffect(() => {
