@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,7 @@ const poetryStyles = [
 export default function OnboardingPage() {
   const router = useRouter();
   const { user: clerkUser, isLoaded, isSignedIn } = useUser();
+  const { user: dbUser, refreshUser } = useAuth();
   const [step, setStep] = useState(1);
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -57,10 +59,15 @@ export default function OnboardingPage() {
   };
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn) {
-      router.push("/login");
+    if (isLoaded) {
+      if (!isSignedIn) {
+        router.push("/login");
+      } else if (dbUser) {
+        // Already has database record, skip onboarding
+        router.push("/");
+      }
     }
-  }, [isLoaded, isSignedIn, router]);
+  }, [isLoaded, isSignedIn, dbUser, router]);
 
   useEffect(() => {
     const checkUsername = async () => {
@@ -128,6 +135,8 @@ export default function OnboardingPage() {
         throw new Error(data.error || "Failed to create profile");
       }
 
+      // Refresh user in auth context before redirecting
+      await refreshUser();
       router.push("/");
     } catch (err: unknown) {
       const message =
