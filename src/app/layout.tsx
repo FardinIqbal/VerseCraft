@@ -2,8 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/hooks/use-theme";
-import { MusicProvider } from "@/hooks/use-music";
-import { AuthProvider } from "@/hooks/use-auth";
 import "./globals.css";
 
 const inter = Inter({
@@ -65,11 +63,7 @@ export default function RootLayout({
           className={`${inter.variable} ${cormorantGaramond.variable} antialiased`}
         >
           <ThemeProvider>
-            <MusicProvider>
-              <AuthProvider>
-                {children}
-              </AuthProvider>
-            </MusicProvider>
+            {children}
           </ThemeProvider>
         </body>
       </html>
