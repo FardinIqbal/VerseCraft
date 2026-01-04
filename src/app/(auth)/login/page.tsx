@@ -127,44 +127,29 @@ export default function LoginPage() {
           {/* Clerk SignIn Component */}
           <SignIn
             appearance={{
-              variables: {
-                colorPrimary: "var(--accent)",
-                colorBackground: "var(--bg-primary)",
-                colorInputBackground: "var(--bg-secondary)",
-                colorInputText: "var(--text-primary)",
-                colorText: "var(--text-primary)",
-                colorTextSecondary: "var(--text-secondary)",
-                colorDanger: "#ef4444",
-                borderRadius: "0.75rem",
-                fontFamily: "inherit",
-              },
               elements: {
                 rootBox: "w-full",
-                card: "bg-transparent shadow-none p-0 gap-6",
-                headerTitle: "text-3xl font-serif text-[var(--text-primary)] mb-2",
-                headerSubtitle: "text-[var(--text-secondary)] text-base",
+                card: "!bg-transparent !shadow-none !p-0",
+                headerTitle: "!text-3xl !font-serif !text-[var(--text-primary)]",
+                headerSubtitle: "!text-[var(--text-secondary)]",
                 socialButtonsBlockButton:
-                  "!bg-[var(--bg-secondary)] !border !border-[var(--border)] hover:!bg-[var(--bg-tertiary)] hover:!border-[var(--text-muted)] transition-all duration-200 rounded-xl py-3",
-                socialButtonsBlockButtonText: "!text-[var(--text-primary)] font-medium",
-                socialButtonsProviderIcon: "w-5 h-5",
+                  "!bg-[var(--bg-secondary)] !border !border-[var(--border)] hover:!bg-[var(--bg-tertiary)] !transition-all !duration-200 !rounded-xl",
+                socialButtonsBlockButtonText: "!text-[var(--text-primary)] !font-medium",
                 dividerLine: "!bg-[var(--border)]",
-                dividerText: "!text-[var(--text-secondary)] text-sm",
-                formFieldLabel: "!text-[var(--text-secondary)] text-sm font-medium",
+                dividerText: "!text-[var(--text-secondary)]",
+                formFieldLabel: "!text-[var(--text-secondary)]",
                 formFieldInput:
-                  "!bg-[var(--bg-secondary)] !border !border-[var(--border)] !text-[var(--text-primary)] rounded-xl py-3 px-4 focus:!border-[var(--text-muted)] focus:ring-0 transition-colors",
-                formFieldInputShowPasswordButton: "!text-[var(--text-secondary)] hover:!text-[var(--text-primary)]",
+                  "!bg-[var(--bg-secondary)] !border !border-[var(--border)] !text-[var(--text-primary)] !rounded-xl",
                 formButtonPrimary:
-                  "!bg-[var(--accent)] !text-[var(--bg-primary)] hover:!bg-[var(--accent-hover)] font-medium rounded-xl py-3 transition-all duration-200",
-                footerAction: "mt-6",
+                  "!bg-[var(--accent)] !text-[var(--bg-primary)] hover:!opacity-90 !rounded-xl",
                 footerActionText: "!text-[var(--text-secondary)]",
-                footerActionLink: "!text-[var(--text-primary)] hover:!text-[var(--accent)] font-medium",
-                identityPreviewEditButton: "!text-[var(--text-primary)] hover:!text-[var(--accent)]",
+                footerActionLink: "!text-[var(--text-primary)] hover:!text-[var(--accent)]",
+                identityPreviewEditButton: "!text-[var(--accent)]",
                 identityPreviewText: "!text-[var(--text-primary)]",
-                formFieldAction: "!text-[var(--text-secondary)] hover:!text-[var(--text-primary)] text-sm",
-                alert: "!bg-[var(--bg-secondary)] !border !border-[var(--border)] rounded-xl",
+                formFieldAction: "!text-[var(--text-secondary)]",
+                alert: "!bg-[var(--bg-secondary)] !border !border-[var(--border)] !rounded-xl",
                 alertText: "!text-[var(--text-secondary)]",
-                formFieldErrorText: "!text-red-400 text-sm",
-                otpCodeFieldInput: "!bg-[var(--bg-secondary)] !border !border-[var(--border)] !text-[var(--text-primary)] rounded-lg",
+                otpCodeFieldInput: "!bg-[var(--bg-secondary)] !border !border-[var(--border)] !text-[var(--text-primary)] !rounded-lg",
               },
             }}
             routing="hash"
