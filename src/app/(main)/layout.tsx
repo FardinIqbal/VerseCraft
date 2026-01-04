@@ -1,8 +1,6 @@
 import { AuthProvider } from "@/hooks/use-auth";
 import { MusicProvider } from "@/hooks/use-music";
-import { MobileNav } from "@/components/layout/mobile-nav";
-import { FloatingControls } from "@/components/ui/floating-controls";
-import { MusicPlayer } from "@/components/ui/music-player";
+import { UnifiedNav } from "@/components/layout/unified-nav";
 
 export default function MainLayout({
   children,
@@ -12,11 +10,9 @@ export default function MainLayout({
   return (
     <AuthProvider>
       <MusicProvider>
-        <div className="min-h-screen bg-background">
-          <MusicPlayer />
-          <FloatingControls />
+        <div className="min-h-screen bg-background pb-[52px]">
           {children}
-          <MobileNav />
+          <UnifiedNav />
         </div>
       </MusicProvider>
     </AuthProvider>
