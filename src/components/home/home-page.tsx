@@ -46,10 +46,15 @@ export function HomePage() {
   const touchStartY = useRef(0);
 
   useEffect(() => {
-    if (!authLoading && !isSignedIn) {
-      router.push("/welcome");
+    if (!authLoading) {
+      if (!isSignedIn) {
+        router.push("/welcome");
+      } else if (isSignedIn && !user) {
+        // Signed in with Clerk but no database record - need onboarding
+        router.push("/onboarding");
+      }
     }
-  }, [authLoading, isSignedIn, router]);
+  }, [authLoading, isSignedIn, user, router]);
 
   const fetchPosts = useCallback(
     async (nextCursor?: string | null) => {
