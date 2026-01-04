@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowDown, Feather, BookOpen, Sparkles, Volume2, VolumeX } from "lucide-react";
+import { ArrowRight, ArrowDown, Feather, BookOpen, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -146,49 +146,15 @@ function FloatingFragment({ text, index }: { text: string; index: number }) {
   );
 }
 
-// Clair de Lune - public domain classical piano
-const CLAIR_DE_LUNE_URL = "https://upload.wikimedia.org/wikipedia/commons/5/54/Debussy_-_Clair_de_Lune.ogg";
-
 export default function WelcomePage() {
   const [currentPoem, setCurrentPoem] = useState(0);
   const [currentLine, setCurrentLine] = useState(0);
-  const [isMuted, setIsMuted] = useState(true);
-  const [audioReady, setAudioReady] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { scrollYProgress } = useScroll({ target: containerRef });
 
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   const heroScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.95]);
   const heroY = useTransform(scrollYProgress, [0, 0.2], [0, -50]);
-
-  // Initialize audio
-  useEffect(() => {
-    audioRef.current = new Audio(CLAIR_DE_LUNE_URL);
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.3;
-    setAudioReady(true);
-
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
-  }, []);
-
-  // Handle mute toggle
-  const toggleMute = () => {
-    if (!audioRef.current) return;
-
-    if (isMuted) {
-      audioRef.current.play().catch(() => {});
-      setIsMuted(false);
-    } else {
-      audioRef.current.pause();
-      setIsMuted(true);
-    }
-  };
 
   // Auto-rotate poems
   useEffect(() => {
@@ -279,30 +245,6 @@ export default function WelcomePage() {
             transition={{ duration: 0.6 }}
             className="flex items-center gap-4"
           >
-            {/* Audio toggle - Clair de Lune */}
-            {audioReady && (
-              <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={toggleMute}
-                className="relative p-2.5 rounded-xl bg-bg-secondary/50 border border-border/30 hover:border-accent/30 transition-colors group"
-                title={isMuted ? "Play Clair de Lune" : "Mute"}
-              >
-                {isMuted ? (
-                  <VolumeX className="w-4 h-4 text-text-muted group-hover:text-text-secondary transition-colors" />
-                ) : (
-                  <>
-                    <Volume2 className="w-4 h-4 text-accent" />
-                    {/* Playing indicator */}
-                    <motion.div
-                      className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-accent"
-                      animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-                      transition={{ duration: 1.5, repeat: Infinity }}
-                    />
-                  </>
-                )}
-              </motion.button>
-            )}
             <Link href="/login">
               <Button variant="ghost" size="sm" className="font-light tracking-wide">
                 Sign In
