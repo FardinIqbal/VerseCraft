@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
   Home,
-  Compass,
+  Feather,
   Music,
   Sun,
   User,
@@ -108,7 +108,7 @@ export function UnifiedNav() {
   // Navigation items
   const navItems: NavItem[] = [
     { href: "/", icon: Home, label: "Home" },
-    { href: "/explore", icon: Compass, label: "Explore" },
+    { href: "/create", icon: Feather, label: "Create" },
     { type: "music", icon: Music, label: "Music" },
     { type: "theme", icon: Sun, label: "Theme" },
     ...(user
