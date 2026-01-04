@@ -31,6 +31,18 @@
   --duration-page: 500ms;
   --ease-default: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+  /* Clerk Theme Variables */
+  --clerk-color-primary: #e5e5e5;
+  --clerk-color-primary-foreground: #0a0a0a;
+  --clerk-color-background: #0a0a0a;
+  --clerk-color-input-background: #141414;
+  --clerk-color-input-text: #fafafa;
+  --clerk-color-text-primary: #fafafa;
+  --clerk-color-text-secondary: #b8b8b8;
+  --clerk-color-border: #262626;
+  --clerk-color-danger: #ef4444;
+  --clerk-border-radius: 0.75rem;
 }
 
 /* Light Mode */
@@ -47,6 +59,17 @@
   --accent-hover: #000000;
   --border: #e5e5e5;
   --border-hover: #d4d4d4;
+
+  /* Clerk Theme Variables */
+  --clerk-color-primary: #171717;
+  --clerk-color-primary-foreground: #ffffff;
+  --clerk-color-background: #ffffff;
+  --clerk-color-input-background: #fafafa;
+  --clerk-color-input-text: #171717;
+  --clerk-color-text-primary: #171717;
+  --clerk-color-text-secondary: #404040;
+  --clerk-color-border: #e5e5e5;
+  --clerk-color-danger: #ef4444;
 }
 
 /* Sepia Mode - warm, paper-like reading */
@@ -63,6 +86,17 @@
   --accent-hover: #6b4a2e;
   --border: #d4c8b0;
   --border-hover: #c4b8a0;
+
+  /* Clerk Theme Variables */
+  --clerk-color-primary: #8b5e3c;
+  --clerk-color-primary-foreground: #f4ecd8;
+  --clerk-color-background: #f4ecd8;
+  --clerk-color-input-background: #ebe3cf;
+  --clerk-color-input-text: #3d2e1c;
+  --clerk-color-text-primary: #3d2e1c;
+  --clerk-color-text-secondary: #5a4633;
+  --clerk-color-border: #d4c8b0;
+  --clerk-color-danger: #b54b4b;
 }
 
 /* Midnight Mode - deep blue, easy on eyes */
@@ -79,6 +113,17 @@
   --accent-hover: #79b8ff;
   --border: #30363d;
   --border-hover: #484f58;
+
+  /* Clerk Theme Variables */
+  --clerk-color-primary: #58a6ff;
+  --clerk-color-primary-foreground: #0d1117;
+  --clerk-color-background: #0d1117;
+  --clerk-color-input-background: #161b22;
+  --clerk-color-input-text: #e6edf3;
+  --clerk-color-text-primary: #e6edf3;
+  --clerk-color-text-secondary: #a8b2bc;
+  --clerk-color-border: #30363d;
+  --clerk-color-danger: #f85149;
 }
 
 /* Forest Mode - calming green tones */
@@ -95,6 +140,17 @@
   --accent-hover: #8fd98f;
   --border: #3a4a3a;
   --border-hover: #4a5a4a;
+
+  /* Clerk Theme Variables */
+  --clerk-color-primary: #6fbf6f;
+  --clerk-color-primary-foreground: #1a1f1a;
+  --clerk-color-background: #1a1f1a;
+  --clerk-color-input-background: #232823;
+  --clerk-color-input-text: #e0f0e0;
+  --clerk-color-text-primary: #e0f0e0;
+  --clerk-color-text-secondary: #b8d4b8;
+  --clerk-color-border: #3a4a3a;
+  --clerk-color-danger: #ef6b6b;
 }
 
 @theme inline {

@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import { dark } from "@clerk/themes";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { MusicProvider } from "@/hooks/use-music";
 import { AuthProvider } from "@/hooks/use-auth";
@@ -49,12 +48,15 @@ export default function RootLayout({
   return (
     <ClerkProvider
       appearance={{
-        baseTheme: dark,
-        variables: {
-          colorPrimary: "#3b82f6",
-          colorBackground: "#0a0a0a",
-          colorInputBackground: "#1a1a1a",
-          colorInputText: "#ffffff",
+        elements: {
+          formButtonPrimary: "bg-[var(--accent)] text-[var(--bg-primary)]",
+          card: "bg-[var(--bg-primary)]",
+          headerTitle: "text-[var(--text-primary)]",
+          headerSubtitle: "text-[var(--text-secondary)]",
+          socialButtonsBlockButton: "bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)]",
+          formFieldLabel: "text-[var(--text-secondary)]",
+          formFieldInput: "bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)]",
+          footerActionLink: "text-[var(--accent)]",
         },
       }}
     >
