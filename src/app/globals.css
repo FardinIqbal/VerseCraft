@@ -309,3 +309,101 @@ body {
     scroll-behavior: auto;
   }
 }
+
+/* Clerk Component Overrides */
+.cl-rootBox {
+  --clerk-color-primary: var(--accent);
+  --clerk-color-text-primary: var(--text-primary);
+  --clerk-color-text-secondary: var(--text-secondary);
+  --clerk-color-background: var(--bg-primary);
+  --clerk-color-input-background: var(--bg-secondary);
+  --clerk-color-input-text: var(--text-primary);
+  --clerk-color-border: var(--border);
+}
+
+.cl-card {
+  background-color: var(--bg-primary) !important;
+  border-color: var(--border) !important;
+}
+
+.cl-formFieldInput {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border) !important;
+  color: var(--text-primary) !important;
+}
+
+.cl-formFieldInput::placeholder {
+  color: var(--text-muted) !important;
+}
+
+.cl-formFieldInput:focus {
+  border-color: var(--border-hover) !important;
+  box-shadow: none !important;
+}
+
+.cl-formButtonPrimary {
+  background-color: var(--accent) !important;
+  color: var(--bg-primary) !important;
+}
+
+.cl-formButtonPrimary:hover {
+  background-color: var(--accent-hover) !important;
+}
+
+.cl-socialButtonsBlockButton {
+  background-color: var(--bg-secondary) !important;
+  border-color: var(--border) !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+  background-color: var(--bg-tertiary) !important;
+  border-color: var(--border-hover) !important;
+}
+
+.cl-socialButtonsBlockButtonText {
+  color: var(--text-primary) !important;
+}
+
+.cl-dividerLine {
+  background-color: var(--border) !important;
+}
+
+.cl-dividerText {
+  color: var(--text-muted) !important;
+}
+
+.cl-formFieldLabel {
+  color: var(--text-secondary) !important;
+}
+
+.cl-formFieldHintText {
+  color: var(--text-muted) !important;
+}
+
+.cl-footerActionText {
+  color: var(--text-muted) !important;
+}
+
+.cl-footerActionLink {
+  color: var(--text-primary) !important;
+}
+
+.cl-footerActionLink:hover {
+  color: var(--accent) !important;
+}
+
+.cl-headerTitle {
+  color: var(--text-primary) !important;
+}
+
+.cl-headerSubtitle {
+  color: var(--text-secondary) !important;
+}
+
+.cl-internal-b1sa5e {
+  color: var(--text-muted) !important;
+}
+
+.cl-footer {
+  background-color: transparent !important;
+}
