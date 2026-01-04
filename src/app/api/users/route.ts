@@ -1,22 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
-import { createClient } from "@/lib/supabase/server";
 import { eq } from "drizzle-orm";
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user: authUser },
-    } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!authUser) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-    const { username, displayName } = body;
+    const { username, displayName, preferences } = body;
 
     // Validate username
     if (!username || username.length < 3 || username.length > 20) {
@@ -40,7 +37,7 @@ export async function POST(request: NextRequest) {
       .where(eq(users.username, username.toLowerCase()))
       .limit(1);
 
-    if (existingUser && existingUser.authId !== authUser.id) {
+    if (existingUser && existingUser.authId !== userId) {
       return NextResponse.json(
         { error: "Username is already taken" },
         { status: 400 }
@@ -51,7 +48,7 @@ export async function POST(request: NextRequest) {
     const [existing] = await db
       .select()
       .from(users)
-      .where(eq(users.authId, authUser.id))
+      .where(eq(users.authId, userId))
       .limit(1);
 
     if (existing) {
@@ -61,9 +58,10 @@ export async function POST(request: NextRequest) {
         .set({
           username: username.toLowerCase(),
           displayName: displayName || null,
+          preferences: preferences || null,
           updatedAt: new Date(),
         })
-        .where(eq(users.authId, authUser.id))
+        .where(eq(users.authId, userId))
         .returning();
 
       return NextResponse.json({ user: updated });
@@ -73,10 +71,10 @@ export async function POST(request: NextRequest) {
     const [newUser] = await db
       .insert(users)
       .values({
-        authId: authUser.id,
+        authId: userId,
         username: username.toLowerCase(),
         displayName: displayName || null,
-        avatarUrl: authUser.user_metadata?.avatar_url || null,
+        preferences: preferences || null,
       })
       .returning();
 

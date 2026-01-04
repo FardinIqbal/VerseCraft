@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft, Check } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { useUser } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ const poetryStyles = [
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const supabase = createClient();
+  const { user: clerkUser, isLoaded, isSignedIn } = useUser();
   const [step, setStep] = useState(1);
   const [username, setUsername] = useState("");
   const [displayName, setDisplayName] = useState("");
@@ -57,16 +57,10 @@ export default function OnboardingPage() {
   };
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      if (!user) {
-        router.push("/login");
-      }
-    };
-    checkAuth();
-  }, [supabase, router]);
+    if (isLoaded && !isSignedIn) {
+      router.push("/login");
+    }
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     const checkUsername = async () => {

@@ -1,15 +1,10 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Feather, ArrowLeft } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { SignIn } from "@clerk/nextjs";
 
 // Rotating poetry quotes for ambiance
 const poetryQuotes = [
@@ -21,12 +16,6 @@ const poetryQuotes = [
 ];
 
 export default function LoginPage() {
-  const router = useRouter();
-  const { signInWithEmail } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
   const [currentQuote, setCurrentQuote] = useState(0);
 
   // Rotate quotes
@@ -36,21 +25,6 @@ export default function LoginPage() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  const handleEmailLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      await signInWithEmail(email, password);
-      router.push("/");
-    } catch (err) {
-      setError("Invalid email or password");
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-bg-primary flex">
@@ -125,7 +99,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right side - form */}
+      {/* Right side - Clerk SignIn */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -136,7 +110,7 @@ export default function LoginPage() {
           {/* Back to welcome */}
           <Link
             href="/welcome"
-            className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-12 group"
+            className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-8 group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span className="text-base">Back to home</span>
@@ -150,78 +124,28 @@ export default function LoginPage() {
             <span className="font-serif text-xl text-text-primary">VerseCraft</span>
           </div>
 
-          {/* Header */}
-          <div className="mb-10">
-            <h2 className="text-3xl md:text-4xl font-serif text-text-primary mb-3">
-              Sign in
-            </h2>
-            <p className="text-text-primary/70 text-lg">
-              Continue your poetic journey
-            </p>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={handleEmailLogin} className="space-y-6">
-            <div className="space-y-2">
-              <label className="block text-text-secondary text-sm font-medium">
-                Email
-              </label>
-              <Input
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="h-14 text-base bg-bg-secondary/50 border-border/50 focus:border-accent"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-text-secondary text-sm font-medium">
-                Password
-              </label>
-              <Input
-                type="password"
-                placeholder="Enter your password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="h-14 text-base bg-bg-secondary/50 border-border/50 focus:border-accent"
-              />
-            </div>
-
-            <AnimatePresence>
-              {error && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="text-red-500 text-base text-center py-2"
-                >
-                  {error}
-                </motion.p>
-              )}
-            </AnimatePresence>
-
-            <Button
-              type="submit"
-              className="w-full h-14 text-base font-medium tracking-wide"
-              loading={loading}
-            >
-              Sign In
-            </Button>
-          </form>
-
-          {/* Sign up link */}
-          <p className="text-center text-text-secondary text-base mt-8">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/signup"
-              className="text-accent hover:underline font-medium"
-            >
-              Create one
-            </Link>
-          </p>
+          {/* Clerk SignIn Component */}
+          <SignIn
+            appearance={{
+              elements: {
+                rootBox: "w-full",
+                card: "bg-transparent shadow-none p-0",
+                headerTitle: "text-3xl font-serif text-text-primary",
+                headerSubtitle: "text-text-secondary",
+                socialButtonsBlockButton: "bg-bg-secondary border-border hover:bg-bg-tertiary",
+                socialButtonsBlockButtonText: "text-text-primary",
+                dividerLine: "bg-border",
+                dividerText: "text-text-secondary",
+                formFieldLabel: "text-text-secondary",
+                formFieldInput: "bg-bg-secondary border-border text-text-primary",
+                formButtonPrimary: "bg-accent hover:bg-accent/90",
+                footerActionLink: "text-accent hover:text-accent/80",
+                identityPreviewEditButton: "text-accent",
+              },
+            }}
+            routing="hash"
+            forceRedirectUrl="/"
+          />
 
           {/* Footer quote - mobile only */}
           <div className="lg:hidden mt-16 text-center">

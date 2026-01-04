@@ -1,14 +1,10 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Feather, ArrowLeft, Mail, Sparkles } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Feather, ArrowLeft, Sparkles } from "lucide-react";
+import { SignUp } from "@clerk/nextjs";
 
 // Inspiring quotes about beginnings and creation
 const poetryQuotes = [
@@ -20,12 +16,6 @@ const poetryQuotes = [
 ];
 
 export default function SignupPage() {
-  const { signUpWithEmail } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const [currentQuote, setCurrentQuote] = useState(0);
 
   // Rotate quotes
@@ -35,88 +25,6 @@ export default function SignupPage() {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  const handleEmailSignup = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      await signUpWithEmail(email, password);
-      setSuccess(true);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Failed to sign up";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (success) {
-    return (
-      <div className="min-h-screen bg-bg-primary flex items-center justify-center px-6">
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="w-full max-w-md text-center"
-        >
-          {/* Success icon */}
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", delay: 0.2 }}
-            className="w-20 h-20 mx-auto mb-8 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center"
-          >
-            <Mail className="w-10 h-10 text-accent" />
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="font-serif text-3xl md:text-4xl text-text-primary mb-4"
-          >
-            Check your email
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="text-text-primary/70 text-lg mb-8"
-          >
-            We&apos;ve sent you a confirmation link.
-            <br />
-            Click it to begin your poetic journey.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-          >
-            <Link href="/login">
-              <Button variant="secondary" className="gap-2">
-                <ArrowLeft className="w-4 h-4" />
-                Back to sign in
-              </Button>
-            </Link>
-          </motion.div>
-
-          {/* Decorative quote */}
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8 }}
-            className="mt-16 font-serif italic text-text-secondary text-base"
-          >
-            &ldquo;Every new beginning comes from some other beginning&apos;s end.&rdquo;
-            <span className="block text-sm mt-2 not-italic">— Seneca</span>
-          </motion.p>
-        </motion.div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-bg-primary flex">
@@ -225,7 +133,7 @@ export default function SignupPage() {
         </div>
       </div>
 
-      {/* Right side - form */}
+      {/* Right side - Clerk SignUp */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -236,7 +144,7 @@ export default function SignupPage() {
           {/* Back to welcome */}
           <Link
             href="/welcome"
-            className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-12 group"
+            className="inline-flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors mb-8 group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             <span className="text-base">Back to home</span>
@@ -252,90 +160,28 @@ export default function SignupPage() {
             </span>
           </div>
 
-          {/* Header */}
-          <div className="mb-10">
-            <h2 className="text-3xl md:text-4xl font-serif text-text-primary mb-3">
-              Create account
-            </h2>
-            <p className="text-text-primary/70 text-lg">
-              Join the literary community
-            </p>
-          </div>
-
-          {/* Form */}
-          <form onSubmit={handleEmailSignup} className="space-y-6">
-            <div className="space-y-2">
-              <label className="block text-text-secondary text-sm font-medium">
-                Email
-              </label>
-              <Input
-                type="email"
-                placeholder="your@email.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="h-14 text-base bg-bg-secondary/50 border-border/50 focus:border-accent"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <label className="block text-text-secondary text-sm font-medium">
-                Password
-              </label>
-              <Input
-                type="password"
-                placeholder="At least 6 characters"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                minLength={6}
-                required
-                className="h-14 text-base bg-bg-secondary/50 border-border/50 focus:border-accent"
-              />
-              <p className="text-text-secondary/70 text-sm">
-                Must be at least 6 characters
-              </p>
-            </div>
-
-            <AnimatePresence>
-              {error && (
-                <motion.p
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="text-red-500 text-base text-center py-2"
-                >
-                  {error}
-                </motion.p>
-              )}
-            </AnimatePresence>
-
-            <Button
-              type="submit"
-              className="w-full h-14 text-base font-medium tracking-wide"
-              loading={loading}
-            >
-              Create Account
-            </Button>
-          </form>
-
-          {/* Terms */}
-          <p className="text-center text-text-secondary/70 text-sm mt-6">
-            By creating an account, you agree to our{" "}
-            <span className="text-text-secondary hover:underline cursor-pointer">Terms</span>
-            {" "}and{" "}
-            <span className="text-text-secondary hover:underline cursor-pointer">Privacy Policy</span>
-          </p>
-
-          {/* Sign in link */}
-          <p className="text-center text-text-secondary text-base mt-8">
-            Already have an account?{" "}
-            <Link
-              href="/login"
-              className="text-accent hover:underline font-medium"
-            >
-              Sign in
-            </Link>
-          </p>
+          {/* Clerk SignUp Component */}
+          <SignUp
+            appearance={{
+              elements: {
+                rootBox: "w-full",
+                card: "bg-transparent shadow-none p-0",
+                headerTitle: "text-3xl font-serif text-text-primary",
+                headerSubtitle: "text-text-secondary",
+                socialButtonsBlockButton: "bg-bg-secondary border-border hover:bg-bg-tertiary",
+                socialButtonsBlockButtonText: "text-text-primary",
+                dividerLine: "bg-border",
+                dividerText: "text-text-secondary",
+                formFieldLabel: "text-text-secondary",
+                formFieldInput: "bg-bg-secondary border-border text-text-primary",
+                formButtonPrimary: "bg-accent hover:bg-accent/90",
+                footerActionLink: "text-accent hover:text-accent/80",
+                identityPreviewEditButton: "text-accent",
+              },
+            }}
+            routing="hash"
+            forceRedirectUrl="/onboarding"
+          />
 
           {/* Footer quote - mobile only */}
           <div className="lg:hidden mt-16 text-center">

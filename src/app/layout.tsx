@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { MusicProvider } from "@/hooks/use-music";
 import "./globals.css";
@@ -44,16 +46,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.variable} ${cormorantGaramond.variable} antialiased`}
-      >
-        <ThemeProvider>
-          <MusicProvider>
-            {children}
-          </MusicProvider>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ClerkProvider
+      appearance={{
+        baseTheme: dark,
+        variables: {
+          colorPrimary: "#3b82f6",
+          colorBackground: "#0a0a0a",
+          colorInputBackground: "#1a1a1a",
+          colorInputText: "#ffffff",
+        },
+      }}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${inter.variable} ${cormorantGaramond.variable} antialiased`}
+        >
+          <ThemeProvider>
+            <MusicProvider>
+              {children}
+            </MusicProvider>
+          </ThemeProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

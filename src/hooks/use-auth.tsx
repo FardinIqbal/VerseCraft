@@ -8,12 +8,11 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
-import { createClient } from "@/lib/supabase/client";
-import type { User as SupabaseUser, AuthChangeEvent, Session } from "@supabase/supabase-js";
+import { useUser, useClerk, useAuth as useClerkAuth } from "@clerk/nextjs";
 
 interface User {
   id: string;
-  authId: string;
+  clerkId: string;
   username: string;
   displayName: string | null;
   bio: string | null;
@@ -22,12 +21,11 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  supabaseUser: SupabaseUser | null;
+  clerkUser: ReturnType<typeof useUser>["user"];
   loading: boolean;
-  signInWithGoogle: () => Promise<void>;
-  signInWithGithub: () => Promise<void>;
-  signInWithEmail: (email: string, password: string) => Promise<void>;
-  signUpWithEmail: (email: string, password: string) => Promise<void>;
+  isSignedIn: boolean;
+  signInWithGoogle: () => void;
+  signInWithGithub: () => void;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<void>;
 }
@@ -35,126 +33,66 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const { user: clerkUser, isLoaded, isSignedIn } = useUser();
+  const { signOut: clerkSignOut, openSignIn } = useClerk();
   const [user, setUser] = useState<User | null>(null);
-  const [supabaseUser, setSupabaseUser] = useState<SupabaseUser | null>(null);
   const [loading, setLoading] = useState(true);
-  const supabase = createClient();
 
-  const fetchUserProfile = useCallback(
-    async (authId: string) => {
-      try {
-        const res = await fetch(`/api/users/me?authId=${authId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setUser(data.user);
-        }
-      } catch (error) {
-        console.error("Error fetching user profile:", error);
+  const fetchUserProfile = useCallback(async (clerkId: string) => {
+    try {
+      const res = await fetch(`/api/users/me?authId=${clerkId}`);
+      if (res.ok) {
+        const data = await res.json();
+        setUser(data.user);
       }
-    },
-    []
-  );
+    } catch (error) {
+      console.error("Error fetching user profile:", error);
+    }
+  }, []);
 
   const refreshUser = useCallback(async () => {
-    const {
-      data: { user: authUser },
-    } = await supabase.auth.getUser();
-    if (authUser) {
-      await fetchUserProfile(authUser.id);
+    if (clerkUser?.id) {
+      await fetchUserProfile(clerkUser.id);
     }
-  }, [supabase, fetchUserProfile]);
+  }, [clerkUser, fetchUserProfile]);
 
   useEffect(() => {
-    const getUser = async () => {
-      try {
-        const {
-          data: { user: authUser },
-        } = await supabase.auth.getUser();
-
-        setSupabaseUser(authUser);
-
-        if (authUser) {
-          await fetchUserProfile(authUser.id);
-        }
-      } catch (error) {
-        console.error("Error getting user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getUser();
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event: AuthChangeEvent, session: Session | null) => {
-      setSupabaseUser(session?.user ?? null);
-
-      if (session?.user) {
-        await fetchUserProfile(session.user.id);
+    if (isLoaded) {
+      if (isSignedIn && clerkUser) {
+        fetchUserProfile(clerkUser.id);
       } else {
         setUser(null);
       }
-
       setLoading(false);
-    });
+    }
+  }, [isLoaded, isSignedIn, clerkUser, fetchUserProfile]);
 
-    return () => subscription.unsubscribe();
-  }, [supabase, fetchUserProfile]);
-
-  const signInWithGoogle = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+  const signInWithGoogle = () => {
+    openSignIn({
+      forceRedirectUrl: "/",
     });
   };
 
-  const signInWithGithub = async () => {
-    await supabase.auth.signInWithOAuth({
-      provider: "github",
-      options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
-      },
+  const signInWithGithub = () => {
+    openSignIn({
+      forceRedirectUrl: "/",
     });
-  };
-
-  const signInWithEmail = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (error) throw error;
-  };
-
-  const signUpWithEmail = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback`,
-      },
-    });
-    if (error) throw error;
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    await clerkSignOut();
     setUser(null);
-    setSupabaseUser(null);
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        supabaseUser,
-        loading,
+        clerkUser: clerkUser ?? null,
+        loading: !isLoaded || loading,
+        isSignedIn: isSignedIn ?? false,
         signInWithGoogle,
         signInWithGithub,
-        signInWithEmail,
-        signUpWithEmail,
         signOut,
         refreshUser,
       }}
@@ -171,3 +109,6 @@ export function useAuth() {
   }
   return context;
 }
+
+// Re-export Clerk's useAuth for direct access when needed
+export { useClerkAuth };

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { db } from "@/lib/db";
 import { users } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
-import { createClient } from "@/lib/supabase/server";
 
 export async function GET(request: NextRequest) {
   try {
@@ -44,10 +44,9 @@ export async function GET(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   try {
-    const supabase = await createClient();
-    const { data: { user: authUser } } = await supabase.auth.getUser();
+    const { userId } = await auth();
 
-    if (!authUser) {
+    if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -61,7 +60,7 @@ export async function PATCH(request: NextRequest) {
         bio: bio || null,
         updatedAt: new Date(),
       })
-      .where(eq(users.authId, authUser.id))
+      .where(eq(users.authId, userId))
       .returning();
 
     if (!updatedUser) {

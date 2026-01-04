@@ -30,7 +30,7 @@ interface Post {
 
 export function HomePage() {
   const router = useRouter();
-  const { user, supabaseUser, loading: authLoading } = useAuth();
+  const { user, clerkUser, loading: authLoading, isSignedIn } = useAuth();
   const [posts, setPosts] = useState<Post[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -46,10 +46,10 @@ export function HomePage() {
   const touchStartY = useRef(0);
 
   useEffect(() => {
-    if (!authLoading && !supabaseUser) {
+    if (!authLoading && !isSignedIn) {
       router.push("/welcome");
     }
-  }, [authLoading, supabaseUser, router]);
+  }, [authLoading, isSignedIn, router]);
 
   const fetchPosts = useCallback(
     async (nextCursor?: string | null) => {
@@ -59,7 +59,7 @@ export function HomePage() {
       try {
         const params = new URLSearchParams();
         if (nextCursor) params.set("cursor", nextCursor);
-        if (supabaseUser) params.set("userId", supabaseUser.id);
+        if (clerkUser) params.set("userId", clerkUser.id);
 
         const endpoint = `/api/feed?${params}`;
         const response = await fetch(endpoint);
@@ -81,7 +81,7 @@ export function HomePage() {
         setIsFetching(false);
       }
     },
-    [supabaseUser, isFetching]
+    [clerkUser, isFetching]
   );
 
   useEffect(() => {
@@ -159,7 +159,7 @@ export function HomePage() {
     );
   };
 
-  if (authLoading || (!supabaseUser && !loading)) {
+  if (authLoading || (!isSignedIn && !loading)) {
     return (
       <div className="fixed inset-0 flex items-center justify-center bg-bg-primary">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-text-tertiary border-t-accent" />
