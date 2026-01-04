@@ -4,6 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { ThemeProvider } from "@/hooks/use-theme";
 import { MusicProvider } from "@/hooks/use-music";
+import { AuthProvider } from "@/hooks/use-auth";
 import "./globals.css";
 
 const inter = Inter({
@@ -63,7 +64,9 @@ export default function RootLayout({
         >
           <ThemeProvider>
             <MusicProvider>
-              {children}
+              <AuthProvider>
+                {children}
+              </AuthProvider>
             </MusicProvider>
           </ThemeProvider>
         </body>
