@@ -163,20 +163,44 @@ export default function SignupPage() {
           {/* Clerk SignUp Component */}
           <SignUp
             appearance={{
+              variables: {
+                colorPrimary: "#e5e5e5",
+                colorBackground: "#0a0a0a",
+                colorInputBackground: "#171717",
+                colorInputText: "#fafafa",
+                colorText: "#fafafa",
+                colorTextSecondary: "#a3a3a3",
+                colorDanger: "#ef4444",
+                borderRadius: "0.75rem",
+                fontFamily: "inherit",
+              },
               elements: {
                 rootBox: "w-full",
-                card: "bg-transparent shadow-none p-0",
-                headerTitle: "text-3xl font-serif text-text-primary",
-                headerSubtitle: "text-text-secondary",
-                socialButtonsBlockButton: "bg-bg-secondary border-border hover:bg-bg-tertiary",
-                socialButtonsBlockButtonText: "text-text-primary",
+                card: "bg-transparent shadow-none p-0 gap-6",
+                headerTitle: "text-3xl font-serif text-text-primary mb-2",
+                headerSubtitle: "text-text-secondary text-base",
+                socialButtonsBlockButton:
+                  "bg-bg-secondary border border-border hover:bg-bg-tertiary hover:border-text-muted transition-all duration-200 rounded-xl py-3",
+                socialButtonsBlockButtonText: "text-text-primary font-medium",
+                socialButtonsProviderIcon: "w-5 h-5",
                 dividerLine: "bg-border",
-                dividerText: "text-text-secondary",
-                formFieldLabel: "text-text-secondary",
-                formFieldInput: "bg-bg-secondary border-border text-text-primary",
-                formButtonPrimary: "bg-accent hover:bg-accent/90",
-                footerActionLink: "text-accent hover:text-accent/80",
-                identityPreviewEditButton: "text-accent",
+                dividerText: "text-text-secondary text-sm",
+                formFieldLabel: "text-text-secondary text-sm font-medium",
+                formFieldInput:
+                  "bg-bg-secondary border border-border text-text-primary rounded-xl py-3 px-4 focus:border-text-muted focus:ring-0 transition-colors",
+                formFieldInputShowPasswordButton: "text-text-secondary hover:text-text-primary",
+                formButtonPrimary:
+                  "bg-text-primary text-bg-primary hover:bg-text-secondary font-medium rounded-xl py-3 transition-all duration-200",
+                footerAction: "mt-6",
+                footerActionText: "text-text-secondary",
+                footerActionLink: "text-text-primary hover:text-accent font-medium",
+                identityPreviewEditButton: "text-text-primary hover:text-accent",
+                identityPreviewText: "text-text-primary",
+                formFieldAction: "text-text-secondary hover:text-text-primary text-sm",
+                alert: "bg-bg-secondary border border-border rounded-xl",
+                alertText: "text-text-secondary",
+                formFieldErrorText: "text-red-400 text-sm",
+                otpCodeFieldInput: "bg-bg-secondary border border-border text-text-primary rounded-lg",
               },
             }}
             routing="hash"
